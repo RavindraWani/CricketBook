@@ -114,17 +114,17 @@
     }
     
     .match-title {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
       color: #1f2937;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     
     .match-score {
-      font-size: 13px;
-      color: #6b7280;
+      font-size: 14px;
+      color: #4b5563;
       margin-bottom: 10px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     
     .match-meta {
@@ -197,20 +197,20 @@
     .nav {
       text-align: center;
       margin-bottom: 15px;
-      padding: 0 10px;
+      padding: 0 5px;
     }
     
     .nav a {
       display: inline-block;
       color: white;
       text-decoration: none;
-      padding: 6px 12px;
-      margin: 4px 4px;
-      border-radius: 8px;
+      padding: 5px 8px;
+      margin: 3px 2px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       font-weight: 600;
-      font-size: 13px;
+      font-size: 11px;
       transition: all 0.2s;
       white-space: nowrap;
     }
@@ -227,11 +227,12 @@
     @media (max-width: 768px) {
       .nav {
         margin-bottom: 12px;
+        padding: 0 3px;
       }
       .nav a {
-        padding: 5px 10px;
-        margin: 3px 2px;
-        font-size: 12px;
+        padding: 4px 6px;
+        margin: 2px 1px;
+        font-size: 10px;
       }
     }
     
@@ -451,9 +452,15 @@
                   ${statusBadge}
                 </div>
                 <div class="match-score">
-                  <strong>${match.teamA || 'Team A'}:</strong> ${firstScore} (${firstOvers})<br>
-                  <strong>${match.teamB || 'Team B'}:</strong> ${secondScore} (${secondOvers})
-                  ${hasResult ? '<br><span style="color:#10b981;font-weight:600;">🏆 ' + match.resultText + '</span>' : ''}
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span><strong>${match.teamA || 'Team A'}:</strong></span>
+                    <span style="font-weight: 600;">${firstScore} (${firstOvers})</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span><strong>${match.teamB || 'Team B'}:</strong></span>
+                    <span style="font-weight: 600;">${secondScore} (${secondOvers})</span>
+                  </div>
+                  ${hasResult ? '<div style="color:#10b981;font-weight:600;margin-top:6px;">🏆 ' + match.resultText + '</div>' : ''}
                 </div>
                 ${dateStr ? `<div class="match-meta">📅 ${dateStr}</div>` : ''}
               </div>

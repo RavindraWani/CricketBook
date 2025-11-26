@@ -73,20 +73,20 @@
     .nav {
       text-align: center;
       margin-bottom: 15px;
-      padding: 0 10px;
+      padding: 0 5px;
     }
     
     .nav a {
       display: inline-block;
       color: white;
       text-decoration: none;
-      padding: 6px 12px;
-      margin: 4px 4px;
-      border-radius: 8px;
+      padding: 5px 8px;
+      margin: 3px 2px;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       font-weight: 600;
-      font-size: 13px;
+      font-size: 11px;
       transition: all 0.2s;
       white-space: nowrap;
     }
@@ -103,11 +103,12 @@
     @media (max-width: 768px) {
       .nav {
         margin-bottom: 12px;
+        padding: 0 3px;
       }
       .nav a {
-        padding: 5px 10px;
-        margin: 3px 2px;
-        font-size: 12px;
+        padding: 4px 6px;
+        margin: 2px 1px;
+        font-size: 10px;
       }
     }
     
@@ -115,27 +116,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: #ef4444;
       color: white;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-      animation: livePulse 2s infinite;
       margin: 0 12px;
-    }
-    
-    @keyframes livePulse {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.85;
-        transform: scale(1.05);
-      }
     }
   </style>
 </head>
@@ -153,9 +141,26 @@
     
     <div id="content" style="display:none">
       <div class="card">
+        <!-- Match Completed Banner -->
+        <div id="matchCompletedBanner" style="display:none;text-align:center;margin-bottom:12px;padding:10px 16px;background:linear-gradient(135deg, #10b981 0%, #059669 100%);border-radius:12px;color:#ffffff;font-size:15px;font-weight:700;letter-spacing:0.5px;box-shadow:0 4px 12px rgba(16,185,129,0.4);">
+          🏏 Match Completed
+        </div>
+        
+        <!-- Live Viewers Counter -->
+        <div id="viewersCounter" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px 12px;background:linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);border:1px solid #cbd5e1;border-radius:10px;font-size:11px;font-weight:600;color:#475569;">
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span style="color:#6b7280;">👁️ TOTAL VIEWS:</span>
+            <span id="totalViews" style="color:#3b82f6;font-weight:700;">0</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span style="color:#6b7280;">🔴 LIVE VIEWERS:</span>
+            <span id="liveViewers" style="color:#ef4444;font-weight:700;">0</span>
+          </div>
+        </div>
+        
         <!-- Tournament Header -->
         <div style="text-align:center;margin-bottom:16px;padding:10px 16px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:12px;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1px;box-shadow:0 2px 8px rgba(102,126,234,0.3);">
-          🏆 Sariput Nagar Premier League (SNPL) 2025 🏆
+          <span id="tournamentTitle">🏆 Sariput Nagar Premier League (SNPL) 2025 🏆</span>
         </div>
         
         <!-- 📊 Scoreboard Header -->
@@ -171,7 +176,7 @@
             
             <!-- LIVE NOW Badge -->
             <div id="liveBadge" class="live-badge" style="display:none;">
-              🔴 LIVE NOW
+              🔴 LIVE
             </div>
             
             <!-- Team B -->
@@ -317,6 +322,9 @@
         return;
       }
       
+      // Setup viewer tracking
+      setupViewerTracking(id);
+      
       // Listen to Firebase changes
       const matchRef = database.ref('matches/' + id);
       matchRef.on('value', (snapshot) => {
@@ -334,6 +342,66 @@
         console.error('❌ Firebase error:', error);
         document.getElementById('loading').innerHTML = '<div class="error">Error loading match: ' + error.message + '</div>';
       });
+    }
+
+    // Setup viewer tracking
+    function setupViewerTracking(matchId) {
+      const viewersRef = database.ref('matches/' + matchId + '/viewers');
+      const totalViewsRef = database.ref('matches/' + matchId + '/totalViews');
+      
+      // Generate unique viewer ID
+      const viewerId = 'viewer_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const myViewerRef = viewersRef.child(viewerId);
+      
+      // Increment total views
+      totalViewsRef.transaction((currentViews) => {
+        return (currentViews || 0) + 1;
+      });
+      
+      // Set this viewer as online
+      myViewerRef.set({
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        online: true
+      });
+      
+      // Remove viewer on disconnect
+      myViewerRef.onDisconnect().remove();
+      
+      // Listen to total views
+      totalViewsRef.on('value', (snapshot) => {
+        const totalViews = snapshot.val() || 0;
+        document.getElementById('totalViews').textContent = totalViews;
+      });
+      
+      // Listen to live viewers count
+      viewersRef.on('value', (snapshot) => {
+        const viewers = snapshot.val();
+        const liveCount = viewers ? Object.keys(viewers).length : 0;
+        document.getElementById('liveViewers').textContent = liveCount;
+      });
+      
+      // Cleanup old viewers (older than 5 minutes)
+      setInterval(() => {
+        viewersRef.once('value', (snapshot) => {
+          const now = Date.now();
+          const viewers = snapshot.val();
+          if (viewers) {
+            Object.keys(viewers).forEach(vId => {
+              const viewer = viewers[vId];
+              if (viewer.timestamp && (now - viewer.timestamp > 300000)) {
+                viewersRef.child(vId).remove();
+              }
+            });
+          }
+        });
+      }, 60000); // Check every minute
+      
+      // Update timestamp every 30 seconds to stay active
+      setInterval(() => {
+        myViewerRef.update({
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      }, 30000);
     }
 
     // Update UI with match data
@@ -356,12 +424,18 @@
       document.getElementById('teamAName').textContent = data.teamA || 'Team A';
       document.getElementById('teamBName').textContent = data.teamB || 'Team B';
       
-      // Show/Hide LIVE badge based on match completion
+      // Show/Hide LIVE badge and completion banner based on match status
       const liveBadge = document.getElementById('liveBadge');
+      const matchCompletedBanner = document.getElementById('matchCompletedBanner');
+      
       if (data.matchCompleted || (data.resultText && data.resultText.trim() !== '')) {
+        // Match completed
         liveBadge.style.display = 'none';
+        matchCompletedBanner.style.display = 'block';
       } else {
+        // Match is live
         liveBadge.style.display = 'flex';
+        matchCompletedBanner.style.display = 'none';
       }
       
       const firstScore = `${data.first?.runs || 0}/${data.first?.wkts || 0}`;
