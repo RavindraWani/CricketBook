@@ -438,11 +438,16 @@
       document.getElementById('teamAName').textContent = data.teamA || 'Team A';
       document.getElementById('teamBName').textContent = data.teamB || 'Team B';
       
+      // Determine if match is completed - compute once
+      const isMatchCompleted = data.matchCompleted === true || 
+                               (data.first && data.first.done && data.second && data.second.done) ||
+                               (data.inSecond && data.second && data.second.done);
+      
       // Show/Hide LIVE badge and completion banner based on match status
       const liveBadge = document.getElementById('liveBadge');
       const matchCompletedBanner = document.getElementById('matchCompletedBanner');
       
-      if (data.matchCompleted || (data.resultText && data.resultText.trim() !== '')) {
+      if (isMatchCompleted) {
         // Match completed
         liveBadge.style.display = 'none';
         matchCompletedBanner.style.display = 'block';
@@ -500,8 +505,8 @@
         teamBName.style.backgroundClip = 'text';
       }
       
-      // Result
-      if (data.resultText) {
+      // Result - only show if match is actually completed
+      if (data.resultText && data.resultText.trim() !== '' && isMatchCompleted) {
         document.getElementById('result').textContent = data.resultText;
         document.getElementById('result').classList.add('show');
         // Hide live match elements when result is displayed
@@ -661,7 +666,10 @@
     function showMatchSummary(data) {
       if (!data) return;
       
-      const matchFinished = data.resultText && data.resultText.trim() !== '';
+      // Only consider match finished if explicitly marked as completed
+      const matchFinished = data.matchCompleted === true || 
+                           (data.first && data.first.done && data.second && data.second.done) ||
+                           (data.inSecond && data.second && data.second.done);
       
       // First Innings
       const firstInnings = data.first;
