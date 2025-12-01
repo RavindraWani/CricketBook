@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About CricketBook - Free realtime cricket scoring tool for local matches">
+  <title>About CricketBook</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1f2937;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px 12px;
+      }
+    }
+    
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .card {
+        padding: 24px;
+        border-radius: 16px;
+      }
+    }
+    
+    /* Typography */
+    h1 {
+      margin: 0 0 24px;
+      font-size: 32px;
+      text-align: center;
+      color: #1f2937;
+      font-weight: 900;
+    }
+    
+    h2 {
+      color: #3b82f6;
+      margin: 24px 0 12px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    h3 {
+      color: #3b82f6;
+      font-size: 18px;
+      margin: 16px 0 8px;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 12px 0;
+      color: #4b5563;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    
+    strong {
+      color: #1f2937;
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      
+      h2 {
+        font-size: 22px;
+        margin: 20px 0 10px;
+      }
+      
+      h3 {
+        font-size: 16px;
+      }
+      
+      p {
+        font-size: 14px;
+      }
+    }
+    
+    /* Feature List */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 8px 0;
+      color: #4b5563;
+      font-size: 15px;
+    }
+    
+    .feature-list li::before {
+      content: "✓ ";
+      color: #10b981;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .feature-list li {
+        font-size: 14px;
+        padding: 6px 0;
+      }
+    }
+    
+    /* Navigation */
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 0 5px;
+    }
+    
+    .nav a {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 5px 8px;
+      margin: 3px 2px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      font-weight: 600;
+      font-size: 11px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    
+    .nav a.active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .nav {
+        margin-bottom: 15px;
+        padding: 0 3px;
+      }
+      .nav a {
+        padding: 4px 6px;
+        margin: 2px 1px;
+        font-size: 10px;
+      }
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: white;
+      padding: 16px;
+      opacity: 0.9;
+    }
+    
+    .footer p {
+      font-size: 13px;
+      color: white;
+      margin: 0 0 4px;
+    }
+    
+    @media (max-width: 768px) {
+      .footer {
+        padding: 12px;
+      }
+      .footer p {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="livescore.html">📺 Live Score</a>
+      <a href="matches.html">📋 Matches</a>
+      <a href="about.html" class="active">ℹ️ About</a>
+    </nav>
+  <div class="card">
+    <h1>🏏 About CricketBook</h1>
+    
+    <p>CricketBook is a <strong>free, real-time cricket scoring application</strong> designed for local cricket matches, tournaments, and friendly games. Our tool makes it easy to score matches ball-by-ball and share live updates instantly with players, friends, and family.</p>
+
+    <h2>What We Offer</h2>
+    <p>CricketBook provides four main ways to experience cricket matches:</p>
+    
+    <h3 style="color:#3b82f6;font-size:18px;margin:16px 0 8px;">⚙️ Scorer Tool</h3>
+    <p>A powerful scoring interface for match officials and scorers. Record every ball, wicket, extra, and milestone with precision. Features protected edit access with secure tokens - only authorized scorers can edit matches while the public can watch safely. Create tournaments, generate organization IDs, and share dual links: public viewer links for spectators and private scorer links for co-scorers. The scorer creates unique match IDs that can be shared for live viewing, making it easy for others to follow along in real-time without the risk of accidental changes.</p>
+    
+    <h3 style="color:#3b82f6;font-size:18px;margin:16px 0 8px;">📺 Live Score</h3>
+    <p>Watch real-time cricket scores with automatic updates. The live score page automatically detects ongoing matches and displays ball-by-ball updates, over summaries, and match progress. Perfect for spectators who want to follow the action remotely.</p>
+    
+    <h3 style="color:#3b82f6;font-size:18px;margin:16px 0 8px;">📋 All Matches</h3>
+    <p>Browse through match history with a comprehensive view of all matches - both completed and ongoing. See recent matches in an organized grid layout, track tournament progress, and quickly jump to any match for detailed viewing.</p>
+
+    <h2>Key Features</h2>
+    <ul class="feature-list">
+      <li><strong>Edit Token Protection:</strong> Secure edit access with unique tokens - public can watch, only authorized scorers can edit</li>
+      <li><strong>Dual Link Sharing:</strong> Separate viewer links (public) and scorer links (private) for controlled access</li>
+      <li><strong>Multi-User Isolation:</strong> Organization IDs ensure your tournaments stay separate from others</li>
+      <li><strong>Tournament Management:</strong> Name your tournaments and organize matches by league/competition</li>
+      <li><strong>Smart Autocomplete:</strong> Tournament dropdown remembers your recent tournament names (stored locally for privacy)</li>
+      <li><strong>Privacy-First:</strong> Your tournament history is stored only on your device, not shared with others</li>
+      <li><strong>Real-time Synchronization:</strong> Scores update instantly across all devices using Firebase</li>
+      <li><strong>Auto-Detection:</strong> Live Score page automatically finds and displays ongoing matches</li>
+      <li><strong>Ball-by-Ball Tracking:</strong> Record every delivery with runs, wickets, and extras</li>
+      <li><strong>Match History:</strong> View up to 20 recent matches in an organized grid with tournament badges</li>
+      <li><strong>Dynamic Tournament Display:</strong> Shows #TournamentName on Live Score and Matches pages</li>
+      <li><strong>Live Badges:</strong> Clear indicators show which matches are currently in progress</li>
+      <li><strong>Customizable Settings:</strong> Configure overs limit, wickets (supports 1-20 players), and team names</li>
+      <li><strong>Cross-Browser Sharing:</strong> Works across different devices and browsers with URL parameters</li>
+      <li><strong>Read-Only Mode:</strong> Automatic UI protection when viewing without edit token</li>
+      <li><strong>Detailed Statistics:</strong> Track runs, wickets, extras, strike rates, and run rates</li>
+      <li><strong>Complete Match Summary:</strong> Over-by-over breakdown with runs/wickets per over and ball-by-ball details</li>
+      <li><strong>Incomplete Over Display:</strong> Shows ongoing overs even when innings are complete</li>
+      <li><strong>Mobile-First Design:</strong> Optimized for phones, tablets, and desktops</li>
+      <li><strong>No Registration:</strong> Start using immediately without any sign-up</li>
+      <li><strong>100% Free:</strong> No hidden costs or premium features</li>
+    </ul>
+
+    <h2>Perfect For</h2>
+    <ul class="feature-list">
+      <li>Local neighborhood cricket matches</li>
+      <li>School and college tournaments</li>
+      <li>Office cricket leagues</li>
+      <li>Family cricket gatherings</li>
+      <li>Street cricket (gully cricket) games</li>
+      <li>Practice matches and scrimmages</li>
+      <li>Weekend cricket clubs</li>
+      <li>Community cricket events</li>
+    </ul>
+
+    <h2>How It Works</h2>
+    <p><strong>For Scorers:</strong> Open the scorer tool, optionally enter a tournament name (or leave blank for casual matches), enter team names and match settings, then start recording each ball. The app generates a unique Organization ID based on your tournament name to keep your matches organized. Share individual match links or the entire tournament link with spectators for live updates.</p>
+    <p><strong>Tournament Management:</strong> When you enter a tournament name, it's saved to your device's history for quick autocomplete next time. Your tournament list is private and stored locally - other users won't see your tournaments in their dropdown.</p>
+    <p><strong>For Viewers:</strong> Simply open the Live Score page - it automatically detects and displays the current live match. Or use the shared link (with org and match parameters) to watch a specific match across any device or browser.</p>
+    <p><strong>For Everyone:</strong> Browse all matches on the Matches page, see which games are live with tournament badges (#TournamentName), and review completed match results with detailed statistics.</p>
+
+    <h2>Technology</h2>
+    <p>Built with modern web technologies including Firebase Realtime Database for instant synchronization and localStorage for privacy-focused tournament history. The app features real-time listeners that automatically update scores without page refreshes, organization-based database isolation for multi-user environments, smart match detection algorithms, tournament-based URL sharing with org and match parameters, and a responsive design that works beautifully on all screen sizes.</p>
+
+    <h2>Privacy & Security</h2>
+    <p>Your privacy and data integrity matter. Tournament names you create are stored only on your device using localStorage - they're never shared with other users. Each tournament gets a unique Organization ID that keeps your matches separate from others. Match scores are shared via Firebase for live viewing, but your personal tournament list remains private.</p>
+    
+    <p><strong>Edit Token Protection:</strong> Every match generates a secure edit token that controls who can modify scores. Share the public viewer link for spectators to watch safely (read-only mode), and share the private scorer link only with trusted co-scorers who need edit access. This prevents accidental changes and malicious tampering while keeping matches publicly viewable.</p>
+
+    <h2>Our Mission</h2>
+    <p>To make professional-grade cricket scoring accessible to everyone. We believe every cricket match deserves proper scoring and the ability to share the excitement with others, whether it's a neighborhood game or an organized tournament. We prioritize privacy, ease of use, and real-time collaboration while ensuring multiple users can run their own tournaments without interference.</p>
+
+    <h2>Updates & Features (Latest: December 2025)</h2>
+    <p><strong>Recent Updates:</strong></p>
+    <ul class="feature-list">
+      <li>Edit token security system for protected scoring access</li>
+      <li>Dual link sharing: Viewer links (public) and Scorer links (private)</li>
+      <li>Read-only mode with visual indicators when viewing without edit token</li>
+      <li>Organization ID system for multi-user isolation and tournament grouping</li>
+      <li>Tournament name autocomplete with localStorage-based history (privacy-focused)</li>
+      <li>Dynamic #TournamentName display across Live Score and Matches pages</li>
+      <li>Cross-browser/cross-device sharing with URL parameters (org & match)</li>
+      <li>Enhanced Match Summary showing runs/wickets per over</li>
+      <li>Incomplete over display when innings complete</li>
+      <li>Improved run calculation accuracy using proven algorithms</li>
+      <li>Auto-redirect from root URL when org parameter present</li>
+    </ul>
+    <p>CricketBook continuously evolves with new features like edit token protection for secure scoring, customizable wicket limits for different team sizes, automatic live match detection, enhanced mobile sharing capabilities, tournament management, and improved match history organization. We're committed to making cricket scoring simple, fast, secure, private, and enjoyable for everyone.</p>
+
+  </div>
+  
+  <!-- Footer -->
+  <div class="footer">
+    <p>Made with ❤️ for local cricket matches.</p>
+    <p>© 2025 CricketBook — Realtime Cricket Scoring Tool</p>
+  </div>
+  </div>
+</body>
+</html>

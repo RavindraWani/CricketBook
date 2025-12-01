@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Record cricket scores effortlessly. Share live match updates with your team instantly.">
+  <title>CricketBook - Real-time Cricket Scoring</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1f2937;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+    
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      padding: 20px 16px;
+    }
+    
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .hero p {
+      font-size: 24px;
+      font-weight: 400;
+      opacity: 0.95;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px 12px;
+      }
+      .hero {
+        margin-bottom: 20px;
+        padding: 12px 12px;
+      }
+      .hero h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      .hero p {
+        font-size: 16px;
+        line-height: 1.3;
+      }
+    }
+    
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 968px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .card h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+    
+    .card p {
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #8b5cf6;
+      transition: all 0.2s;
+    }
+    
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+        border-radius: 14px;
+      }
+      .card h2 {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      .card p {
+        font-size: 14px;
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+      .card-link {
+        font-size: 13px;
+      }
+    }
+    
+    .card:hover .card-link {
+      color: #7c3aed;
+      gap: 12px;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: white;
+      padding: 16px;
+      opacity: 0.9;
+    }
+    
+    .footer p {
+      font-size: 13px;
+    }
+    
+    @media (max-width: 768px) {
+      .footer {
+        padding: 12px;
+      }
+      .footer p {
+        font-size: 12px;
+      }
+    }
+    
+    /* Navigation */
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 0 5px;
+    }
+    
+    .nav a {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 5px 8px;
+      margin: 3px 2px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      font-weight: 600;
+      font-size: 11px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    
+    .nav a.active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .nav {
+        margin-bottom: 15px;
+        padding: 0 3px;
+      }
+      .nav a {
+        padding: 4px 6px;
+        margin: 2px 1px;
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="nav">
+      <a href="index.html" class="active">🏠 Home</a>
+      <a href="livescore.html">📺 Live Score</a>
+      <a href="matches.html">📋 Matches</a>
+      <a href="about.html">ℹ️ About</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <div class="hero">
+      <h1>🏏 CricketBook</h1>
+      <p>Real-time Cricket Scoring for Local Matches & Tournaments</p>
+    </div>
+    
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+      <!-- Scorer Card -->
+      <a href="scorer.html" class="card">
+        <h2>⚙️ Scorer</h2>
+        <p>Score matches ball-by-ball with protected edit access. Create tournaments and share live updates securely.</p>
+        <span class="card-link">Start Scoring →</span>
+      </a>
+      
+      <!-- Live Score Card -->
+      <a href="livescore.html" class="card">
+        <h2>📺 Live Score</h2>
+        <p>Watch real-time cricket scores with ball-by-ball updates. Auto-detects and displays ongoing matches.</p>
+        <span class="card-link">Watch Live →</span>
+      </a>
+      
+      <!-- All Matches Card -->
+      <a href="matches.html" class="card">
+        <h2>📋 All Matches</h2>
+        <p>View match history, completed games, and ongoing tournaments. Track all your cricket matches in one place.</p>
+        <span class="card-link">View Matches →</span>
+      </a>
+      
+      <!-- About Card -->
+      <a href="about.html" class="card">
+        <h2>ℹ️ About</h2>
+        <p>Learn more about CricketBook and how it helps you score and share cricket matches effortlessly.</p>
+        <span class="card-link">Learn More →</span>
+      </a>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <p>Made with ❤️ for local cricket matches.</p>
+      <p>© 2025 CricketBook — Realtime Cricket Scoring Tool</p>
+    </div>
+  </div>
+  
+  <script>
+    // Auto-redirect to LiveScore if org parameter is present
+    const urlParams = new URLSearchParams(window.location.search);
+    const orgId = urlParams.get('org');
+    const matchId = urlParams.get('match');
+    
+    if (orgId) {
+      // Build redirect URL
+      let redirectUrl = 'livescore.html?org=' + orgId;
+      if (matchId) {
+        redirectUrl += '&match=' + matchId;
+      }
+      console.log('🔗 Redirecting to LiveScore with org ID:', orgId);
+      window.location.href = redirectUrl;
+    }
+  </script>
+</body>
+</html>
