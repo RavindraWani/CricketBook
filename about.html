@@ -232,16 +232,17 @@
     <h2>Key Features</h2>
     <ul class="feature-list">
       <li><strong>Edit Token Protection:</strong> Secure edit access with unique tokens - public can watch, only authorized scorers can edit</li>
+      <li><strong>Match Type Categories:</strong> Select match type (Friendly, League, Semi-Final, Final, Qualifier, Eliminator, Super Over, 3rd Place Playoff)</li>
       <li><strong>Dual Link Sharing:</strong> Separate viewer links (public) and scorer links (private) for controlled access</li>
       <li><strong>Multi-User Isolation:</strong> Organization IDs ensure your tournaments stay separate from others</li>
       <li><strong>Tournament Management:</strong> Name your tournaments and organize matches by league/competition</li>
       <li><strong>Smart Autocomplete:</strong> Tournament dropdown remembers your recent tournament names (stored locally for privacy)</li>
+      <li><strong>Dynamic Tournament Display:</strong> Shows "#TournamentName - Match Type" across all pages (Scorer, Live Score, Matches)</li>
       <li><strong>Privacy-First:</strong> Your tournament history is stored only on your device, not shared with others</li>
       <li><strong>Real-time Synchronization:</strong> Scores update instantly across all devices using Firebase</li>
       <li><strong>Auto-Detection:</strong> Live Score page automatically finds and displays ongoing matches</li>
       <li><strong>Ball-by-Ball Tracking:</strong> Record every delivery with runs, wickets, and extras</li>
       <li><strong>Match History:</strong> View up to 20 recent matches in an organized grid with tournament badges</li>
-      <li><strong>Dynamic Tournament Display:</strong> Shows #TournamentName on Live Score and Matches pages</li>
       <li><strong>Live Badges:</strong> Clear indicators show which matches are currently in progress</li>
       <li><strong>Customizable Settings:</strong> Configure overs limit, wickets (supports 1-20 players), and team names</li>
       <li><strong>Cross-Browser Sharing:</strong> Works across different devices and browsers with URL parameters</li>
@@ -267,10 +268,11 @@
     </ul>
 
     <h2>How It Works</h2>
-    <p><strong>For Scorers:</strong> Open the scorer tool, optionally enter a tournament name (or leave blank for casual matches), enter team names and match settings, then start recording each ball. The app generates a unique Organization ID based on your tournament name to keep your matches organized. Share individual match links or the entire tournament link with spectators for live updates.</p>
+    <p><strong>For Scorers:</strong> Open the scorer tool, optionally enter a tournament name (or leave blank for casual matches), select the match type (League, Semi-Final, Final, etc.), enter team names and match settings, then start recording each ball. The app generates a unique Organization ID based on your tournament name to keep your matches organized. Share individual match links or the entire tournament link with spectators for live updates.</p>
+    <p><strong>Match Types:</strong> Choose from 8 match categories: Friendly Match (practice), League Match (regular round-robin), Qualifier 1 (winner to final), Eliminator (loser eliminated), Semi-Final, Final (championship), 3rd Place Playoff, or Super Over (tie-breaker). The match type displays alongside your tournament name across all pages.</p>
     <p><strong>Tournament Management:</strong> When you enter a tournament name, it's saved to your device's history for quick autocomplete next time. Your tournament list is private and stored locally - other users won't see your tournaments in their dropdown.</p>
     <p><strong>For Viewers:</strong> Simply open the Live Score page - it automatically detects and displays the current live match. Or use the shared link (with org and match parameters) to watch a specific match across any device or browser.</p>
-    <p><strong>For Everyone:</strong> Browse all matches on the Matches page, see which games are live with tournament badges (#TournamentName), and review completed match results with detailed statistics.</p>
+    <p><strong>For Everyone:</strong> Browse all matches on the Matches page, see which games are live with tournament badges (#TournamentName - Match Type), and review completed match results with detailed statistics.</p>
 
     <h2>Technology</h2>
     <p>Built with modern web technologies including Firebase Realtime Database for instant synchronization and localStorage for privacy-focused tournament history. The app features real-time listeners that automatically update scores without page refreshes, organization-based database isolation for multi-user environments, smart match detection algorithms, tournament-based URL sharing with org and match parameters, and a responsive design that works beautifully on all screen sizes.</p>
@@ -286,19 +288,26 @@
     <h2>Updates & Features (Latest: December 2025)</h2>
     <p><strong>Recent Updates:</strong></p>
     <ul class="feature-list">
+      <li>Match Type categorization with 8 options (League, Semi-Final, Final, etc.)</li>
+      <li>Tournament display format: "#TournamentName - Match Type" across all pages</li>
       <li>Edit token security system for protected scoring access</li>
       <li>Dual link sharing: Viewer links (public) and Scorer links (private)</li>
       <li>Read-only mode with visual indicators when viewing without edit token</li>
       <li>Organization ID system for multi-user isolation and tournament grouping</li>
       <li>Tournament name autocomplete with localStorage-based history (privacy-focused)</li>
-      <li>Dynamic #TournamentName display across Live Score and Matches pages</li>
+      <li>Dynamic tournament and match type display on Scorer page</li>
       <li>Cross-browser/cross-device sharing with URL parameters (org & match)</li>
       <li>Enhanced Match Summary showing runs/wickets per over</li>
       <li>Incomplete over display when innings complete</li>
       <li>Improved run calculation accuracy using proven algorithms</li>
       <li>Auto-redirect from root URL when org parameter present</li>
     </ul>
-    <p>CricketBook continuously evolves with new features like edit token protection for secure scoring, customizable wicket limits for different team sizes, automatic live match detection, enhanced mobile sharing capabilities, tournament management, and improved match history organization. We're committed to making cricket scoring simple, fast, secure, private, and enjoyable for everyone.</p>
+    <p>CricketBook continuously evolves with new features like match type categorization for organized tournaments, edit token protection for secure scoring, customizable wicket limits for different team sizes, automatic live match detection, enhanced mobile sharing capabilities, tournament management, and improved match history organization. We're committed to making cricket scoring simple, fast, secure, private, and enjoyable for everyone.</p>
+
+    <h2>Contact & Support</h2>
+    <p>Have questions, feedback, or suggestions? We'd love to hear from you!</p>
+    <p><strong>Email:</strong> <a href="mailto:ravindramailme@gmail.com" style="color:#3b82f6;text-decoration:none;font-weight:600;">RavindraMailMe@gmail.com</a></p>
+    <p>For bug reports, feature requests, or general inquiries, please reach out via email. We aim to respond within 24-48 hours.</p>
 
   </div>
   

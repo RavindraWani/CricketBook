@@ -634,6 +634,20 @@
       <input id="teamB" placeholder="🎯 Bowling Side (e.g., Team B)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'" />
     </div>
     
+    <div style="margin-bottom:16px;">
+      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:6px;">🏅 Match Type</label>
+      <select id="matchType" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;cursor:pointer;" onfocus="this.style.borderColor='#8b5cf6'" onblur="this.style.borderColor='#e2e8f0'">
+        <option value="Friendly Match">Friendly Match – Practice or non-ranking match</option>
+        <option value="League Match">League Match – Regular round-robin stage</option>
+        <option value="Qualifier 1">Qualifier 1 – Winner advances to Final</option>
+        <option value="Eliminator">Eliminator – Losing team gets eliminated</option>
+        <option value="Semi-Final">Semi-Final – Decides final two teams</option>
+        <option value="Final">Final – Championship match</option>
+        <option value="3rd Place Playoff">3rd Place Playoff – Decides 3rd rank</option>
+        <option value="Super Over">Super Over – Tie-breaking over</option>
+      </select>
+    </div>
+    
     <div style="margin-bottom:8px;">
       <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:6px;">⚙️ Match Settings</label>
       <div class="row" style="gap:10px;">
@@ -671,6 +685,11 @@
         <span style="color:#6b7280;">🔴 LIVE VIEWERS:</span>
         <span id="liveViewers" style="color:#ef4444;font-weight:700;">0</span>
       </div>
+    </div>
+    
+    <!-- Tournament Header -->
+    <div id="tournamentHeaderScorer" style="display:none;text-align:center;margin-bottom:12px;padding:10px 16px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:12px;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1px;box-shadow:0 2px 8px rgba(102,126,234,0.3);">
+      <span id="tournamentTitleScorer"></span>
     </div>
     
     <!-- 📊 Scoreboard Header -->
@@ -1055,11 +1074,25 @@ function updateUI(){
   thisOverWkts = thisOver.wkts;
   
   // Display consolidated Overs/RR/Extras in chip banner
-  document.getElementById("oversExtrasInfo").innerHTML = `Overs: <b>(${overs}.${ballsInOver})</b> | RR: <b>${rr}</b> | Extras: <b>${extras}</b>`;
+  document.getElementById("oversExtrasInfo").innerHTML = `Overs: <b>(${overs}.${ballsInOver}/${oversLimit})</b> | RR: <b>${rr}</b> | Extras: <b>${extras}</b>`;
 
   // Update page title with team names
   if (teamA && teamB) {
     document.getElementById('pageTitle').textContent = `${teamA} vs ${teamB} - Cricket Scorer`;
+  }
+
+  // Update tournament header display
+  const tournamentHeaderScorer = document.getElementById('tournamentHeaderScorer');
+  const tournamentTitleScorer = document.getElementById('tournamentTitleScorer');
+  const tournamentNameValue = document.getElementById('tournamentName')?.value || '';
+  const matchTypeValue = document.getElementById('matchType')?.value || '';
+  
+  if (tournamentNameValue && tournamentNameValue.trim() !== '') {
+    const matchTypeText = matchTypeValue ? ` - ${matchTypeValue}` : '';
+    tournamentTitleScorer.textContent = `#${tournamentNameValue}${matchTypeText}`;
+    tournamentHeaderScorer.style.display = 'block';
+  } else {
+    tournamentHeaderScorer.style.display = 'none';
   }
 
   // Result
@@ -1105,6 +1138,7 @@ function saveMatchState() {
     teamA: teamA,
     teamB: teamB,
     tournamentName: document.getElementById('tournamentName')?.value || '',
+    matchType: document.getElementById('matchType')?.value || 'League Match',
     target: target,
     oversLimit: oversLimit,
     wicketsLimit: wicketsLimit,
@@ -1183,6 +1217,14 @@ function listenForUpdates() {
     matchCompleted = data.matchCompleted || false;
     matchStarted = true;
     
+    // Restore tournament name and match type to input fields (for display purposes)
+    if (data.tournamentName && document.getElementById('tournamentName')) {
+      document.getElementById('tournamentName').value = data.tournamentName;
+    }
+    if (data.matchType && document.getElementById('matchType')) {
+      document.getElementById('matchType').value = data.matchType;
+    }
+    
     // If loading from URL, show game screen
     if (document.getElementById('setup').style.display !== 'none') {
       document.getElementById('setup').style.display = 'none';
@@ -1248,7 +1290,7 @@ function updateUIFromFirebase() {
   }
   
   // Display consolidated Overs/RR/Extras
-  document.getElementById("oversExtrasInfo").innerHTML = `Overs: <b>(${overs}.${ballsInOver})</b> | RR: <b>${rr}</b> | Extras: <b>${extras}</b>`;
+  document.getElementById("oversExtrasInfo").innerHTML = `Overs: <b>(${overs}.${ballsInOver}/${oversLimit})</b> | RR: <b>${rr}</b> | Extras: <b>${extras}</b>`;
   
   // Update live over display
   updateLiveOverDisplay(inn);
@@ -1798,6 +1840,7 @@ function cancelExtra(){
 /* ---------------- Flow ---------------- */
 function startMatch(){
   const tournamentName = document.getElementById("tournamentName").value.trim();
+  const matchType = document.getElementById("matchType").value;
   teamA = document.getElementById("teamA").value || "Team A";
   teamB = document.getElementById("teamB").value || "Team B";
   oversLimit = Math.max(1, parseInt(document.getElementById("overs").value || "2"));

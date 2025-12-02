@@ -425,8 +425,9 @@
       
       const isBattingFirst = !match.inSecond;
       
+      const matchTypeText = match.matchType ? ` - ${match.matchType}` : '';
       const tournamentBadge = match.tournamentName && match.tournamentName.trim() !== '' 
-        ? `<div style="font-size:11px;color:#667eea;font-weight:700;margin-bottom:4px;">#${match.tournamentName}</div>` 
+        ? `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>` 
         : '';
       
       container.innerHTML = `
@@ -494,8 +495,9 @@
           minute: '2-digit'
         }) : '';
         
+        const matchTypeText = match.matchType ? ` - ${match.matchType}` : '';
         const tournamentBadge = match.tournamentName && match.tournamentName.trim() !== '' 
-          ? `<div style="font-size:11px;color:#667eea;font-weight:700;margin-bottom:4px;">#${match.tournamentName}</div>` 
+          ? `<div style="font-size:11px;color:#667eea;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>` 
           : '';
         
         return `

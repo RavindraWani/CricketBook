@@ -429,7 +429,8 @@
       const tournamentHeader = document.getElementById('tournamentHeader');
       const tournamentTitle = document.getElementById('tournamentTitle');
       if (data.tournamentName && data.tournamentName.trim() !== '') {
-        tournamentTitle.textContent = `#${data.tournamentName}`;
+        const matchTypeText = data.matchType ? ` - ${data.matchType}` : '';
+        tournamentTitle.textContent = `#${data.tournamentName}${matchTypeText}`;
         tournamentHeader.style.display = 'block';
       } else {
         tournamentHeader.style.display = 'none';
@@ -451,13 +452,14 @@
       
       const firstScore = `${data.first?.runs || 0}/${data.first?.wkts || 0}`;
       const firstOvers = calculateOvers(data.first?.legalBalls || 0);
+      const oversLimit = data.oversLimit || 20;
       document.getElementById('scoreA').textContent = firstScore;
-      document.getElementById('teamAOvers').textContent = `(${firstOvers} overs)`;
+      document.getElementById('teamAOvers').textContent = `(${firstOvers}/${oversLimit} overs)`;
       
       const secondScore = `${data.second?.runs || 0}/${data.second?.wkts || 0}`;
       const secondOvers = calculateOvers(data.second?.legalBalls || 0);
       document.getElementById('scoreB').textContent = secondScore;
-      document.getElementById('teamBOvers').textContent = `(${secondOvers} overs)`;
+      document.getElementById('teamBOvers').textContent = `(${secondOvers}/${oversLimit} overs)`;
       
       // Highlight currently batting team with larger score and gradient text
       const teamAScore = document.getElementById('scoreA');
