@@ -1383,8 +1383,8 @@ function shareViewerLink() {
   const matchType = document.getElementById('matchType')?.value || '';
   const badgeName = matchType ? `${tournamentName} - ${matchType}` : tournamentName;
   
-  // WhatsApp-specific message
-  const whatsappMessage = `🏏 *${badgeName}* is LIVE!\n\nNo need to ask "score kya hai?" every 5 minutes 😄\n\nCheck the live score anytime right here 👇\n${link}`;
+  // WhatsApp-specific message (link will be added automatically by WhatsApp)
+  const whatsappMessage = `🏏 *${badgeName}* is LIVE!\n\nNo need to ask "score kya hai?" every 5 minutes 😄\n\nCheck the live score anytime right here 👇\n\n${link}`;
   const whatsappLink = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
   
   const shareTitle = `${teamA} vs ${teamB} - Live Score`;
