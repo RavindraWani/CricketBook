@@ -338,6 +338,7 @@
 
     // Global variable to store matches for export
     let allMatchesData = [];
+    let pollingInterval = null; // For polling instead of continuous listener
 
     // Check if org parameter is in URL (from share link)
     const urlParams = new URLSearchParams(window.location.search);
@@ -369,7 +370,9 @@
     function loadMatches() {
       const matchesRef = database.ref('organizations/' + organizationId + '/matches');
     
-    matchesRef.on('value', (snapshot) => {
+    // Use polling instead of continuous listener to reduce active connections
+    const pollMatches = () => {
+      matchesRef.once('value', (snapshot) => {
       const allMatches = snapshot.val();
       
       console.log('📊 Loaded matches from Firebase for org ' + organizationId + ':', allMatches); // Debug log
@@ -444,6 +447,15 @@
       console.error('❌ Firebase error:', error); // Debug log
       document.getElementById('loading').innerHTML = '<div class="error">Error loading matches: ' + error.message + '</div>';
     });
+    };
+    
+    // Initial load
+    pollMatches();
+    
+    // Poll every 5 seconds for updates (instead of continuous listener)
+    pollingInterval = setInterval(pollMatches, 5000);
+    
+    console.log('✅ Polling enabled (every 5 seconds) - reduced active connections');
     }
     
     function displayOngoingMatch(match) {
@@ -512,12 +524,23 @@
         const hasResult = match.resultText && match.resultText.trim() !== '';
         const isComplete = match.first?.done && match.second?.done;
         
+        // Check if match is inactive (no update in 15+ minutes)
+        const currentTime = Date.now();
+        const lastUpdate = match.lastUpdated || match.timestamp || 0;
+        const minutesSinceUpdate = (currentTime - lastUpdate) / (1000 * 60);
+        const isInactive = minutesSinceUpdate >= 15;
+        
         let statusBadge = '';
         if (hasResult) {
           statusBadge = '<span style="display:inline-block;background:#10b981;color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;margin-left:8px;">✅ Completed</span>';
         } else if (!match.matchCompleted && !hasResult) {
-          // Show LIVE badge for any ongoing match (first or second innings)
-          statusBadge = '<span style="display:inline-block;background:#f59e0b;color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;margin-left:8px;">🏏 LIVE</span>';
+          // Check if match is paused/inactive
+          if (isInactive) {
+            statusBadge = '<span style="display:inline-block;background:#f59e0b;color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;margin-left:8px;">⚠️ Stalled</span>';
+          } else {
+            // Show LIVE badge for any ongoing match (first or second innings)
+            statusBadge = '<span style="display:inline-block;background:#f59e0b;color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;margin-left:8px;">🏏 LIVE</span>';
+          }
         }
         
         const dateStr = match.timestamp ? new Date(match.timestamp).toLocaleDateString('en-US', { 
@@ -674,6 +697,14 @@
       
       console.log('✅ Exported ' + allMatchesData.length + ' matches to CSV');
     }
+    
+    // Clean up connections when leaving page
+    window.addEventListener('beforeunload', () => {
+      console.log('🧹 Cleaning up connections before page unload');
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
+    });
   </script>
 
   <!-- Footer -->

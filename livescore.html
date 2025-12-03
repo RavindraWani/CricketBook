@@ -266,6 +266,7 @@
     // Track active listeners for cleanup
     let currentMatchRef = null;
     let matchesListenerRef = null;
+    let pollingInterval = null; // For polling instead of continuous listeners
 
     // Organization ID for multi-user isolation
     let organizationId = localStorage.getItem('cricketbook_org_id');
@@ -310,13 +311,14 @@
         matchesListenerRef.off();
       }
       
-      matchesListenerRef = database.ref('organizations/' + organizationId + '/matches');
-      // Use on('value') instead of once() to listen for new matches in real-time
-      matchesListenerRef.on('value', (snapshot) => {
+      // Use once() instead of on() to avoid persistent connection
+      database.ref('organizations/' + organizationId + '/matches').once('value', (snapshot) => {
         const allMatches = snapshot.val();
         
         if (!allMatches) {
           document.getElementById('loading').innerHTML = '<div class="error">No matches found. Waiting for match to start...</div>';
+          // Retry after 5 seconds
+          setTimeout(findAndLoadLiveMatch, 5000);
           return;
         }
         
@@ -346,7 +348,7 @@
           if (matchId !== liveMatch.matchId) {
             matchId = liveMatch.matchId;
             localStorage.setItem('lastMatchId', matchId);
-            // Stop listening to old match and load new one
+            // Load new match with polling
             loadMatch(matchId);
           }
         } else {
@@ -381,23 +383,41 @@
         currentMatchRef.off();
       }
       
-      // Listen to Firebase changes
-      currentMatchRef = database.ref('organizations/' + organizationId + '/matches/' + id);
-      currentMatchRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        console.log('📡 Received update from Firebase for match', id, ':', data);
-        if (data) {
-          updateUI(data);
-          document.getElementById('loading').style.display = 'none';
-          document.getElementById('content').style.display = 'block';
-        } else {
-          console.warn('⚠️ Match not found:', id);
-          document.getElementById('loading').innerHTML = '<div class="error">Match ID "' + id + '" not found in Firebase. <br><br>Try refreshing or start a new match.</div>';
-        }
-      }, (error) => {
-        console.error('❌ Firebase error:', error);
-        document.getElementById('loading').innerHTML = '<div class="error">Error loading match: ' + error.message + '</div>';
-      });
+      // Clean up previous polling interval
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
+      
+      // Use polling instead of continuous listener to reduce active connections
+      const pollMatch = () => {
+        database.ref('organizations/' + organizationId + '/matches/' + id).once('value', (snapshot) => {
+          const data = snapshot.val();
+          console.log('📡 Polled update from Firebase for match', id);
+          if (data) {
+            updateUI(data);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+          } else {
+            console.warn('⚠️ Match not found:', id);
+            document.getElementById('loading').innerHTML = '<div class="error">Match ID "' + id + '" not found in Firebase. <br><br>Try refreshing or start a new match.</div>';
+            // Stop polling if match not found
+            if (pollingInterval) {
+              clearInterval(pollingInterval);
+            }
+          }
+        }, (error) => {
+          console.error('❌ Firebase error:', error);
+          document.getElementById('loading').innerHTML = '<div class="error">Error loading match: ' + error.message + '</div>';
+        });
+      };
+      
+      // Initial load
+      pollMatch();
+      
+      // Poll every 2 seconds for updates (instead of continuous listener)
+      pollingInterval = setInterval(pollMatch, 2000);
+      
+      console.log('✅ Polling enabled (every 2 seconds) - reduced active connections');
     }
 
     // Update UI with match data
@@ -445,7 +465,20 @@
         liveBadge.style.display = 'none';
         matchCompletedBanner.style.display = 'block';
       } else {
-        // Match is live
+        // Match is live - check if stalled (no update in 15+ minutes)
+        const currentTime = Date.now();
+        const lastUpdate = data.lastUpdated || data.timestamp || 0;
+        const minutesSinceUpdate = (currentTime - lastUpdate) / (1000 * 60);
+        const isStalled = minutesSinceUpdate >= 15;
+        
+        if (isStalled) {
+          liveBadge.textContent = '⚠️ STALLED';
+          liveBadge.style.background = 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)';
+        } else {
+          liveBadge.textContent = 'LIVE';
+          liveBadge.style.background = 'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)';
+        }
+        
         liveBadge.style.display = 'flex';
         matchCompletedBanner.style.display = 'none';
       }
@@ -809,6 +842,20 @@
       });
       return {runs, wkts};
     }
+    
+    // Clean up connections when leaving page
+    window.addEventListener('beforeunload', () => {
+      console.log('🧹 Cleaning up connections before page unload');
+      if (currentMatchRef) {
+        currentMatchRef.off();
+      }
+      if (matchesListenerRef) {
+        matchesListenerRef.off();
+      }
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
+    });
   </script>
 
   <!-- Footer -->

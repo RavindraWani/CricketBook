@@ -675,18 +675,6 @@
 
   <!-- Game -->
   <div id="game" class="card" style="display:none">
-    <!-- Live Viewers Counter -->
-    <div id="viewersCounter" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px 12px;background:linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);border:1px solid #cbd5e1;border-radius:10px;font-size:11px;font-weight:600;color:#475569;">
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="color:#6b7280;">👁️ TOTAL VIEWS:</span>
-        <span id="totalViews" style="color:#3b82f6;font-weight:700;">0</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <span style="color:#6b7280;">🔴 LIVE VIEWERS:</span>
-        <span id="liveViewers" style="color:#ef4444;font-weight:700;">0</span>
-      </div>
-    </div>
-    
     <!-- Tournament Header -->
     <div id="tournamentHeaderScorer" style="display:none;text-align:center;margin-bottom:12px;padding:10px 16px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:12px;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1px;box-shadow:0 2px 8px rgba(102,126,234,0.3);">
       <span id="tournamentTitleScorer"></span>
@@ -1966,73 +1954,11 @@ function startMatch(){
   
   if (!isViewerMode && firebaseEnabled) {
     saveMatchState();
-    
-    // Initialize viewers tracking for scorer
-    initializeViewersTracking();
+    // Viewer tracking removed - simplified for better performance
   }
 }
 
-// Function to track viewers (for scorer only)
-function initializeViewersTracking() {
-  if (!firebaseEnabled || !matchId || !db) return;
-  
-  const viewersRef = db.ref('organizations/' + organizationId + '/matches/' + matchId + '/viewers');
-  const totalViewsRef = db.ref('organizations/' + organizationId + '/matches/' + matchId + '/totalViews');
-  
-  // Generate unique viewer ID
-  const viewerId = 'viewer_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-  const myViewerRef = viewersRef.child(viewerId);
-  
-  // Increment total views
-  totalViewsRef.transaction((currentViews) => {
-    return (currentViews || 0) + 1;
-  });
-  
-  // Set this viewer as online
-  myViewerRef.set({
-    timestamp: firebase.database.ServerValue.TIMESTAMP,
-    online: true
-  });
-  
-  // Remove viewer on disconnect
-  myViewerRef.onDisconnect().remove();
-  
-  // Listen to total views
-  totalViewsRef.on('value', (snapshot) => {
-    const totalViews = snapshot.val() || 0;
-    document.getElementById('totalViews').textContent = totalViews;
-  });
-  
-  // Listen to live viewers count
-  viewersRef.on('value', (snapshot) => {
-    const viewers = snapshot.val();
-    const liveCount = viewers ? Object.keys(viewers).length : 0;
-    document.getElementById('liveViewers').textContent = liveCount;
-  });
-  
-  // Cleanup old viewers (older than 5 minutes)
-  setInterval(() => {
-    viewersRef.once('value', (snapshot) => {
-      const now = Date.now();
-      const viewers = snapshot.val();
-      if (viewers) {
-        Object.keys(viewers).forEach(vId => {
-          const viewer = viewers[vId];
-          if (viewer.timestamp && (now - viewer.timestamp > 300000)) {
-            viewersRef.child(vId).remove();
-          }
-        });
-      }
-    });
-  }, 60000); // Check every minute
-  
-  // Update timestamp every 30 seconds to stay active
-  setInterval(() => {
-    myViewerRef.update({
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
-  }, 30000);
-}
+// Viewer tracking functionality removed for simplicity and performance
 
 function endInnings(){
   const inn = currentInnings();
