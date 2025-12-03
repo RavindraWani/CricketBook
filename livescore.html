@@ -280,9 +280,9 @@
       localStorage.setItem('cricketbook_org_id', organizationId);
       console.log('🔗 Using Organization ID from share link and saved to localStorage:', organizationId);
     } else if (!organizationId) {
-      // No org ID in URL or localStorage - show error message
-      console.warn('⚠️ No Organization ID found. Please start a match from Scorer.html first.');
-      document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:8px;">No organization found</div><div>Please start a match from <strong>Scorer.html</strong> first to create your tournament.</div></div>';
+      // No org ID in URL or localStorage - show helpful message
+      console.warn('⚠️ No Organization ID found. Please start a match first.');
+      document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:12px;color:#1f2937;">Ready to Watch Live Cricket?</div><div style="color:#6b7280;margin-bottom:16px;">Start a new match or get a share link to view live scores here!</div><a href="index.html" class="btn" style="background:#8b5cf6;color:white;padding:10px 24px;border-radius:10px;text-decoration:none;display:inline-block;font-weight:600;">🏠 Go to Home</a></div>';
     } else {
       console.log('✅ Using Organization ID from localStorage:', organizationId);
     }
