@@ -224,9 +224,17 @@
       padding: 0 2px;
     }
     .nav a {
-      padding: 7px 10px;
-      margin: 2px 2px;
-      font-size: 11px;
+      padding: 6px 8px;
+      margin: 2px 1px;
+      font-size: 10.5px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .nav a {
+      padding: 6px 6px;
+      margin: 2px 1px;
+      font-size: 10px;
     }
   }
   
@@ -1510,7 +1518,7 @@ function getTournamentLink() {
   pathParts.pop(); // Remove the current file (scorer.html)
   const basePath = pathParts.join('/');
   const baseUrl = window.location.origin + basePath + '/';
-  return `${baseUrl}matches.html?org=${organizationId}`;
+  return `${baseUrl}livescore.html?org=${organizationId}`;
 }
 
 function shareViewerLink() {
