@@ -1491,7 +1491,7 @@ function updateLiveOverDisplay(inn) {
       else if (sym.startsWith('WD') || sym.startsWith('NB')) color = '#f59e0b';
       else if (sym === 'B' || sym === 'LB') color = '#6b7280';
     }
-    return `<span style="display:inline-block;min-width:32px;padding:4px 6px;margin:2px;background:${color};color:#fff;border-radius:6px;font-size:12px;font-weight:600;text-align:center;">${label}</span>`;
+    return `<span style="display:inline-block;min-width:32px;width:32px;height:32px;padding:0;margin:2px;background:${color};color:#fff;border-radius:4px;font-size:12px;font-weight:600;text-align:center;line-height:32px;">${label}</span>`;
   }).join('');
   
   liveOverDiv.innerHTML = `<div style="color:#475569;font-size:13px;font-weight:600;margin-bottom:6px;">Over ${overNum}</div>${ballsHtml}`;
