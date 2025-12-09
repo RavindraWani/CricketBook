@@ -222,18 +222,22 @@
     <h2>Core Features</h2>
     <ul class="feature-list">
       <li><strong>Real-Time Scoring:</strong> Ball-by-ball tracking with instant updates across all devices</li>
+      <li><strong>Password-Protected Tournaments:</strong> Secure your tournaments with passwords - prevent duplicates and allow team collaboration</li>
       <li><strong>WhatsApp Sharing:</strong> One-tap sharing with custom messages - "No need to ask 'score kya hai?' every 5 minutes 😄"</li>
       <li><strong>Secure Access:</strong> Edit tokens protect scoring - public can watch, only authorized scorers can edit</li>
-      <li><strong>Tournament Management:</strong> Organize matches with custom names and 8 match types (League, Semi-Final, Final, etc.)</li>
+      <li><strong>Tournament Management:</strong> Organize multiple matches under one tournament with custom names and 8 match types (League, Semi-Final, Final, etc.)</li>
+      <li><strong>Team Collaboration:</strong> Share tournament password with team members to let them add matches</li>
       <li><strong>Auto-Detection:</strong> Live Score page automatically finds and displays ongoing matches</li>
       <li><strong>Match History:</strong> Browse up to 20 recent matches with detailed over-by-over summaries</li>
       <li><strong>Flexible Settings:</strong> Configure overs limit (1-50), wickets (1-20 players), and team names</li>
-      <li><strong>Privacy-First:</strong> Tournament history stored locally on your device only</li>
+      <li><strong>Privacy-First:</strong> Passwords are SHA-256 hashed - never stored in plain text</li>
       <li><strong>No Sign-up:</strong> Start scoring immediately - 100% free forever</li>
     </ul>
 
     <h2>How It Works</h2>
-    <p><strong>Score:</strong> Enter tournament name (optional), select match type, set team names → Record each ball → Share via WhatsApp</p>
+    <p><strong>Create Tournament:</strong> Enter tournament name, set a password to protect it → Add team names and match settings</p>
+    <p><strong>Score:</strong> Record each ball with runs, wickets, and extras → All changes sync in real-time</p>
+    <p><strong>Collaborate:</strong> Share tournament password with team members → Multiple scorers can add matches to same tournament</p>
     <p><strong>Watch:</strong> Open Live Score for auto-detected matches or use shared link from scorer</p>
     <p><strong>Share:</strong> Two link types - Viewer Link (public, read-only) and Scorer Link (private, edit access)</p>
 
@@ -246,7 +250,7 @@
     </ul>
 
     <h2>Technology & Security</h2>
-    <p>Built with Firebase Realtime Database for instant sync and localStorage for privacy. Edit token system prevents unauthorized changes while keeping matches publicly viewable. Organization IDs isolate tournaments between different users.</p>
+    <p>Built with Firebase Realtime Database for instant sync and localStorage for session management. Password protection uses SHA-256 cryptographic hashing - passwords are never stored in plain text. Edit token system prevents unauthorized changes while keeping matches publicly viewable. Organization IDs with password protection ensure complete tournament isolation between users.</p>
 
     <h2>Our Mission</h2>
     <p>Make professional-grade cricket scoring accessible to everyone - from backyard games to organized tournaments. Free, simple, and secure.</p>

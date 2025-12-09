@@ -308,6 +308,23 @@
   let canEditMatch = false;  // Whether current user can edit
   let isLoadingFromFirebase = false;  // Flag to prevent save loop when loading
   
+  // ========== Password Hashing Utility ==========
+  // Simple SHA-256 hashing for password security
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+  
+  // Verify password against stored hash
+  async function verifyPassword(password, storedHash) {
+    const hash = await hashPassword(password);
+    return hash === storedHash;
+  }
+  
   try {
     // Check if config is filled in
     if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
@@ -680,13 +697,17 @@
     const sanitize = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 30);
     let tourName = sanitize(tournamentName);
     
-    // If no tournament name provided, use date as org ID
+    // If no tournament name provided, generate unique ID with date + time + random
     if (!tourName || tourName === '') {
       const now = new Date();
       const dd = String(now.getDate()).padStart(2, '0');
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const yyyy = String(now.getFullYear());
-      tourName = `match_${dd}${mm}${yyyy}`;
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      const random = Math.random().toString(36).substr(2, 6);
+      tourName = `match_${dd}${mm}${yyyy}_${hh}${min}${ss}_${random}`;
     }
     
     return tourName;
@@ -728,8 +749,8 @@
   </nav>
 
   <!-- Saved Matches Section -->
-  <div id="savedMatchesSection" class="container" style="margin-bottom:14px;display:none;">
-    <div class="card" style="background:#ffffff;color:#1f2937;">
+  <div id="savedMatchesSection" style="margin-bottom:14px;display:none;">
+    <div class="card" style="background:#ffffff;color:#1f2937;max-width:520px;margin:0 auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <h2 style="margin:0;font-size:20px;font-weight:700;color:#1f2937;">💾 Saved Matches</h2>
         <button class="btn" onclick="refreshSavedMatches()" style="padding:8px 16px;background:#10b981;font-size:13px;width:auto;min-width:80px;">🔄 Refresh</button>
@@ -749,9 +770,20 @@
   <div style="background:linear-gradient(135deg, #667eea15 0%, #764ba215 100%);padding:20px;border-radius:16px;margin-bottom:20px;">
     <div style="margin-bottom:16px;">
       <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">🏆 Tournament Name</label>
-      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Optional: Name of your tournament or league (e.g., Summer League 2025)</p>
-      <input id="tournamentName" list="tournamentsList" placeholder="e.g., Indian Premier League" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" />
+      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Optional: Name your tournament (e.g., Summer League 2025). If provided, password is required. Leave blank for quick one-off matches.</p>
+      <input id="tournamentName" list="tournamentsList" placeholder="e.g., Indian Premier League (Optional)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkTournamentExists()" />
       <datalist id="tournamentsList"></datalist>
+      <div id="tournamentStatus" style="margin-top:8px;display:none;"></div>
+    </div>
+    
+    <div id="passwordSection" style="margin-bottom:16px;padding:16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;">
+      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">🔐 Tournament Password</label>
+      <p id="passwordHelpText" style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Required for named tournaments. Protects your tournament and allows team collaboration. Leave both name and password blank for quick matches.</p>
+      <div style="position:relative;">
+        <input id="tournamentPassword" type="password" placeholder="Enter password" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;padding-right:45px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkPasswordStrength()" />
+        <button type="button" onclick="togglePasswordVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;padding:0;line-height:1;">👁️</button>
+      </div>
+      <div id="passwordStrength" style="margin-top:8px;font-size:12px;display:none;"></div>
     </div>
     
     <div style="margin-bottom:16px;">
@@ -2062,36 +2094,195 @@ function cancelExtra(){
   updateUI();
 }
 
+/* ---------------- Tournament Password System ---------------- */
+// Toggle password visibility
+function togglePasswordVisibility() {
+  const passwordInput = document.getElementById('tournamentPassword');
+  const currentType = passwordInput.getAttribute('type');
+  passwordInput.setAttribute('type', currentType === 'password' ? 'text' : 'password');
+}
+
+// Check password strength
+function checkPasswordStrength() {
+  const password = document.getElementById('tournamentPassword').value;
+  const strengthDiv = document.getElementById('passwordStrength');
+  
+  if (!password) {
+    strengthDiv.style.display = 'none';
+    return;
+  }
+  
+  let strength = 0;
+  let message = '';
+  let color = '';
+  
+  if (password.length >= 6) strength++;
+  if (password.length >= 10) strength++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[^a-zA-Z0-9]/.test(password)) strength++;
+  
+  if (strength <= 1) {
+    message = '⚠️ Weak password';
+    color = '#ef4444';
+  } else if (strength <= 3) {
+    message = '✓ Medium password';
+    color = '#f59e0b';
+  } else {
+    message = '✓ Strong password';
+    color = '#10b981';
+  }
+  
+  strengthDiv.innerHTML = `<span style="color:${color};font-weight:600;">${message}</span>`;
+  strengthDiv.style.display = 'block';
+}
+
+// Check if tournament exists in Firebase
+let checkTournamentTimeout = null;
+async function checkTournamentExists() {
+  const tournamentName = document.getElementById('tournamentName').value.trim();
+  const statusDiv = document.getElementById('tournamentStatus');
+  const passwordHelpText = document.getElementById('passwordHelpText');
+  const passwordSection = document.getElementById('passwordSection');
+  
+  // Clear previous timeout
+  if (checkTournamentTimeout) {
+    clearTimeout(checkTournamentTimeout);
+  }
+  
+  if (!tournamentName) {
+    statusDiv.style.display = 'none';
+    passwordHelpText.textContent = 'Required for named tournaments. Protects your tournament and allows team collaboration. Leave both name and password blank for quick matches.';
+    passwordSection.style.borderColor = '#e2e8f0';
+    passwordSection.style.background = '#f8fafc';
+    return;
+  }
+  
+  // Debounce the check
+  checkTournamentTimeout = setTimeout(async () => {
+    if (!firebaseEnabled || !db) {
+      statusDiv.style.display = 'none';
+      return;
+    }
+    
+    const orgId = generateOrganizationId(tournamentName);
+    
+    try {
+      const snapshot = await db.ref('organizations/' + orgId).once('value');
+      const exists = snapshot.exists();
+      
+      if (exists) {
+        statusDiv.innerHTML = '<div style="padding:8px 12px;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;color:#92400e;font-size:12px;font-weight:600;">⚠️ Tournament exists! Enter password to add matches or choose a different name.</div>';
+        statusDiv.style.display = 'block';
+        passwordHelpText.textContent = 'Enter the correct password to add matches to this existing tournament.';
+        passwordSection.style.borderColor = '#fbbf24';
+        passwordSection.style.background = '#fef3c7';
+      } else {
+        statusDiv.innerHTML = '<div style="padding:8px 12px;background:#d1fae5;border:1px solid #10b981;border-radius:8px;color:#065f46;font-size:12px;font-weight:600;">✓ New tournament - set a password to get started!</div>';
+        statusDiv.style.display = 'block';
+        passwordHelpText.textContent = 'Set a password to protect your tournament. Share it with your team to allow them to add matches.';
+        passwordSection.style.borderColor = '#10b981';
+        passwordSection.style.background = '#f0fdf4';
+      }
+    } catch (error) {
+      console.error('Error checking tournament:', error);
+      statusDiv.style.display = 'none';
+    }
+  }, 500); // Wait 500ms after user stops typing
+}
+
 /* ---------------- Flow ---------------- */
-function startMatch(){
+async function startMatch(){
   const tournamentName = document.getElementById("tournamentName").value.trim();
+  const tournamentPassword = document.getElementById("tournamentPassword").value;
   const matchType = document.getElementById("matchType").value;
   teamA = document.getElementById("teamA").value || "Team A";
   teamB = document.getElementById("teamB").value || "Team B";
   oversLimit = Math.max(1, parseInt(document.getElementById("overs").value || "2"));
   wicketsLimit = Math.max(1, Math.min(20, parseInt(document.getElementById("wicketsLimit").value || "10")));
   
+  // Validate password only if tournament name is provided
+  if (tournamentName && tournamentName !== '') {
+    // Named tournament - password is REQUIRED
+    if (!tournamentPassword) {
+      alert('⚠️ Please enter a tournament password.\n\nPassword is required for named tournaments to:\n• Protect your tournament\n• Allow team members to add matches\n• Prevent unauthorized access\n\nTip: Leave tournament name blank for quick matches without password.');
+      return;
+    }
+    
+    if (tournamentPassword.length < 4) {
+      alert('⚠️ Password must be at least 4 characters long.\n\nPlease choose a stronger password.');
+      return;
+    }
+  } else {
+    // Quick match without tournament name - password is OPTIONAL
+    console.log('🏏 Quick match mode - tournament name blank, password optional');
+  }
+  
+  // Generate organization ID based on tournament name
+  if (tournamentName && tournamentName !== '') {
+    organizationId = generateOrganizationId(tournamentName);
+  } else {
+    // Generate unique org ID for unnamed tournament (includes timestamp + random)
+    organizationId = generateOrganizationId('');
+    console.log('🆔 Generated unique org ID for quick match:', organizationId);
+  }
+  
+  // Check if tournament exists and validate password (only for named tournaments)
+  if (firebaseEnabled && db && tournamentName && tournamentName !== '' && tournamentPassword) {
+    try {
+      const orgSnapshot = await db.ref('organizations/' + organizationId).once('value');
+      const orgData = orgSnapshot.val();
+      
+      if (orgData && orgData.passwordHash) {
+        // Tournament exists - verify password
+        console.log('� Tournament exists, verifying password...');
+        const passwordValid = await verifyPassword(tournamentPassword, orgData.passwordHash);
+        
+        if (!passwordValid) {
+          alert('❌ Incorrect password!\n\nThis tournament already exists.\n\nEnter the correct password to add matches, or choose a different tournament name.');
+          return;
+        }
+        
+        console.log('✅ Password verified! Adding match to existing tournament.');
+        alert('✅ Password verified!\n\nAdding your match to existing tournament: "' + tournamentName + '"');
+        
+      } else {
+        // New tournament - create with password
+        console.log('🆕 Creating new tournament with password protection...');
+        const passwordHash = await hashPassword(tournamentPassword);
+        
+        // Save tournament metadata to Firebase
+        await db.ref('organizations/' + organizationId).update({
+          name: tournamentName,
+          passwordHash: passwordHash,
+          createdAt: Date.now(),
+          createdBy: 'scorer_' + Math.random().toString(36).substr(2, 9)
+        });
+        
+        console.log('✅ New tournament created with password protection');
+        alert('✅ Tournament created!\n\n"' + tournamentName + '"\n\nPassword has been set. Share it with your team to allow them to add matches.');
+      }
+      
+    } catch (error) {
+      console.error('❌ Error checking tournament:', error);
+      alert('⚠️ Error connecting to server.\n\nYour match will be saved locally but may not sync.\n\nError: ' + error.message);
+      // Continue anyway for offline functionality
+    }
+  } else if (!tournamentName || tournamentName === '') {
+    // Quick match - no password validation needed
+    console.log('🚀 Quick match mode - skipping password/tournament checks');
+  }
+  
+  // Save to localStorage
+  localStorage.setItem('cricketbook_org_id', organizationId);
+  if (tournamentName) {
+    saveTournamentToHistory(tournamentName);
+  }
+  
   // Generate edit token for this new match
   editToken = generateEditToken();
   canEditMatch = true; // Creator always has edit permission
   console.log('🔐 Generated edit token for match protection');
-  
-  // Generate organization ID based on tournament name
-  // Always generate fresh org ID for each new match
-  if (tournamentName && tournamentName !== '') {
-    // User provided tournament name - generate org ID from it
-    organizationId = generateOrganizationId(tournamentName);
-    localStorage.setItem('cricketbook_org_id', organizationId);
-    console.log('📛 Generated Organization ID from tournament name:', organizationId);
-    
-    // Save tournament to history for autocomplete
-    saveTournamentToHistory(tournamentName);
-  } else {
-    // No tournament name - generate date-based org ID
-    organizationId = generateOrganizationId('');
-    localStorage.setItem('cricketbook_org_id', organizationId);
-    console.log('🆕 Generated date-based Organization ID:', organizationId);
-  }
   
   // Generate match ID based on team names (only if not already set from URL)
   if (!matchId) {
@@ -2109,9 +2300,10 @@ function startMatch(){
   // Initialize Firebase sync for scorer
   console.log("🏏 Match started");
   console.log("📋 Match ID:", matchId);
+  console.log("🏆 Organization ID:", organizationId);
   console.log("🔍 Firebase enabled:", firebaseEnabled);
   console.log("🔍 Viewer mode:", isViewerMode);
-  console.log("� Database object:", db ? "✅ exists" : "❌ null");
+  console.log("📦 Database object:", db ? "✅ exists" : "❌ null");
   
   if (!isViewerMode && firebaseEnabled) {
     saveMatchState();
