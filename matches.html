@@ -283,6 +283,165 @@
       background: #059669;
       transform: scale(1.05);
     }
+    
+    /* Points Table Styling */
+    .points-table-container {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
+      overflow-x: auto;
+    }
+    
+    .points-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    
+    .points-table thead {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .points-table th {
+      padding: 12px 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    
+    .points-table th:first-child {
+      text-align: left;
+      padding-left: 16px;
+    }
+    
+    .points-table td {
+      padding: 14px 8px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .points-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      padding-left: 16px;
+      color: #1f2937;
+    }
+    
+    .points-table tbody tr:hover {
+      background: #f9fafb;
+    }
+    
+    .points-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .rank-cell {
+      font-weight: 700;
+      color: #8b5cf6;
+      font-size: 15px;
+    }
+    
+    .nrr-positive {
+      color: #10b981;
+      font-weight: 600;
+    }
+    
+    .nrr-negative {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    
+    .points-cell {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 16px;
+    }
+    
+    .nrr-breakdown {
+      display: none;
+      background: #f9fafb;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    
+    .nrr-breakdown.show {
+      display: table-row;
+    }
+    
+    .nrr-breakdown td {
+      padding: 16px !important;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .nrr-formula {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+      margin-top: 8px;
+    }
+    
+    .nrr-formula-title {
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    
+    .nrr-calc-step {
+      margin: 6px 0;
+      color: #4b5563;
+    }
+    
+    .nrr-calc-step strong {
+      color: #1f2937;
+    }
+    
+    .toggle-nrr {
+      cursor: pointer;
+      color: #667eea;
+      font-size: 11px;
+      margin-left: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      user-select: none;
+    }
+    
+    .toggle-nrr:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .points-table {
+        font-size: 12px;
+      }
+      
+      .points-table th,
+      .points-table td {
+        padding: 10px 6px;
+      }
+      
+      .points-table th:first-child,
+      .points-table td:first-child {
+        padding-left: 10px;
+      }
+      
+      .points-table th {
+        font-size: 11px;
+      }
+      
+      .nrr-breakdown {
+        font-size: 11px;
+      }
+      
+      .nrr-formula {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -303,6 +462,32 @@
     <div class="loading" id="loading">Loading matches...</div>
     
     <div id="content" style="display:none">
+      <!-- Points Table Section (League Matches Only) -->
+      <div id="pointsTableSection" class="section" style="display:none">
+        <div class="section-title">
+          🏆 League Standings
+        </div>
+        <div class="points-table-container">
+          <table class="points-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th title="Matches Played">M</th>
+                <th title="Wins">W</th>
+                <th title="Losses">L</th>
+                <th title="No Result">NR</th>
+                <th title="Net Run Rate">NRR</th>
+                <th title="Points">Pts</th>
+              </tr>
+            </thead>
+            <tbody id="pointsTableBody">
+              <!-- Points table rows will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
       <!-- Ongoing Match Section -->
       <div id="ongoingSection" class="section" style="display:none">
         <div class="section-title">
@@ -347,6 +532,9 @@
     // Global variable to store matches for export
     let allMatchesData = [];
     let pollingInterval = null; // For polling instead of continuous listener
+    let openNRRBreakdowns = new Set(); // Track which NRR breakdowns are open
+    let lastActivityTime = Date.now(); // Track last user activity
+    let isPollingPaused = false; // Track if polling is paused
 
     // Check if org parameter is in URL (from share link)
     const urlParams = new URLSearchParams(window.location.search);
@@ -444,6 +632,9 @@
         document.getElementById('ongoingSection').style.display = 'none';
       }
       
+      // Calculate and display points table for League matches
+      calculatePointsTable(matchesArray);
+      
       // Display recent 20 matches
       const recentMatches = matchesArray.slice(0, 20);
       displayRecentMatches(recentMatches);
@@ -485,6 +676,53 @@
     pollingInterval = setInterval(pollMatches, 5000);
     
     console.log('✅ Polling enabled (every 5 seconds) - reduced active connections');
+    
+    // Inactivity checker - pause polling after 15 minutes of inactivity
+    setInterval(() => {
+      const inactiveTime = Date.now() - lastActivityTime;
+      const fifteenMinutes = 15 * 60 * 1000;
+      
+      if (inactiveTime > fifteenMinutes && !isPollingPaused) {
+        console.log('⏸️ Pausing polling due to 15 min inactivity');
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          pollingInterval = null;
+          isPollingPaused = true;
+        }
+      }
+    }, 30000); // Check every 30 seconds
+    
+    // Track user activity to reset inactivity timer
+    ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+      document.addEventListener(event, () => {
+        lastActivityTime = Date.now();
+        
+        // Resume polling if it was paused
+        if (isPollingPaused) {
+          console.log('▶️ Resuming polling - user activity detected');
+          isPollingPaused = false;
+          pollMatches(); // Immediate refresh
+          pollingInterval = setInterval(pollMatches, 5000);
+        }
+      }, { passive: true });
+    });
+    
+    // Pause polling when page is hidden (user switched tabs)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        console.log('👁️ Page hidden - pausing polling');
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          pollingInterval = null;
+        }
+      } else {
+        console.log('👁️ Page visible - resuming polling');
+        lastActivityTime = Date.now(); // Reset activity timer
+        isPollingPaused = false;
+        pollMatches(); // Immediate refresh
+        pollingInterval = setInterval(pollMatches, 5000);
+      }
+    });
     }
     
     function displayOngoingMatch(match) {
@@ -622,6 +860,191 @@
       const overs = Math.floor(legalBalls / 6);
       const balls = legalBalls % 6;
       return `${overs}.${balls}`;
+    }
+    
+    // Calculate Points Table for League Matches
+    function calculatePointsTable(matches) {
+      // Filter only League matches that are completed
+      const leagueMatches = matches.filter(match => {
+        const isLeague = match.matchType && match.matchType.toLowerCase().includes('league');
+        const isCompleted = match.matchCompleted || (match.resultText && match.resultText.trim() !== '');
+        return isLeague && isCompleted;
+      });
+      
+      if (leagueMatches.length === 0) {
+        document.getElementById('pointsTableSection').style.display = 'none';
+        return;
+      }
+      
+      // Build team statistics
+      const teamStats = {};
+      
+      leagueMatches.forEach(match => {
+        const teamA = match.teamA || 'Team A';
+        const teamB = match.teamB || 'Team B';
+        
+        // Initialize team stats if not exists
+        if (!teamStats[teamA]) {
+          teamStats[teamA] = { matches: 0, wins: 0, losses: 0, noResult: 0, totalRunsScored: 0, totalOversPlayed: 0, totalRunsConceded: 0, totalOversBowled: 0 };
+        }
+        if (!teamStats[teamB]) {
+          teamStats[teamB] = { matches: 0, wins: 0, losses: 0, noResult: 0, totalRunsScored: 0, totalOversPlayed: 0, totalRunsConceded: 0, totalOversBowled: 0 };
+        }
+        
+        const firstRuns = match.first?.runs || 0;
+        const firstBalls = match.first?.legalBalls || 0;
+        const secondRuns = match.second?.runs || 0;
+        const secondBalls = match.second?.legalBalls || 0;
+        
+        // In the scorer: first innings is ALWAYS Team A, second innings is ALWAYS Team B
+        // So Team A batted in first innings, Team B batted in second innings
+        
+        // Team A scored firstRuns in firstBalls, conceded secondRuns in secondBalls
+        teamStats[teamA].totalRunsScored += firstRuns;
+        teamStats[teamA].totalOversPlayed += firstBalls;
+        teamStats[teamA].totalRunsConceded += secondRuns;
+        teamStats[teamA].totalOversBowled += secondBalls;
+        
+        // Team B scored secondRuns in secondBalls, conceded firstRuns in firstBalls
+        teamStats[teamB].totalRunsScored += secondRuns;
+        teamStats[teamB].totalOversPlayed += secondBalls;
+        teamStats[teamB].totalRunsConceded += firstRuns;
+        teamStats[teamB].totalOversBowled += firstBalls;
+        
+        // Determine winner from result text
+        const resultText = match.resultText || '';
+        const resultLower = resultText.toLowerCase();
+        
+        let winner = null;
+        if (resultLower.includes(teamA.toLowerCase()) && (resultLower.includes('won') || resultLower.includes('win'))) {
+          winner = teamA;
+        } else if (resultLower.includes(teamB.toLowerCase()) && (resultLower.includes('won') || resultLower.includes('win'))) {
+          winner = teamB;
+        } else if (resultLower.includes('tie') || resultLower.includes('draw') || resultLower.includes('no result')) {
+          winner = 'noResult';
+        }
+        
+        // Update match counts
+        teamStats[teamA].matches++;
+        teamStats[teamB].matches++;
+        
+        if (winner === teamA) {
+          teamStats[teamA].wins++;
+          teamStats[teamB].losses++;
+        } else if (winner === teamB) {
+          teamStats[teamB].wins++;
+          teamStats[teamA].losses++;
+        } else {
+          teamStats[teamA].noResult++;
+          teamStats[teamB].noResult++;
+        }
+      });
+      
+      // Calculate NRR and Points for each team
+      const teamArray = Object.keys(teamStats).map(team => {
+        const stats = teamStats[team];
+        
+        // Calculate Run Rate
+        const totalOvers = (stats.totalOversPlayed / 6).toFixed(1);
+        const totalOversBowled = (stats.totalOversBowled / 6).toFixed(1);
+        const runRateFor = stats.totalOversPlayed > 0 ? (stats.totalRunsScored / (stats.totalOversPlayed / 6)) : 0;
+        const runRateAgainst = stats.totalOversBowled > 0 ? (stats.totalRunsConceded / (stats.totalOversBowled / 6)) : 0;
+        
+        // Net Run Rate = Run Rate For - Run Rate Against
+        const nrr = runRateFor - runRateAgainst;
+        
+        // Points: Win = 2, No Result = 1, Loss = 0
+        const points = (stats.wins * 2) + (stats.noResult * 1);
+        
+        return {
+          team,
+          matches: stats.matches,
+          wins: stats.wins,
+          losses: stats.losses,
+          noResult: stats.noResult,
+          nrr: isNaN(nrr) ? 0 : nrr,
+          points,
+          // Store calculation details
+          nrrDetails: {
+            runsScored: stats.totalRunsScored,
+            oversPlayed: totalOvers,
+            runsConceded: stats.totalRunsConceded,
+            oversBowled: totalOversBowled,
+            runRateFor: runRateFor.toFixed(3),
+            runRateAgainst: runRateAgainst.toFixed(3)
+          }
+        };
+      });
+      
+      // Sort by: Points (desc), NRR (desc), Wins (desc)
+      teamArray.sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.nrr !== a.nrr) return b.nrr - a.nrr;
+        return b.wins - a.wins;
+      });
+      
+      // Display points table
+      displayPointsTable(teamArray);
+    }
+    
+    function displayPointsTable(teamArray) {
+      const tbody = document.getElementById('pointsTableBody');
+      
+      if (teamArray.length === 0) {
+        document.getElementById('pointsTableSection').style.display = 'none';
+        return;
+      }
+      
+      tbody.innerHTML = teamArray.map((team, index) => {
+        const nrrClass = team.nrr > 0 ? 'nrr-positive' : (team.nrr < 0 ? 'nrr-negative' : '');
+        const nrrDisplay = team.nrr >= 0 ? `+${team.nrr.toFixed(3)}` : team.nrr.toFixed(3);
+        const rowId = `team-${team.team.replace(/\s+/g, '-')}`;
+        const isOpen = openNRRBreakdowns.has(rowId) ? 'show' : '';
+        
+        return `
+          <tr>
+            <td class="rank-cell">${index + 1}</td>
+            <td>${team.team}</td>
+            <td>${team.matches}</td>
+            <td>${team.wins}</td>
+            <td>${team.losses}</td>
+            <td>${team.noResult}</td>
+            <td class="${nrrClass}">
+              ${nrrDisplay}
+              <a href="javascript:void(0)" class="toggle-nrr" onclick="toggleNRRBreakdown('${rowId}')" title="Show NRR calculation">ⓘ</a>
+            </td>
+            <td class="points-cell">${team.points}</td>
+          </tr>
+          <tr class="nrr-breakdown ${isOpen}" id="breakdown-${rowId}">
+            <td colspan="8">
+              <div class="nrr-formula">
+                <div class="nrr-formula-title">📊 NRR Calculation for ${team.team}</div>
+                <div class="nrr-calc-step"><strong>Runs Scored:</strong> ${team.nrrDetails.runsScored} runs in ${team.nrrDetails.oversPlayed} overs</div>
+                <div class="nrr-calc-step"><strong>Run Rate (For):</strong> ${team.nrrDetails.runsScored} ÷ ${team.nrrDetails.oversPlayed} = <strong>${team.nrrDetails.runRateFor}</strong></div>
+                <div class="nrr-calc-step" style="margin-top:12px;"><strong>Runs Conceded:</strong> ${team.nrrDetails.runsConceded} runs in ${team.nrrDetails.oversBowled} overs</div>
+                <div class="nrr-calc-step"><strong>Run Rate (Against):</strong> ${team.nrrDetails.runsConceded} ÷ ${team.nrrDetails.oversBowled} = <strong>${team.nrrDetails.runRateAgainst}</strong></div>
+                <div class="nrr-calc-step" style="margin-top:12px;padding-top:12px;border-top:2px solid #e5e7eb;"><strong>Net Run Rate:</strong> ${team.nrrDetails.runRateFor} - ${team.nrrDetails.runRateAgainst} = <strong class="${nrrClass}">${nrrDisplay}</strong></div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      
+      document.getElementById('pointsTableSection').style.display = 'block';
+    }
+    
+    function toggleNRRBreakdown(rowId) {
+      const breakdownRow = document.getElementById(`breakdown-${rowId}`);
+      if (breakdownRow) {
+        breakdownRow.classList.toggle('show');
+        
+        // Track the state
+        if (breakdownRow.classList.contains('show')) {
+          openNRRBreakdowns.add(rowId);
+        } else {
+          openNRRBreakdowns.delete(rowId);
+        }
+      }
     }
     
     function exportToCSV() {

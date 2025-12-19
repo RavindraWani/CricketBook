@@ -275,6 +275,8 @@
     let currentMatchRef = null;
     let matchesListenerRef = null;
     let pollingInterval = null; // For polling instead of continuous listeners
+    let lastActivityTime = Date.now(); // Track last user activity
+    let isPollingPaused = false; // Track if polling is paused
 
     // Organization ID for multi-user isolation
     let organizationId = localStorage.getItem('cricketbook_org_id');
@@ -463,6 +465,53 @@
       pollingInterval = setInterval(pollMatch, 2000);
       
       console.log('✅ Polling enabled (every 2 seconds) - reduced active connections');
+      
+      // Inactivity checker - pause polling after 15 minutes of inactivity
+      setInterval(() => {
+        const inactiveTime = Date.now() - lastActivityTime;
+        const fifteenMinutes = 15 * 60 * 1000;
+        
+        if (inactiveTime > fifteenMinutes && !isPollingPaused) {
+          console.log('⏸️ Pausing polling due to 15 min inactivity');
+          if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+            isPollingPaused = true;
+          }
+        }
+      }, 30000); // Check every 30 seconds
+      
+      // Track user activity
+      ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+        document.addEventListener(event, () => {
+          lastActivityTime = Date.now();
+          
+          // Resume polling if paused
+          if (isPollingPaused) {
+            console.log('▶️ Resuming polling - user activity detected');
+            isPollingPaused = false;
+            pollMatch(); // Immediate refresh
+            pollingInterval = setInterval(pollMatch, 2000);
+          }
+        }, { passive: true });
+      });
+      
+      // Pause when page hidden
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          console.log('👁️ Page hidden - pausing polling');
+          if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+          }
+        } else {
+          console.log('👁️ Page visible - resuming polling');
+          lastActivityTime = Date.now();
+          isPollingPaused = false;
+          pollMatch(); // Immediate refresh
+          pollingInterval = setInterval(pollMatch, 2000);
+        }
+      });
     }
 
     // Update UI with match data
