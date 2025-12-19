@@ -249,6 +249,45 @@
       <li>Weekend cricket clubs and community events</li>
     </ul>
 
+    <h2>Net Run Rate (NRR) Calculation</h2>
+    <p>CricketBook uses the <strong>standard ICC method</strong> for calculating Net Run Rate in League matches, providing accurate tournament standings.</p>
+    
+    <h3>📊 What is Net Run Rate?</h3>
+    <p>Net Run Rate (NRR) is a statistical method used to rank teams with equal points in limited-overs tournaments. It measures the relative scoring rate of a team across all their matches.</p>
+    
+    <h3>🧮 ICC Formula</h3>
+    <p style="background:#f3f4f6;padding:16px;border-radius:8px;font-family:monospace;font-size:14px;margin:16px 0;">
+      <strong>NRR = (Total Runs Scored ÷ Total Overs Faced) - (Total Runs Conceded ÷ Total Overs Bowled)</strong>
+    </p>
+    
+    <h3>📝 Step-by-Step Calculation</h3>
+    <p><strong>Step 1:</strong> Calculate Run Rate For (runs your team scored per over across all matches)</p>
+    <p style="padding-left:20px;">Example: 450 runs in 45.2 overs = 450 ÷ 45.33 = <strong>9.926 runs/over</strong></p>
+    
+    <p><strong>Step 2:</strong> Calculate Run Rate Against (runs scored against your team per over)</p>
+    <p style="padding-left:20px;">Example: 420 runs conceded in 48.1 overs = 420 ÷ 48.17 = <strong>8.719 runs/over</strong></p>
+    
+    <p><strong>Step 3:</strong> Subtract to get NRR</p>
+    <p style="padding-left:20px;">NRR = 9.926 - 8.719 = <strong>+1.207</strong></p>
+    
+    <h3>✅ Key Points</h3>
+    <ul class="feature-list">
+      <li><strong>All-out innings:</strong> Full overs allocation is used (e.g., 20 overs for T20, even if all out in 15)</li>
+      <li><strong>Winning while chasing:</strong> Only actual overs faced count, not remaining overs</li>
+      <li><strong>Positive NRR:</strong> Team scoring faster than opponents (good)</li>
+      <li><strong>Negative NRR:</strong> Team scoring slower than opponents (needs improvement)</li>
+      <li><strong>League matches only:</strong> NRR applies to league/round-robin formats, not knockouts</li>
+    </ul>
+    
+    <h3>🏆 Tiebreaker Priority (ICC Standard)</h3>
+    <p><strong>1.</strong> Points (Win = 2, No Result = 1, Loss = 0)</p>
+    <p><strong>2.</strong> Net Run Rate (higher is better)</p>
+    <p><strong>3.</strong> Head-to-head results</p>
+    <p><strong>4.</strong> Number of wins</p>
+    
+    <h3>💡 View NRR Details</h3>
+    <p>On the <strong>Matches</strong> page, click the <strong>ⓘ icon</strong> next to any team's NRR to see the complete calculation breakdown with actual numbers from their matches!</p>
+
     <h2>Technology & Security</h2>
     <p>Built with Firebase Realtime Database for instant sync and localStorage for session management. Password protection uses SHA-256 cryptographic hashing - passwords are never stored in plain text. Edit token system prevents unauthorized changes while keeping matches publicly viewable. Organization IDs with password protection ensure complete tournament isolation between users.</p>
 
