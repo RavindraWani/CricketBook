@@ -853,6 +853,7 @@
         <!-- Team Name (Left) -->
         <div style="flex:1;min-width:0;">
           <div id="status" style="font-size:22px;font-weight:800;background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+          <div id="bowlingTeamDisplay" style="font-size:12px;color:#64748b;font-weight:600;margin-top:4px;letter-spacing:0.3px;"></div>
           <div id="firstInningsScore" style="font-size:13px;color:#3b82f6;font-weight:700;margin-top:6px;display:none;letter-spacing:0.3px;"></div>
         </div>
         <!-- Primary Score Display (Right) -->
@@ -904,16 +905,16 @@
         </div>
       </div>
 
-      <!-- Middle Row: High Score Buttons -->
+      <!-- Middle Row: Single Runs -->
       <div class="row" style="margin-bottom:8px;">
-        <button class="btn" onclick="addLegalRun(4)" style="flex:1;font-size:26px;padding:16px 0;background:#10b981;font-weight:900;">4</button>
-        <button class="btn" onclick="addLegalRun(6)" style="flex:1;font-size:26px;padding:16px 0;background:#f59e0b;font-weight:900;">6</button>
+        <button class="btn" onclick="addLegalRun(0)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">0</button>
+        <button class="btn" onclick="addLegalRun(1)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">1</button>
       </div>
 
-      <!-- Bottom Row: Single/Other Runs -->
+      <!-- Bottom Row: High Score Buttons/Other Runs -->
       <div class="row">
-        <button class="btn" onclick="addLegalRun(0)" style="flex:1;font-size:24px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">0</button>
-        <button class="btn" onclick="addLegalRun(1)" style="flex:1;font-size:24px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">1</button>
+        <button class="btn" onclick="addLegalRun(4)" style="flex:1;font-size:24px;padding:16px 0;background:#10b981;font-weight:700;">4</button>
+        <button class="btn" onclick="addLegalRun(6)" style="flex:1;font-size:24px;padding:16px 0;background:#f59e0b;font-weight:700;">6</button>
         <button class="btn" onclick="addLegalRun(2)" style="flex:1;font-size:24px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">2</button>
         <button class="btn btn-muted" onclick="showMoreOptions()" style="flex:1;font-size:18px;padding:16px 0;">☰</button>
       </div>
@@ -1000,6 +1001,35 @@
       </a>
     </div>
 
+    <!-- Match Summary -->
+    <div id="matchSummary" style="margin-top:20px;">
+      <div style="font-size:16px;font-weight:700;color:#1f2937;margin-bottom:16px;text-align:center;">
+        📊 MATCH SUMMARY
+      </div>
+      
+      <!-- 3-Column Table for Match Summary -->
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table id="matchSummaryTable" style="width:100%;border-collapse:collapse;background:#f8fafc;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+          <thead>
+            <tr style="background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);color:#fff;">
+              <th rowspan="2" style="padding:8px 4px;font-size:12px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:40px;vertical-align:middle;">Ovs</th>
+              <th id="team1Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:50%;">Team 1</th>
+              <th id="team2Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;width:50%;">Team 2</th>
+            </tr>
+            <tr style="background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);color:#fff;">
+              <th id="team1Stats" style="padding:2px 6px 6px 6px;font-size:10px;font-weight:600;text-align:center;border-right:1px solid rgba(255,255,255,0.2);opacity:0.9;">—</th>
+              <th id="team2Stats" style="padding:2px 6px 6px 6px;font-size:10px;font-weight:600;text-align:center;opacity:0.9;">—</th>
+            </tr>
+          </thead>
+          <tbody id="matchSummaryBody">
+            <tr>
+              <td colspan="3" style="text-align:center;color:#94a3b8;padding:20px;font-size:13px;">No overs bowled yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -1044,12 +1074,16 @@ function showExtraPanel(show, label=""){
 function updateUI(){
   const inn = currentInnings();
   const batting = inSecond ? teamB : teamA;
+  const bowling = inSecond ? teamA : teamB;
 
   // Primary Score Display
   document.getElementById("score").textContent = `${inn.runs}/${inn.wkts}`;
 
   // Team Name
   document.getElementById("status").textContent = batting;
+  
+  // Bowling Team Display
+  document.getElementById("bowlingTeamDisplay").textContent = `vs ${bowling}`;
 
   // First Innings Score (show when in second innings)
   const firstInningsScoreElem = document.getElementById("firstInningsScore");
@@ -1311,6 +1345,231 @@ function updateUI(){
   if (!isViewerMode && firebaseEnabled && canEditMatch && !isLoadingFromFirebase) {
     saveMatchState();
   }
+  
+  // Update match summary display
+  updateMatchSummary();
+}
+
+// Update Match Summary Table
+function updateMatchSummary() {
+  // Calculate team 1 stats
+  const team1Runs = first.runs || 0;
+  const team1Wkts = first.wkts || 0;
+  const team1Overs = calculateOvers(first.legalBalls || 0);
+  const team1Extras = calculateExtrasForInnings(first);
+  const team1RR = first.legalBalls > 0 ? ((team1Runs * 6) / first.legalBalls).toFixed(2) : '0.00';
+  
+  // Calculate team 2 stats
+  const team2Runs = second.runs || 0;
+  const team2Wkts = second.wkts || 0;
+  const team2Overs = calculateOvers(second.legalBalls || 0);
+  const team2Extras = calculateExtrasForInnings(second);
+  const team2RR = second.legalBalls > 0 ? ((team2Runs * 6) / second.legalBalls).toFixed(2) : '0.00';
+  
+  // Update team headers with scores
+  document.getElementById('team1Header').textContent = `${teamA || 'Team 1'} - ${team1Runs}/${team1Wkts}`;
+  document.getElementById('team2Header').textContent = `${teamB || 'Team 2'} - ${team2Runs}/${team2Wkts}`;
+  
+  // Update team stats row
+  document.getElementById('team1Stats').textContent = `(${team1Overs} ovs) | RR: ${team1RR} | Exts: ${team1Extras}`;
+  document.getElementById('team2Stats').textContent = inSecond ? `(${team2Overs} ovs) | RR: ${team2RR} | Exts: ${team2Extras}` : '—';
+  
+  // Get all overs for both innings
+  const firstOvers = [...(first.overs || [])];
+  const secondOvers = [...(second.overs || [])];
+  
+  // Add current over if innings is done or has incomplete over
+  const firstInningsDone = first.done || inSecond;
+  if (firstInningsDone && first.curOver && first.curOver.length > 0) {
+    firstOvers.push(first.curOver);
+  }
+  
+  const secondInningsDone = second.done || matchCompleted;
+  if (secondInningsDone && second.curOver && second.curOver.length > 0) {
+    secondOvers.push(second.curOver);
+  }
+  
+  // Determine maximum number of overs to display
+  const maxOvers = Math.max(firstOvers.length, secondOvers.length);
+  
+  if (maxOvers === 0) {
+    document.getElementById('matchSummaryBody').innerHTML = '<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:20px;font-size:13px;">No overs bowled yet</td></tr>';
+    return;
+  }
+  
+  // Build table rows
+  let tableHtml = '';
+  let firstCumulativeRuns = 0;
+  let firstCumulativeWkts = 0;
+  let secondCumulativeRuns = 0;
+  let secondCumulativeWkts = 0;
+  
+  for (let i = 0; i < maxOvers; i++) {
+    const overNum = i + 1;
+    const firstOver = firstOvers[i];
+    const secondOver = secondOvers[i];
+    
+    // Calculate runs/wickets for this over
+    const firstStats = firstOver ? overRunsAndWktsHelper(firstOver) : null;
+    const secondStats = secondOver ? overRunsAndWktsHelper(secondOver) : null;
+    
+    // Update cumulative scores
+    if (firstStats) {
+      firstCumulativeRuns += firstStats.runs;
+      firstCumulativeWkts += firstStats.wkts;
+    }
+    if (secondStats) {
+      secondCumulativeRuns += secondStats.runs;
+      secondCumulativeWkts += secondStats.wkts;
+    }
+    
+    // Build balls HTML for first innings
+    const firstBallsHtml = firstOver ? firstOver.map(sym => {
+      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
+      let bgColor = '#3b82f6';
+      if (isWicket) bgColor = '#e31d1d';
+      else if (sym === 6 || sym === '6') bgColor = '#f59e0b';
+      else if (sym === 4 || sym === '4') bgColor = '#10b981';
+      else if (sym === 0 || sym === '0') bgColor = '#94a3b8';
+      else if (typeof sym === 'string' && (sym.includes('WD') || sym.includes('NB') || sym.includes('B+') || sym.includes('LB+'))) bgColor = '#f59e0b';
+      return `<span style="display:inline-block;margin:2px;padding:3px 6px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;font-size:11px;">${sym}</span>`;
+    }).join('') : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
+    
+    // Build balls HTML for second innings
+    const secondBallsHtml = secondOver ? secondOver.map(sym => {
+      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
+      let bgColor = '#3b82f6';
+      if (isWicket) bgColor = '#e31d1d';
+      else if (sym === 6 || sym === '6') bgColor = '#f59e0b';
+      else if (sym === 4 || sym === '4') bgColor = '#10b981';
+      else if (sym === 0 || sym === '0') bgColor = '#94a3b8';
+      else if (typeof sym === 'string' && (sym.includes('WD') || sym.includes('NB') || sym.includes('B+') || sym.includes('LB+'))) bgColor = '#f59e0b';
+      return `<span style="display:inline-block;margin:2px;padding:3px 6px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;font-size:11px;">${sym}</span>`;
+    }).join('') : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
+    
+    tableHtml += `
+      <tr style="border-bottom:1px solid #e2e8f0;">
+        <td style="padding:8px 4px;text-align:center;font-weight:700;color:#1f2937;font-size:12px;border-right:1px solid #e2e8f0;background:#f1f5f9;vertical-align:top;">${overNum}</td>
+        <td style="padding:8px 6px;border-right:1px solid #e2e8f0;background:#fff;vertical-align:top;width:50%;">
+          ${firstStats ? `<div style="font-size:10px;color:#64748b;font-weight:600;margin-bottom:4px;">(${firstCumulativeRuns}/${firstCumulativeWkts}) R:${firstStats.runs} | W:${firstStats.wkts}</div>` : ''}
+          <div>${firstBallsHtml}</div>
+        </td>
+        <td style="padding:8px 6px;background:#fff;vertical-align:top;width:50%;">
+          ${secondStats ? `<div style="font-size:10px;color:#64748b;font-weight:600;margin-bottom:4px;">(${secondCumulativeRuns}/${secondCumulativeWkts}) R:${secondStats.runs} | W:${secondStats.wkts}</div>` : ''}
+          <div>${secondBallsHtml}</div>
+        </td>
+      </tr>
+    `;
+  }
+  
+  document.getElementById('matchSummaryBody').innerHTML = tableHtml;
+}
+
+// Helper to calculate overs from legal balls
+function calculateOvers(legalBalls) {
+  if (!legalBalls || legalBalls === 0) return '0.0';
+  const overs = Math.floor(legalBalls / 6);
+  const balls = legalBalls % 6;
+  return `${overs}.${balls}`;
+}
+
+// Helper to calculate extras for an innings
+function calculateExtrasForInnings(inn) {
+  let extras = 0;
+  
+  // Check completed overs
+  if (inn.overs && inn.overs.length > 0) {
+    inn.overs.forEach(over => {
+      if (over && over.length > 0) {
+        over.forEach(ball => {
+          if (typeof ball === 'string') {
+            if (/^WD/.test(ball)) {
+              const match = ball.match(/^WD\+?(\d+)?/);
+              extras += 1;
+              if (match && match[1]) extras += parseInt(match[1]);
+            }
+            else if (/^NB/.test(ball)) {
+              const match = ball.match(/^NB\+?(\d+)?/);
+              extras += 1;
+              if (match && match[1]) extras += parseInt(match[1]);
+            }
+            else if (/^B\+/.test(ball)) {
+              const match = ball.match(/^B\+(\d+)/);
+              if (match && match[1]) extras += parseInt(match[1]);
+            }
+            else if (/^LB\+/.test(ball)) {
+              const match = ball.match(/^LB\+(\d+)/);
+              if (match && match[1]) extras += parseInt(match[1]);
+            }
+          }
+        });
+      }
+    });
+  }
+  
+  // Check current over
+  if (inn.curOver && inn.curOver.length > 0) {
+    inn.curOver.forEach(ball => {
+      if (typeof ball === 'string') {
+        if (/^WD/.test(ball)) {
+          const match = ball.match(/^WD\+?(\d+)?/);
+          extras += 1;
+          if (match && match[1]) extras += parseInt(match[1]);
+        }
+        else if (/^NB/.test(ball)) {
+          const match = ball.match(/^NB\+?(\d+)?/);
+          extras += 1;
+          if (match && match[1]) extras += parseInt(match[1]);
+        }
+        else if (/^B\+/.test(ball)) {
+          const match = ball.match(/^B\+(\d+)/);
+          if (match && match[1]) extras += parseInt(match[1]);
+        }
+        else if (/^LB\+/.test(ball)) {
+          const match = ball.match(/^LB\+(\d+)/);
+          if (match && match[1]) extras += parseInt(match[1]);
+        }
+      }
+    });
+  }
+  
+  return extras;
+}
+
+// Helper to calculate runs/wickets for an over
+function overRunsAndWktsHelper(arr) {
+  let runs = 0, wkts = 0;
+  arr.forEach(sym => {
+    if (typeof sym === 'string') {
+      // New format with + signs
+      if (/^([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
+      else if (/^W$/.test(sym)) { wkts += 1; }
+      else if (/^WD\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)\+W$/)[1]); wkts += 1; }
+      else if (/^WD\+W$/.test(sym)) { runs += 1; wkts += 1; }
+      else if (/^NB\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)\+W$/)[1]); wkts += 1; }
+      else if (/^NB\+W$/.test(sym)) { runs += 1; wkts += 1; }
+      else if (/^B\+([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)\+W$/)[1]); wkts += 1; }
+      else if (/^B\+W$/.test(sym)) { runs += 0; wkts += 1; }
+      // Old format (backward compatibility)
+      else if (/^([0-9]+)W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
+      else if (/^WD\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)W$/)[1]); wkts += 1; }
+      else if (/^WDW$/.test(sym)) { runs += 1; wkts += 1; }
+      else if (/^NB\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)W$/)[1]); wkts += 1; }
+      else if (/^NBW$/.test(sym)) { runs += 1; wkts += 1; }
+      else if (/^B\+([0-9]+)W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)W$/)[1]); wkts += 1; }
+      else if (/^BW$/.test(sym)) { runs += 0; wkts += 1; }
+      // Normal balls
+      else if (/^[0-9]$/.test(sym)) runs += parseInt(sym);
+      else if (/^NB$/.test(sym) || /^WD$/.test(sym)) runs += 1;
+      else if (/^NB\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)$/)[1]);
+      else if (/^WD\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)$/)[1]);
+      else if (/^B\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^B\+([0-9]+)$/)[1]);
+      else if (/^LB\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^LB\+([0-9]+)$/)[1]);
+    } else if (typeof sym === 'number') {
+      runs += sym;
+    }
+  });
+  return {runs, wkts};
 }
 
 // ========== Firebase Sync Functions ==========
@@ -1477,7 +1736,11 @@ function updateUIFromFirebase() {
   
   // Update status (team name)
   const batting = inSecond ? teamB : teamA;
+  const bowling = inSecond ? teamA : teamB;
   document.getElementById("status").textContent = batting;
+  
+  // Bowling Team Display
+  document.getElementById("bowlingTeamDisplay").textContent = `vs ${bowling}`;
   
   // Overs and Run Rate
   const overs = Math.floor(inn.legalBalls/6);
