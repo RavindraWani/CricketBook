@@ -31,19 +31,19 @@
   body{
     margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color:#1f2937; padding:18px;
+    color:#1f2937; padding:12px;
     min-height:100vh;
   }
   #game.card {
     color:#1f2937;
   }
-  h1{margin:6px 0 14px; font-size:24px; text-align:center}
+  h1{margin:4px 0 10px; font-size:20px; text-align:center}
   .container{max-width:760px; margin:0 auto}
   .card{
     background:#ffffff;
     border:1px solid rgba(148,163,184,.2);
     border-radius:20px; 
-    padding:24px; 
+    padding:18px; 
     box-shadow:0 10px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
     position:relative;
   }
@@ -54,12 +54,12 @@
   .row{display:flex; gap:0px; flex-wrap:wrap}
   input{
     background:#0b1220; color:var(--text); border:1px solid rgba(148,163,184,.25);
-    padding:10px 12px; border-radius:10px; width:100%;
+    padding:8px 10px; border-radius:10px; width:100%;
   }
   .btn{
-    border:0; border-radius:0px; color:white; font-weight:700; padding:10px 0; min-width:48px; width:100%;
+    border:0; border-radius:0px; color:white; font-weight:700; padding:8px 0; min-width:48px; width:100%;
     box-shadow:none;
-    font-size:16px;
+    font-size:15px;
   }
   /* Responsive table buttons for mobile */
   @media (max-width: 600px) {
@@ -79,13 +79,13 @@
   .scoreboard{
     display:grid; gap:6px; margin-bottom:8px;
   }
-  .score-big{font-size:48px; font-weight:900; color:#1f2937;}
+  .score-big{font-size:40px; font-weight:900; color:#1f2937;}
   .chip{
-    display:inline-block; padding:8px 14px; border-radius:999px; font-size:13px;
+    display:inline-block; padding:6px 12px; border-radius:999px; font-size:12px;
     background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; font-weight:600;
   }
   .panel{
-    margin-top:10px; padding:14px; border-radius:16px;
+    margin-top:8px; padding:12px; border-radius:16px;
     background:#ffffff;
     border:2px solid #3b82f6;
     box-shadow:0 4px 16px rgba(59,130,246,0.15);
@@ -96,7 +96,7 @@
     border:2px solid #f43f5e;
     box-shadow:0 8px 32px rgba(244,63,94,0.2);
     animation: wicketPanelPop 0.4s cubic-bezier(.68,-0.55,.27,1.55);
-    padding: 16px;
+    padding: 14px;
   }
   @keyframes wicketPanelPop {
     0% { transform: scale(0.95) translateY(20px); opacity:0; }
@@ -107,11 +107,11 @@
     color: #e31d1d;
     font-weight: 700;
     letter-spacing: 0.5px;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
   }
   #wicketPanel label {
-    font-size: 13px;
+    font-size: 12px;
     color: #475569;
     font-weight: 600;
     margin-bottom: 4px;
@@ -165,13 +165,13 @@
   }
   #extraPanel .muted {
     color: #64748b;
-    font-size: 13px;
+    font-size: 12px;
   }
   .overs{
-    margin-top:12px; background:#f8fafc;
-    border:1px solid #e2e8f0; padding:12px; border-radius:14px;
+    margin-top:10px; background:#f8fafc;
+    border:1px solid #e2e8f0; padding:10px; border-radius:14px;
   }
-  .over-line{padding:6px 0; border-bottom:1px dashed #cbd5e1; color:#1f2937;}
+  .over-line{padding:5px 0; border-bottom:1px dashed #cbd5e1; color:#1f2937;}
   .over-line:last-child{border-bottom:0}
   .muted{color:var(--muted)}
   .flex-between{display:flex; justify-content:space-between; align-items:center}
@@ -761,82 +761,84 @@
 
   <!-- Setup -->
   <div id="setup" class="card" style="margin-bottom:14px;background:#ffffff;color:#1f2937;max-width:520px;margin:0 auto 14px;">
-  <div style="text-align:center;margin-bottom:20px;">
-    <div style="font-size:48px;margin-bottom:8px;"></div>
-    <h1 style="color:#1f2937;margin:0 0 8px;font-size:28px;font-weight:800;">🏏CricketBook</h1>
-    <p class="muted" style="margin:0;color:#64748b;font-size:14px;">Simple • Fast • Realtime Scoring</p>
+  <div style="text-align:center;margin-bottom:16px;">
+    <div style="font-size:40px;margin-bottom:6px;"></div>
+    <h1 style="color:#1f2937;margin:0 0 6px;font-size:24px;font-weight:800;">🏏CricketBook</h1>
+    <p class="muted" style="margin:0;color:#64748b;font-size:13px;">Simple • Fast • Realtime Scoring</p>
   </div>
-  
-  <div style="background:linear-gradient(135deg, #667eea15 0%, #764ba215 100%);padding:20px;border-radius:16px;margin-bottom:20px;">
-    <div style="margin-bottom:16px;">
-      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">🏆 Tournament Name</label>
-      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Optional: Name your tournament (e.g., Summer League 2025). If provided, password is required. Leave blank for quick one-off matches.</p>
-      <input id="tournamentName" list="tournamentsList" placeholder="e.g., Indian Premier League (Optional)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkTournamentExists()" />
-      <datalist id="tournamentsList"></datalist>
-      <div id="tournamentStatus" style="margin-top:8px;display:none;"></div>
+
+  <!-- Team Names Section (Priority) -->
+  <div style="background:#ffffff;padding:14px;border-radius:14px;margin-bottom:14px;border:2px solid #e2e8f0;">
+    <label style="display:block;color:#1f2937;font-weight:700;font-size:14px;margin-bottom:3px;">⚔️ Team Names <span style="color:#ef4444;">*</span></label>
+    <p style="color:#64748b;font-size:11px;margin:0 0 8px 0;line-height:1.4;">Enter team names (first team bats first)</p>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <input id="teamA" placeholder="🏏 Team A (Batting First)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'" />
+      <button id="switchTeamsBtn" onclick="switchTeamNames()" title="Switch teams" style="background:#8b5cf6;color:white;border:none;border-radius:10px;padding:8px;font-size:16px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(139,92,246,0.25);min-width:38px;height:42px;flex-shrink:0;" onmouseover="this.style.background='#7c3aed';this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 12px rgba(139,92,246,0.35)'" onmouseout="this.style.background='#8b5cf6';this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(139,92,246,0.25)'">⇅</button>
     </div>
-    
-    <div id="passwordSection" style="margin-bottom:16px;padding:16px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;">
-      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">🔐 Tournament Password</label>
-      <p id="passwordHelpText" style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Required for named tournaments. Protects your tournament and allows team collaboration. Leave both name and password blank for quick matches.</p>
-      <div style="position:relative;">
-        <input id="tournamentPassword" type="password" placeholder="Enter password" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;padding-right:45px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkPasswordStrength()" />
-        <button type="button" onclick="togglePasswordVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;padding:0;line-height:1;">👁️</button>
+    <input id="teamB" placeholder="🎯 Team B (Bowling First)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'" />
+  </div>
+
+  <!-- Match Settings Section -->
+  <div style="background:#ffffff;padding:14px;border-radius:14px;margin-bottom:14px;border:2px solid #e2e8f0;">
+    <label style="display:block;color:#1f2937;font-weight:700;font-size:14px;margin-bottom:3px;">⚙️ Match Settings</label>
+    <div class="row" style="gap:10px;margin-bottom:10px;">
+      <div style="flex:1;">
+        <label style="display:block;color:#64748b;font-size:11px;margin-bottom:4px;">Total Overs</label>
+        <input id="overs" type="number" min="1" placeholder="Default: 20" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#e2e8f0'" />
       </div>
-      <div id="passwordStrength" style="margin-top:8px;font-size:12px;display:none;"></div>
-    </div>
-    
-    <div style="margin-bottom:16px;">
-      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">⚔️ Team Names</label>
-      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Enter the names of both teams. First team will bat first.</p>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-        <input id="teamA" placeholder="🏏 Batting First (e.g., Mumbai Indians)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'" />
-        <button id="switchTeamsBtn" onclick="switchTeamNames()" title="Switch teams" style="background:#8b5cf6;color:white;border:none;border-radius:10px;padding:10px;font-size:18px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(139,92,246,0.25);min-width:40px;height:46px;flex-shrink:0;" onmouseover="this.style.background='#7c3aed';this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 12px rgba(139,92,246,0.35)'" onmouseout="this.style.background='#8b5cf6';this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(139,92,246,0.25)'">⇅</button>
+      <div style="flex:1;">
+        <label style="display:block;color:#64748b;font-size:11px;margin-bottom:4px;">Max Wickets</label>
+        <input id="wicketsLimit" type="number" min="1" max="20" placeholder="Default: 10" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#e2e8f0'" />
       </div>
-      <input id="teamB" placeholder="🎯 Bowling First (e.g., Chennai Super Kings)" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'" />
     </div>
-    
-    <div style="margin-bottom:16px;">
-      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">🏅 Match Type</label>
-      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Select the match format to help categorize your game</p>
-      <select id="matchType" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;cursor:pointer;" onfocus="this.style.borderColor='#8b5cf6'" onblur="this.style.borderColor='#e2e8f0'">
-        <option value="Friendly Match">Friendly Match – Practice or non-ranking match</option>
-        <option value="League Match">League Match – Regular round-robin stage</option>
-        <option value="Qualifier 1">Qualifier 1 – Winner advances to Final</option>
-        <option value="Eliminator">Eliminator – Losing team gets eliminated</option>
-        <option value="Semi-Final">Semi-Final – Decides final two teams</option>
-        <option value="Final">Final – Championship match</option>
-        <option value="3rd Place Playoff">3rd Place Playoff – Decides 3rd rank</option>
-        <option value="Super Over">Super Over – Tie-breaking over</option>
+    <div>
+      <label style="display:block;color:#64748b;font-size:11px;margin-bottom:4px;">Match Type</label>
+      <select id="matchType" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;cursor:pointer;" onfocus="this.style.borderColor='#8b5cf6'" onblur="this.style.borderColor='#e2e8f0'" onchange="handleMatchTypeChange()">
+        <option value="Friendly Match">Friendly Match – Practice or non-ranking</option>
+        <option value="League Match">League Match – Round-robin stage</option>
+        <option value="Qualifier 1">Qualifier 1 – Winner to Final</option>
+        <option value="Eliminator">Eliminator – Loser eliminated</option>
+        <option value="Semi-Final">Semi-Final – Top 4 knockout</option>
+        <option value="Final">Final – Championship</option>
+        <option value="3rd Place Playoff">3rd Place Playoff</option>
+        <option value="Super Over">Super Over – Tie-breaker</option>
+        <option value="Custom">Custom – Enter your own</option>
       </select>
+      <input id="customMatchType" type="text" placeholder="Enter custom match type" style="display:none;margin-top:8px;background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#8b5cf6'" onblur="this.style.borderColor='#e2e8f0'" />
     </div>
+  </div>
+
+  <!-- Tournament Section (Collapsible) -->
+  <div style="margin-bottom:14px;">
+    <button id="tournamentToggleBtn" onclick="toggleTournamentSection()" style="width:100%;background:#f8fafc;color:#475569;border:2px solid #e2e8f0;border-radius:12px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+      <span>📁 Optional: Organize as Tournament</span>
+      <span id="tournamentToggleIcon" style="font-size:16px;">▼</span>
+    </button>
     
-    <div style="margin-bottom:8px;">
-      <label style="display:block;color:#1f2937;font-weight:600;font-size:14px;margin-bottom:4px;">⚙️ Match Settings</label>
-      <p style="color:#64748b;font-size:12px;margin:0 0 8px 0;line-height:1.4;">Set total overs per innings and maximum wickets allowed</p>
-      <div class="row" style="gap:10px;">
-        <div style="flex:1;">
-          <label style="display:block;color:#64748b;font-size:11px;margin-bottom:4px;">Total Overs</label>
-          <input id="overs" type="number" min="1" placeholder="Default: 2" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#e2e8f0'" />
+    <div id="tournamentSection" style="display:none;margin-top:10px;padding:14px;background:linear-gradient(135deg, #667eea08 0%, #764ba208 100%);border:2px solid #e2e8f0;border-radius:12px;">
+      <div style="margin-bottom:12px;">
+        <label style="display:block;color:#1f2937;font-weight:600;font-size:13px;margin-bottom:3px;">🏆 Tournament Name</label>
+        <p style="color:#64748b;font-size:10px;margin:0 0 6px 0;line-height:1.4;">Name your tournament to organize multiple matches (e.g., Summer League 2025)</p>
+        <input id="tournamentName" list="tournamentsList" placeholder="e.g., Indian Premier League" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkTournamentExists()" />
+        <datalist id="tournamentsList"></datalist>
+        <div id="tournamentStatus" style="margin-top:6px;display:none;"></div>
+      </div>
+      
+      <div id="passwordSection" style="padding:12px;background:#ffffff;border:2px solid #e2e8f0;border-radius:10px;">
+        <label style="display:block;color:#1f2937;font-weight:600;font-size:13px;margin-bottom:3px;">🔐 Tournament Password <span style="color:#ef4444;">*</span></label>
+        <p id="passwordHelpText" style="color:#64748b;font-size:10px;margin:0 0 6px 0;line-height:1.4;">Required for tournaments. Protects your tournament and allows team collaboration.</p>
+        <div style="position:relative;">
+          <input id="tournamentPassword" type="password" placeholder="Enter password" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:10px 12px;padding-right:45px;border-radius:12px;width:100%;font-size:14px;transition:border 0.2s;" onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e2e8f0'" oninput="checkPasswordStrength()" />
+          <button type="button" onclick="togglePasswordVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;padding:0;line-height:1;">👁️</button>
         </div>
-        <div style="flex:1;">
-          <label style="display:block;color:#64748b;font-size:11px;margin-bottom:4px;">Max Wickets</label>
-          <input id="wicketsLimit" type="number" min="1" max="20" placeholder="Default: 10" style="background:#ffffff;color:#1f2937;border:2px solid #e2e8f0;padding:12px 14px;border-radius:12px;width:100%;font-size:15px;transition:border 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#e2e8f0'" />
-        </div>
+        <div id="passwordStrength" style="margin-top:6px;font-size:10px;display:none;"></div>
       </div>
     </div>
   </div>
   
-  <button class="btn btn-action" onclick="startMatch()" style="width:100%;font-size:18px;padding:16px 0;background:linear-gradient(135deg, #10b981 0%, #059669 100%);border-radius:14px;box-shadow:0 8px 24px rgba(16,185,129,0.35);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(16,185,129,0.45)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(16,185,129,0.35)'">
+  <button class="btn btn-action" onclick="startMatch()" style="width:100%;font-size:15px;padding:12px 0;background:linear-gradient(135deg, #10b981 0%, #059669 100%);border-radius:12px;box-shadow:0 4px 12px rgba(16,185,129,0.25);transition:all 0.2s;font-weight:600;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(16,185,129,0.35)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(16,185,129,0.25)'">
     🚀 Start Match
   </button>
-  
-  <div class="muted" style="margin:20px 10px 0; text-align:center; font-size:12px;color:#94a3b8;line-height:1.6;">
-    <b>Disclaimer:</b> This app is intended for informal and recreational use only.<br>
-    It is not affiliated with or endorsed by any official cricket board or organization.<br>
-    This app does not collect or store any personal data.<br>
-    <div style="margin-top:8px;color:#64748b;">© 2025 Ravi. All rights reserved.</div>
-  </div>
   </div>
 
   <!-- Game -->
@@ -864,6 +866,13 @@
 
       <!-- Result Display (moved here) -->
       <div id="result" style="display:none;text-align:center;margin-bottom:12px;padding:12px;border-radius:12px;background:linear-gradient(135deg, #10b981 0%, #3b82f6 100%);color:#ffffff;font-size:16px;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.3);"></div>
+      
+      <!-- New Match Button (shown when match completed) -->
+      <div id="newMatchContainer" style="display:none;text-align:center;margin-bottom:12px;">
+        <button onclick="startNewMatch()" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:white;border:none;border-radius:10px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(59,130,246,0.25);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(59,130,246,0.35)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(59,130,246,0.25)'">
+          🆕 Start New Match
+        </button>
+      </div>
 
       <!-- Overs Info -->
       <div class="flex-between" style="margin-bottom:12px;">
@@ -934,37 +943,37 @@
 
     <!-- Wicket Extra Picker -->
     <div id="wicketPanel" class="panel" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="muted" style="margin-bottom:0;">⚡ Wicket Details</div>
-        <div class="checkbox-label" style="font-size:13px;">
-          <span style="color:#94a3b8;margin-right:6px;">|</span>
-          <input type="checkbox" id="wicketNoBallCount" />
-          <span style="font-size:13px;">Extra&nbsp;Ball</span>
-        </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;line-height:1;">
+        <span style="color:#64748b;font-size:14px;font-weight:500;">⚡ Wicket Details</span>
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:#64748b;font-weight:500;line-height:1;">
+          <input type="checkbox" id="wicketNoBallCount" style="margin:0;vertical-align:middle;" />
+          <span style="white-space:nowrap;">Don't Count Ball</span>
+        </label>
       </div>
       
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-        <!-- Left Column -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+        <!-- Delivery Column -->
         <div>
-          <label style="font-size:14px;">🎯 Delivery</label>
-          <select id="wicketDelivery" style="font-size:14px;padding:6px 10px;">
-            <option value="legal">Legal Ball/Run Out</option>
+          <label style="font-size:13px;display:block;margin-bottom:4px;">🎯 Delivery</label>
+          <select id="wicketDelivery" style="font-size:14px;padding:6px 8px;width:100%;">
+            <option value="legal">Run Out</option>
             <option value="WD">WD - Wide</option>
             <option value="NB">NB - NoBall</option>
             <option value="BYE">B - BYE</option>
           </select>
         </div>
         
-        <!-- Right Column -->
+        <!-- Runs Column -->
         <div>
-          <label style="font-size:14px;">🏃 Runs</label>
-          <input id="wicketRuns" type="number" min="0" max="99" value="0" placeholder="0-99" style="font-size:14px;padding:6px 10px;" />
+          <label style="font-size:13px;display:block;margin-bottom:4px;">🏃 Runs</label>
+          <input id="wicketRuns" type="number" min="0" max="99" value="0" placeholder="0-99" style="font-size:14px;padding:6px 8px;width:100%;" />
         </div>
-      </div>
-      
-      <div class="row" style="gap:10px;margin-bottom:10px;">
-        <button class="btn btn-action" onclick="confirmWicketExtra()" style="flex:1;font-size:15px;padding:10px 0;">✓ Confirm</button>
-        <button class="btn btn-muted" onclick="cancelWicketExtra()" style="flex:1;font-size:15px;padding:10px 0;">✕ Cancel</button>
+        
+        <!-- Buttons Column -->
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button class="btn btn-action" onclick="confirmWicketExtra()" style="font-size:14px;padding:6px 0;">✓</button>
+          <button class="btn btn-muted" onclick="cancelWicketExtra()" style="font-size:14px;padding:6px 0;">✕</button>
+        </div>
       </div>
       
       <div style="padding:6px;background:#f8fafc;border-radius:8px;font-size:12px;color:#64748b;text-align:center;line-height:1.3;">
@@ -980,25 +989,6 @@
       <div style="flex:1;">
         <button class="btn btn-undo" style="width:100%;font-size:15px;padding:14px 0;" onclick="undoLastAction()">Undo</button>
       </div>
-    </div>
-
-    <!-- Reset and Export Buttons -->
-    <div style="margin-top:12px;padding:12px 0;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;">
-      <a href="javascript:void(0)" onclick="resetAll()" style="color:#1e293b;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #fafbfc 0%, #e2e8f0 100%);border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);" onmouseover="this.style.background='linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'" onmouseout="this.style.background='linear-gradient(135deg, #fafbfc 0%, #e2e8f0 100%)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.06)'">
-        <span>Reset Match →</span>
-      </a>
-      <a href="javascript:void(0)" onclick="exportScoreboard()" style="color:#0369a1;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);border:1px solid #7dd3fc;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(3,105,161,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%)';this.style.boxShadow='0 2px 6px rgba(3,105,161,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)';this.style.boxShadow='0 1px 3px rgba(3,105,161,0.15)'">
-        <span>Export/Share →</span>
-      </a>
-      <a id="shareBtn" href="javascript:void(0)" onclick="shareViewerLink()" style="color:#065f46;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);border:1px solid #6ee7b7;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(6,95,70,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%)';this.style.boxShadow='0 2px 6px rgba(6,95,70,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)';this.style.boxShadow='0 1px 3px rgba(6,95,70,0.15)'">
-        <span>Viewer Link (Public) →</span>
-      </a>
-      <a href="javascript:void(0)" onclick="shareScorerLink()" style="color:#92400e;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border:1px solid #fcd34d;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(146,64,14,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #fde68a 0%, #fcd34d 100%)';this.style.boxShadow='0 2px 6px rgba(146,64,14,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';this.style.boxShadow='0 1px 3px rgba(146,64,14,0.15)'">
-        <span>Scorer Link (Private) →</span>
-      </a>
-      <a href="javascript:void(0)" onclick="shareTournamentLink()" style="color:#0e7490;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);border:1px solid #67e8f9;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;grid-column:1/-1;box-shadow:0 1px 3px rgba(14,116,144,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%)';this.style.boxShadow='0 2px 6px rgba(14,116,144,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)';this.style.boxShadow='0 1px 3px rgba(14,116,144,0.15)'">
-        <span>Tournament Link →</span>
-      </a>
     </div>
 
     <!-- Match Summary -->
@@ -1028,6 +1018,25 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Reset and Export Buttons -->
+    <div style="margin-top:12px;padding:12px 0;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;">
+      <a href="javascript:void(0)" onclick="resetAll()" style="color:#1e293b;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #fafbfc 0%, #e2e8f0 100%);border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);" onmouseover="this.style.background='linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'" onmouseout="this.style.background='linear-gradient(135deg, #fafbfc 0%, #e2e8f0 100%)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.06)'">
+        <span>Reset Match →</span>
+      </a>
+      <a href="javascript:void(0)" onclick="exportScoreboard()" style="color:#0369a1;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);border:1px solid #7dd3fc;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(3,105,161,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%)';this.style.boxShadow='0 2px 6px rgba(3,105,161,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)';this.style.boxShadow='0 1px 3px rgba(3,105,161,0.15)'">
+        <span>Export/Share →</span>
+      </a>
+      <a id="shareBtn" href="javascript:void(0)" onclick="shareViewerLink()" style="color:#065f46;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);border:1px solid #6ee7b7;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(6,95,70,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%)';this.style.boxShadow='0 2px 6px rgba(6,95,70,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)';this.style.boxShadow='0 1px 3px rgba(6,95,70,0.15)'">
+        <span>Viewer Link (Public) →</span>
+      </a>
+      <a href="javascript:void(0)" onclick="shareScorerLink()" style="color:#92400e;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border:1px solid #fcd34d;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;box-shadow:0 1px 3px rgba(146,64,14,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #fde68a 0%, #fcd34d 100%)';this.style.boxShadow='0 2px 6px rgba(146,64,14,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';this.style.boxShadow='0 1px 3px rgba(146,64,14,0.15)'">
+        <span>Scorer Link (Private) →</span>
+      </a>
+      <a href="javascript:void(0)" onclick="shareTournamentLink()" style="color:#0e7490;text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);border:1px solid #67e8f9;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-align:center;grid-column:1/-1;box-shadow:0 1px 3px rgba(14,116,144,0.15);" onmouseover="this.style.background='linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%)';this.style.boxShadow='0 2px 6px rgba(14,116,144,0.25)'" onmouseout="this.style.background='linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)';this.style.boxShadow='0 1px 3px rgba(14,116,144,0.15)'">
+        <span>Tournament Link →</span>
+      </a>
     </div>
 
   </div>
@@ -1269,11 +1278,14 @@ function updateUI(){
 
   // Result
   const resultDiv = document.getElementById("result");
+  const newMatchContainer = document.getElementById("newMatchContainer");
   if (resultText) {
     resultDiv.textContent = resultText;
     resultDiv.style.display = 'block';
+    newMatchContainer.style.display = 'block';
   } else {
     resultDiv.style.display = 'none';
+    newMatchContainer.style.display = 'none';
   }
 
   // Disable main buttons while choosing extra runs or wicket details
@@ -2566,14 +2578,62 @@ function switchTeamNames() {
   }, 500);
 }
 
+/* Toggle Tournament Section */
+function toggleTournamentSection() {
+  const section = document.getElementById('tournamentSection');
+  const icon = document.getElementById('tournamentToggleIcon');
+  const btn = document.getElementById('tournamentToggleBtn');
+  
+  if (section.style.display === 'none') {
+    section.style.display = 'block';
+    icon.textContent = '▲';
+    btn.style.background = '#e0e7ff';
+    btn.style.borderColor = '#6366f1';
+  } else {
+    section.style.display = 'none';
+    icon.textContent = '▼';
+    btn.style.background = '#f8fafc';
+    btn.style.borderColor = '#e2e8f0';
+  }
+}
+
+/* Handle Match Type Change */
+function handleMatchTypeChange() {
+  const matchTypeSelect = document.getElementById('matchType');
+  const customInput = document.getElementById('customMatchType');
+  
+  if (matchTypeSelect.value === 'Custom') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
+}
+
 /* ---------------- Flow ---------------- */
 async function startMatch(){
   const tournamentName = document.getElementById("tournamentName").value.trim();
   const tournamentPassword = document.getElementById("tournamentPassword").value;
-  const matchType = document.getElementById("matchType").value;
+  const matchTypeSelect = document.getElementById("matchType");
+  const customMatchType = document.getElementById("customMatchType").value.trim();
+  
+  // Determine actual match type
+  let matchType;
+  if (matchTypeSelect.value === 'Custom') {
+    if (!customMatchType) {
+      alert('⚠️ Please enter a custom match type or select from the dropdown.');
+      document.getElementById('customMatchType').focus();
+      return;
+    }
+    matchType = customMatchType;
+  } else {
+    matchType = matchTypeSelect.value;
+  }
+  
   teamA = document.getElementById("teamA").value || "Team A";
   teamB = document.getElementById("teamB").value || "Team B";
-  oversLimit = Math.max(1, parseInt(document.getElementById("overs").value || "2"));
+  oversLimit = Math.max(1, parseInt(document.getElementById("overs").value || "4"));
   wicketsLimit = Math.max(1, Math.min(20, parseInt(document.getElementById("wicketsLimit").value || "10")));
   
   // Validate password only if tournament name is provided
@@ -2723,6 +2783,21 @@ function checkResult(force=false){
 
 function resetAll(){
   if (!confirm('⚠️ Are you sure you want to reset the match? All data will be lost and cannot be recovered.')) {
+    return;
+  }
+  
+  // Clear localStorage session
+  clearCurrentMatchSession();
+  console.log('🗑️ Cleared match session from localStorage');
+  
+  // Clear URL parameters and reload to clean state
+  matchStarted = false;
+  window.history.replaceState({}, document.title, window.location.pathname);
+  location.reload();
+}
+
+function startNewMatch(){
+  if (!confirm('🆕 Start a new match?\n\nThis will clear the current match and take you back to the setup page.')) {
     return;
   }
   
