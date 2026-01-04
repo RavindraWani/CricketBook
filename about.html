@@ -38,22 +38,22 @@
     .card {
       background: white;
       border-radius: 20px;
-      padding: 32px;
+      padding: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     
     @media (max-width: 768px) {
       .card {
-        padding: 24px;
+        padding: 16px;
         border-radius: 16px;
       }
     }
     
     /* Typography */
     h1 {
-      margin: 0 0 24px;
-      font-size: 32px;
+      margin: 0 0 16px;
+      font-size: 24px;
       text-align: center;
       color: #1f2937;
       font-weight: 900;
@@ -61,22 +61,22 @@
     
     h2 {
       color: #3b82f6;
-      margin: 24px 0 12px;
-      font-size: 24px;
+      margin: 20px 0 10px;
+      font-size: 20px;
       font-weight: 700;
     }
     
     h3 {
       color: #3b82f6;
-      font-size: 18px;
-      margin: 16px 0 8px;
+      font-size: 16px;
+      margin: 14px 0 7px;
       font-weight: 600;
     }
     
     p {
-      margin: 12px 0;
+      margin: 10px 0;
       color: #4b5563;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.6;
     }
     
@@ -86,21 +86,21 @@
     
     @media (max-width: 768px) {
       h1 {
-        font-size: 28px;
-        margin-bottom: 20px;
+        font-size: 22px;
+        margin-bottom: 14px;
       }
       
       h2 {
-        font-size: 22px;
-        margin: 20px 0 10px;
+        font-size: 18px;
+        margin: 16px 0 8px;
       }
       
       h3 {
-        font-size: 16px;
+        font-size: 15px;
       }
       
       p {
-        font-size: 14px;
+        font-size: 13px;
       }
     }
     
@@ -111,9 +111,9 @@
     }
     
     .feature-list li {
-      padding: 8px 0;
+      padding: 6px 0;
       color: #4b5563;
-      font-size: 15px;
+      font-size: 14px;
     }
     
     .feature-list li::before {
@@ -125,8 +125,8 @@
     
     @media (max-width: 768px) {
       .feature-list li {
-        font-size: 14px;
-        padding: 6px 0;
+        font-size: 13px;
+        padding: 5px 0;
       }
     }
     
@@ -217,86 +217,42 @@
   <div class="card">
     <h1>🏏 About CricketBook</h1>
     
-    <p>CricketBook is a <strong>free, real-time cricket scoring tool</strong> for local matches and tournaments. Score matches ball-by-ball and share live updates instantly with WhatsApp integration.</p>
+    <p>Free, real-time cricket scoring for local matches and tournaments. Score ball-by-ball and share live updates instantly with WhatsApp.</p>
 
-    <h2>Core Features</h2>
+    <h2>Key Features</h2>
     <ul class="feature-list">
-      <li><strong>Real-Time Scoring:</strong> Ball-by-ball tracking with instant updates across all devices</li>
-      <li><strong>Password-Protected Tournaments:</strong> Secure your tournaments with passwords - prevent duplicates and allow team collaboration</li>
-      <li><strong>WhatsApp Sharing:</strong> One-tap sharing with custom messages - "No need to ask 'score kya hai?' every 5 minutes 😄"</li>
-      <li><strong>Secure Access:</strong> Edit tokens protect scoring - public can watch, only authorized scorers can edit</li>
-      <li><strong>Tournament Management:</strong> Organize multiple matches under one tournament with custom names and 8 match types (League, Semi-Final, Final, etc.)</li>
-      <li><strong>Team Collaboration:</strong> Share tournament password with team members to let them add matches</li>
-      <li><strong>Auto-Detection:</strong> Live Score page automatically finds and displays ongoing matches</li>
-      <li><strong>Match History:</strong> Browse up to 20 recent matches with detailed over-by-over summaries</li>
-      <li><strong>Flexible Settings:</strong> Configure overs limit (1-50), wickets (1-20 players), and team names</li>
-      <li><strong>Privacy-First:</strong> Passwords are SHA-256 hashed - never stored in plain text</li>
-      <li><strong>No Sign-up:</strong> Start scoring immediately - 100% free forever</li>
+      <li>Real-time ball-by-ball scoring with instant sync</li>
+      <li>Password-protected tournaments with team collaboration</li>
+      <li>WhatsApp sharing - no more "score kya hai?" 😄</li>
+      <li>Secure edit tokens (public view, authorized scoring)</li>
+      <li>8 match types: League, Semi-Final, Final, etc.</li>
+      <li>Auto-detection of ongoing matches</li>
+      <li>Flexible settings: 1-50 overs, 1-20 wickets</li>
+      <li>100% free, no sign-up required</li>
     </ul>
 
     <h2>How It Works</h2>
-    <p><strong>Create Tournament:</strong> Enter tournament name, set a password to protect it → Add team names and match settings</p>
-    <p><strong>Score:</strong> Record each ball with runs, wickets, and extras → All changes sync in real-time</p>
-    <p><strong>Collaborate:</strong> Share tournament password with team members → Multiple scorers can add matches to same tournament</p>
-    <p><strong>Watch:</strong> Open Live Score for auto-detected matches or use shared link from scorer</p>
-    <p><strong>Share:</strong> Two link types - Viewer Link (public, read-only) and Scorer Link (private, edit access)</p>
+    <p><strong>Create:</strong> Set tournament name & password → Add teams & settings<br>
+    <strong>Score:</strong> Record each ball → Real-time sync<br>
+    <strong>Share:</strong> Viewer Link (public) or Scorer Link (edit access)</p>
 
-    <h2>Perfect For</h2>
-    <ul class="feature-list">
-      <li>Neighborhood gully cricket games</li>
-      <li>School and college tournaments</li>
-      <li>Office cricket leagues</li>
-      <li>Weekend cricket clubs and community events</li>
-    </ul>
-
-    <h2>Net Run Rate (NRR) Calculation</h2>
-    <p>CricketBook uses the <strong>standard ICC method</strong> for calculating Net Run Rate in League matches, providing accurate tournament standings.</p>
+    <h2>Net Run Rate (NRR)</h2>
+    <p>Uses standard ICC method for League matches.</p>
     
-    <h3>📊 What is Net Run Rate?</h3>
-    <p>Net Run Rate (NRR) is a statistical method used to rank teams with equal points in limited-overs tournaments. It measures the relative scoring rate of a team across all their matches.</p>
-    
-    <h3>🧮 ICC Formula</h3>
-    <p style="background:#f3f4f6;padding:16px;border-radius:8px;font-family:monospace;font-size:14px;margin:16px 0;">
-      <strong>NRR = (Total Runs Scored ÷ Total Overs Faced) - (Total Runs Conceded ÷ Total Overs Bowled)</strong>
+    <h3>Formula</h3>
+    <p style="background:#f3f4f6;padding:12px;border-radius:8px;font-family:monospace;font-size:13px;margin:12px 0;">
+      <strong>NRR = (Runs Scored ÷ Overs Faced) - (Runs Conceded ÷ Overs Bowled)</strong>
     </p>
     
-    <h3>📝 Step-by-Step Calculation</h3>
-    <p><strong>Step 1:</strong> Calculate Run Rate For (runs your team scored per over across all matches)</p>
-    <p style="padding-left:20px;">Example: 450 runs in 45.2 overs = 450 ÷ 45.33 = <strong>9.926 runs/over</strong></p>
-    
-    <p><strong>Step 2:</strong> Calculate Run Rate Against (runs scored against your team per over)</p>
-    <p style="padding-left:20px;">Example: 420 runs conceded in 48.1 overs = 420 ÷ 48.17 = <strong>8.719 runs/over</strong></p>
-    
-    <p><strong>Step 3:</strong> Subtract to get NRR</p>
-    <p style="padding-left:20px;">NRR = 9.926 - 8.719 = <strong>+1.207</strong></p>
-    
-    <h3>✅ Key Points</h3>
+    <h3>Key Points</h3>
     <ul class="feature-list">
-      <li><strong>All-out innings:</strong> Full overs allocation is used (e.g., 20 overs for T20, even if all out in 15)</li>
-      <li><strong>Winning while chasing:</strong> Only actual overs faced count, not remaining overs</li>
-      <li><strong>Positive NRR:</strong> Team scoring faster than opponents (good)</li>
-      <li><strong>Negative NRR:</strong> Team scoring slower than opponents (needs improvement)</li>
-      <li><strong>League matches only:</strong> NRR applies to league/round-robin formats, not knockouts</li>
+      <li>All-out innings use full overs allocation</li>
+      <li>Positive NRR = scoring faster than opponents</li>
+      <li>View detailed breakdown: click ⓘ icon on Matches page</li>
     </ul>
-    
-    <h3>🏆 Tiebreaker Priority (ICC Standard)</h3>
-    <p><strong>1.</strong> Points (Win = 2, No Result = 1, Loss = 0)</p>
-    <p><strong>2.</strong> Net Run Rate (higher is better)</p>
-    <p><strong>3.</strong> Head-to-head results</p>
-    <p><strong>4.</strong> Number of wins</p>
-    
-    <h3>💡 View NRR Details</h3>
-    <p>On the <strong>Matches</strong> page, click the <strong>ⓘ icon</strong> next to any team's NRR to see the complete calculation breakdown with actual numbers from their matches!</p>
-
-    <h2>Technology & Security</h2>
-    <p>Built with Firebase Realtime Database for instant sync and localStorage for session management. Password protection uses SHA-256 cryptographic hashing - passwords are never stored in plain text. Edit token system prevents unauthorized changes while keeping matches publicly viewable. Organization IDs with password protection ensure complete tournament isolation between users.</p>
-
-    <h2>Our Mission</h2>
-    <p>Make professional-grade cricket scoring accessible to everyone - from backyard games to organized tournaments. Free, simple, and secure.</p>
 
     <h2>Contact</h2>
     <p><strong>Instagram:</strong> <a href="https://www.instagram.com/cricketbook.digital/" target="_blank" rel="noopener noreferrer" style="color:#3b82f6;text-decoration:none;font-weight:600;">@cricketbook.digital</a></p>
-    <p>For support, feature requests, or feedback - DM us on Instagram!</p>
 
   </div>
   

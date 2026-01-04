@@ -635,8 +635,8 @@
       // Calculate and display points table for League matches
       calculatePointsTable(matchesArray);
       
-      // Display recent 20 matches
-      const recentMatches = matchesArray.slice(0, 20);
+      // Display recent 50 matches
+      const recentMatches = matchesArray.slice(0, 50);
       displayRecentMatches(recentMatches);
       
       document.getElementById('loading').style.display = 'none';
