@@ -487,6 +487,14 @@
       
       console.log('✅ Polling enabled (every 2 seconds) - reduced active connections');
       
+      // Periodically check for new live matches (every 30 seconds)
+      const liveMatchScanInterval = setInterval(() => {
+        console.log('🔍 Periodic scan for new live matches...');
+        findAndLoadLiveMatch();
+      }, 30000); // Re-scan every 30 seconds
+      
+      console.log('🔄 Live match scanner enabled (every 30 seconds)');
+      
       // Inactivity checker - pause polling after 15 minutes of inactivity
       setInterval(() => {
         const inactiveTime = Date.now() - lastActivityTime;

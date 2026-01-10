@@ -469,12 +469,31 @@
   // Save current match session to localStorage for recovery
   function saveCurrentMatchSession() {
     try {
+      // Ensure we have all critical data before saving
+      if (!organizationId || !matchId || !editToken) {
+        console.warn('⚠️ Cannot save match session - missing critical data:', {
+          organizationId: organizationId,
+          matchId: matchId,
+          editToken: editToken
+        });
+        return;
+      }
+      
+      if (!teamA || !teamB) {
+        console.warn('⚠️ Cannot save match session - missing team names:', {
+          teamA: teamA,
+          teamB: teamB
+        });
+        return;
+      }
+      
       const session = {
         organizationId: organizationId,
         matchId: matchId,
         editToken: editToken,
         teamA: teamA,
         teamB: teamB,
+        tournamentName: document.getElementById('tournamentName')?.value || '',
         timestamp: Date.now(),
         matchCompleted: matchCompleted,
         resultText: resultText
@@ -510,7 +529,7 @@
       } else {
         localStorage.removeItem('cricketbook_current_session');
       }
-      console.log('💾 Saved match session to localStorage');
+      console.log('💾 Saved match session to localStorage:', matchId);
     } catch (error) {
       console.error('❌ Failed to save session:', error);
     }
@@ -1690,124 +1709,155 @@ function listenForUpdates() {
   
   console.log("👂 Listening for match updates:", matchId);
   
+  // Try to get tournamentName from saved session first, then from input field
+  const savedSession = loadCurrentMatchSession();
+  let tournamentName = '';
+  
+  if (savedSession && savedSession.tournamentName) {
+    tournamentName = savedSession.tournamentName;
+    console.log("📋 Using tournament name from saved session:", tournamentName);
+  } else {
+    tournamentName = document.getElementById('tournamentName')?.value || '';
+  }
+  
   // Determine the Firebase path based on whether it's a tournament or quick match
-  const tournamentName = document.getElementById('tournamentName')?.value || '';
-  const matchPath = (tournamentName && tournamentName.trim() !== '') 
+  const primaryPath = (tournamentName && tournamentName.trim() !== '') 
     ? 'tournaments/' + organizationId + '/matches/' + matchId
     : 'quickMatches/' + organizationId + '/matches/' + matchId;
   
-  console.log("📍 Listening at path:", matchPath);
+  // Fallback path (opposite of primary)
+  const fallbackPath = (tournamentName && tournamentName.trim() !== '') 
+    ? 'quickMatches/' + organizationId + '/matches/' + matchId
+    : 'tournaments/' + organizationId + '/matches/' + matchId;
   
-  db.ref(matchPath).on('value', (snapshot) => {
-    const data = snapshot.val();
-    if (!data) {
-      console.warn("⚠️ No match data found for matchId:", matchId);
-      return;
-    }
-    
-    console.log("📡 Received update from Firebase");
-    
-    // Set flag to prevent save loop
-    isLoadingFromFirebase = true;
-    
-    // Update local state with proper initialization
-    teamA = data.teamA;
-    teamB = data.teamB;
-    target = data.target;
-    oversLimit = data.oversLimit;
-    wicketsLimit = data.wicketsLimit;
-    
-    // Ensure innings data has proper structure
-    first = {
-      runs: data.first.runs || 0,
-      wkts: data.first.wkts || 0,
-      legalBalls: data.first.legalBalls || 0,
-      overs: data.first.overs || [],
-      curOver: data.first.curOver || [],
-      curOverLegal: data.first.curOverLegal || 0,
-      done: data.first.done || false
-    };
-    
-    second = {
-      runs: data.second.runs || 0,
-      wkts: data.second.wkts || 0,
-      legalBalls: data.second.legalBalls || 0,
-      overs: data.second.overs || [],
-      curOver: data.second.curOver || [],
-      curOverLegal: data.second.curOverLegal || 0,
-      done: data.second.done || false
-    };
-    
-    inSecond = data.inSecond;  // Use boolean instead of function
-    resultText = data.resultText;
-    matchCompleted = data.matchCompleted || false;
-    matchStarted = true;
-    
-    // Restore tournament name and match type to input fields (for display purposes)
-    if (data.tournamentName && document.getElementById('tournamentName')) {
-      document.getElementById('tournamentName').value = data.tournamentName;
-    }
-    if (data.matchType && document.getElementById('matchType')) {
-      document.getElementById('matchType').value = data.matchType;
-    }
-    
-    // If loading from URL, show game screen
-    if (document.getElementById('setup').style.display !== 'none') {
-      document.getElementById('setup').style.display = 'none';
-      document.getElementById('game').style.display = 'block';
-    }
-    
-    // Update edit mode UI (enable/disable buttons based on permission)
-    updateEditModeUI();
-    
-    // Use the regular updateUI function - it has all the proper display logic
-    updateUI();
-    
-    // Clear the flag after UI update
-    isLoadingFromFirebase = false;
-  }, (error) => {
-    // Handle connection errors (e.g., connection limit reached)
-    console.error("❌ Firebase connection error:", error);
-    
-    if (error.code === 'PERMISSION_DENIED' || error.message.includes('connection') || error.message.includes('limit')) {
-      // Show user-friendly error message
-      const gameDiv = document.getElementById('game');
-      const setupDiv = document.getElementById('setup');
+  console.log("📍 Primary path:", primaryPath);
+  console.log("📍 Fallback path:", fallbackPath);
+  
+  // Function to set up listener on a given path
+  const setupListener = (matchPath) => {
+    db.ref(matchPath).on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        console.warn("⚠️ No match data found at path:", matchPath);
+        
+        // If this was the primary path and no data found, try fallback
+        if (matchPath === primaryPath) {
+          console.log("🔄 Trying fallback path...");
+          // Remove listener from primary path first
+          db.ref(primaryPath).off('value');
+          // Try fallback path
+          setupListener(fallbackPath);
+        }
+        return;
+      }
       
-      const errorHTML = `
-        <div style="max-width:520px;margin:40px auto;padding:32px;background:#ffffff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.15);text-align:center;">
-          <div style="font-size:64px;margin-bottom:16px;">⚠️</div>
-          <h2 style="color:#ef4444;font-size:24px;margin:0 0 12px;font-weight:800;">Connection Limit Reached</h2>
-          <p style="color:#6b7280;font-size:15px;line-height:1.6;margin:0 0 20px;">
-            Too many people are watching this match right now! 🏏<br>
-            Firebase free tier allows 100 simultaneous connections.
-          </p>
-          <p style="color:#6b7280;font-size:14px;line-height:1.6;margin:0 0 24px;">
-            Please wait a few minutes and try again.<br>
-            Some viewers may disconnect soon.
-          </p>
-          <button onclick="location.reload()" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#ffffff;border:none;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);">
-            🔄 Try Again
-          </button>
-          <div style="margin-top:20px;padding:12px;background:#f3f4f6;border-radius:8px;">
-            <p style="font-size:12px;color:#6b7280;margin:0;">
-              <strong>Note:</strong> Match data is still being recorded.<br>
-              Only viewing is temporarily limited.
+      console.log("📡 Received update from Firebase at:", matchPath);
+    
+      // Set flag to prevent save loop
+      isLoadingFromFirebase = true;
+      
+      // Update local state with proper initialization
+      teamA = data.teamA;
+      teamB = data.teamB;
+      target = data.target;
+      oversLimit = data.oversLimit;
+      wicketsLimit = data.wicketsLimit;
+      
+      // Ensure innings data has proper structure
+      first = {
+        runs: data.first.runs || 0,
+        wkts: data.first.wkts || 0,
+        legalBalls: data.first.legalBalls || 0,
+        overs: data.first.overs || [],
+        curOver: data.first.curOver || [],
+        curOverLegal: data.first.curOverLegal || 0,
+        done: data.first.done || false
+      };
+      
+      second = {
+        runs: data.second.runs || 0,
+        wkts: data.second.wkts || 0,
+        legalBalls: data.second.legalBalls || 0,
+        overs: data.second.overs || [],
+        curOver: data.second.curOver || [],
+        curOverLegal: data.second.curOverLegal || 0,
+        done: data.second.done || false
+      };
+      
+      inSecond = data.inSecond;  // Use boolean instead of function
+      resultText = data.resultText;
+      matchCompleted = data.matchCompleted || false;
+      matchStarted = true;
+      
+      // Restore tournament name and match type to input fields (for display purposes)
+      if (data.tournamentName && document.getElementById('tournamentName')) {
+        document.getElementById('tournamentName').value = data.tournamentName;
+      }
+      if (data.matchType && document.getElementById('matchType')) {
+        document.getElementById('matchType').value = data.matchType;
+      }
+      
+      // If loading from URL, show game screen
+      if (document.getElementById('setup').style.display !== 'none') {
+        document.getElementById('setup').style.display = 'none';
+        document.getElementById('game').style.display = 'block';
+      }
+      
+      // Update edit mode UI (enable/disable buttons based on permission)
+      updateEditModeUI();
+      
+      // Use the regular updateUI function - it has all the proper display logic
+      updateUI();
+      
+      // Clear the flag after UI update
+      isLoadingFromFirebase = false;
+    }, (error) => {
+      // Handle connection errors (e.g., connection limit reached)
+      console.error("❌ Firebase connection error:", error);
+      
+      if (error.code === 'PERMISSION_DENIED' || error.message.includes('connection') || error.message.includes('limit')) {
+        // Show user-friendly error message
+        const gameDiv = document.getElementById('game');
+        const setupDiv = document.getElementById('setup');
+        
+        const errorHTML = `
+          <div style="max-width:520px;margin:40px auto;padding:32px;background:#ffffff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.15);text-align:center;">
+            <div style="font-size:64px;margin-bottom:16px;">⚠️</div>
+            <h2 style="color:#ef4444;font-size:24px;margin:0 0 12px;font-weight:800;">Connection Limit Reached</h2>
+            <p style="color:#6b7280;font-size:15px;line-height:1.6;margin:0 0 20px;">
+              Too many people are watching this match right now! 🏏<br>
+              Firebase free tier allows 100 simultaneous connections.
             </p>
+            <p style="color:#6b7280;font-size:14px;line-height:1.6;margin:0 0 24px;">
+              Please wait a few minutes and try again.<br>
+              Some viewers may disconnect soon.
+            </p>
+            <button onclick="location.reload()" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#ffffff;border:none;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);">
+              🔄 Try Again
+            </button>
+            <div style="margin-top:20px;padding:12px;background:#f3f4f6;border-radius:8px;">
+              <p style="font-size:12px;color:#6b7280;margin:0;">
+                <strong>Note:</strong> Match data is still being recorded.<br>
+                Only viewing is temporarily limited.
+              </p>
+            </div>
           </div>
-        </div>
-      `;
-      
-      if (gameDiv) gameDiv.innerHTML = errorHTML;
-      if (setupDiv) setupDiv.innerHTML = errorHTML;
-      
-      alert('⚠️ Connection Limit Reached!\n\nToo many viewers watching right now.\n\nPlease try again in a few minutes.');
-    } else {
-      // Other errors
-      console.error("Error details:", error);
-      alert('⚠️ Connection Error\n\n' + error.message + '\n\nPlease check your internet connection and try again.');
-    }
-  });
+        `;
+        
+        if (gameDiv) gameDiv.innerHTML = errorHTML;
+        if (setupDiv) setupDiv.innerHTML = errorHTML;
+        
+        alert('⚠️ Connection Limit Reached!\n\nToo many viewers watching right now.\n\nPlease try again in a few minutes.');
+      } else {
+        // Other errors
+        console.error("Error details:", error);
+        alert('⚠️ Connection Error\n\n' + error.message + '\n\nPlease check your internet connection and try again.');
+      }
+    });
+  };
+  
+  // Start listening at the primary path
+  setupListener(primaryPath);
 }
 
 function updateUIFromFirebase() {
@@ -3393,7 +3443,7 @@ function refreshSavedMatches() {
     return;
   }
   
-  // Filter out completed matches (those with results declared)
+  // Filter out completed matches (those with results declared) AND matches with missing data
   const incompleteMatches = allMatches.filter(match => {
     // Hide if match is marked as completed
     if (match.matchCompleted) {
@@ -3405,7 +3455,19 @@ function refreshSavedMatches() {
       return false;
     }
     
-    // Show match if it's still in progress
+    // Hide if missing critical data (organizationId, matchId, or editToken)
+    if (!match.organizationId || !match.matchId || !match.editToken) {
+      console.warn('⚠️ Skipping match with missing data:', match);
+      return false;
+    }
+    
+    // Hide if missing team names
+    if (!match.teamA || !match.teamB) {
+      console.warn('⚠️ Skipping match with missing team names:', match);
+      return false;
+    }
+    
+    // Show match if it's still in progress and has all required data
     return true;
   });
   

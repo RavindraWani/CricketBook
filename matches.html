@@ -464,8 +464,14 @@
     <div id="content" style="display:none">
       <!-- Points Table Section (League Matches Only) -->
       <div id="pointsTableSection" class="section" style="display:none">
-        <div class="section-title">
-          🏆 League Standings
+        <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <span>🏆 League Standings</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="lastUpdated" style="font-size:11px;opacity:0.8;font-weight:400;"></span>
+            <button onclick="location.reload()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">
+              🔄 Refresh
+            </button>
+          </div>
         </div>
         <div class="points-table-container">
           <table class="points-table">
@@ -690,6 +696,14 @@
       // Calculate and display points table for League matches
       calculatePointsTable(matchesArray);
       
+      // Update last updated timestamp
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const lastUpdatedEl = document.getElementById('lastUpdated');
+      if (lastUpdatedEl) {
+        lastUpdatedEl.textContent = `Updated: ${timeStr}`;
+      }
+      
       // Display recent 50 matches
       const recentMatches = matchesArray.slice(0, 50);
       displayRecentMatches(recentMatches);
@@ -727,10 +741,10 @@
     // Initial load
     pollMatches();
     
-    // Poll every 5 seconds for updates (instead of continuous listener)
-    pollingInterval = setInterval(pollMatches, 5000);
+    // Poll every 5 minutes for updates (instead of continuous listener)
+    pollingInterval = setInterval(pollMatches, 300000);
     
-    console.log('✅ Polling enabled (every 5 seconds) - reduced active connections');
+    console.log('✅ Polling enabled (every 5 minutes) - reduced active connections');
     
     // Inactivity checker - pause polling after 15 minutes of inactivity
     setInterval(() => {
@@ -757,7 +771,7 @@
           console.log('▶️ Resuming polling - user activity detected');
           isPollingPaused = false;
           pollMatches(); // Immediate refresh
-          pollingInterval = setInterval(pollMatches, 5000);
+          pollingInterval = setInterval(pollMatches, 300000);
         }
       }, { passive: true });
     });
@@ -775,7 +789,7 @@
         lastActivityTime = Date.now(); // Reset activity timer
         isPollingPaused = false;
         pollMatches(); // Immediate refresh
-        pollingInterval = setInterval(pollMatches, 5000);
+        pollingInterval = setInterval(pollMatches, 300000);
       }
     });
     }
@@ -928,9 +942,32 @@
       // Filter only League matches that are completed
       const leagueMatches = matches.filter(match => {
         const isLeague = match.matchType && match.matchType.toLowerCase().includes('league');
-        const isCompleted = match.matchCompleted || (match.resultText && match.resultText.trim() !== '');
+        
+        // Multiple ways to check if match is completed:
+        // 1. Explicit matchCompleted flag
+        // 2. Has a resultText
+        // 3. Both innings are done
+        const hasCompletedFlag = match.matchCompleted === true;
+        const hasResultText = match.resultText && match.resultText.trim() !== '';
+        const bothInningsDone = (match.first?.done === true) && (match.second?.done === true);
+        
+        const isCompleted = hasCompletedFlag || hasResultText || bothInningsDone;
+        
+        // Debug logging for League matches
+        if (isLeague) {
+          console.log(`🏆 League Match: ${match.teamA} vs ${match.teamB}`, {
+            matchCompleted: match.matchCompleted,
+            resultText: match.resultText,
+            firstDone: match.first?.done,
+            secondDone: match.second?.done,
+            isCompleted: isCompleted
+          });
+        }
+        
         return isLeague && isCompleted;
       });
+      
+      console.log(`📊 Found ${leagueMatches.length} completed League matches for points table`);
       
       if (leagueMatches.length === 0) {
         document.getElementById('pointsTableSection').style.display = 'none';
@@ -956,6 +993,12 @@
         const firstBalls = match.first?.legalBalls || 0;
         const secondRuns = match.second?.runs || 0;
         const secondBalls = match.second?.legalBalls || 0;
+        
+        console.log(`  📝 Processing: ${teamA} vs ${teamB}`, {
+          teamAScore: `${firstRuns}/${match.first?.wkts || 0} (${(firstBalls/6).toFixed(1)} ov)`,
+          teamBScore: `${secondRuns}/${match.second?.wkts || 0} (${(secondBalls/6).toFixed(1)} ov)`,
+          result: match.resultText || 'No result text'
+        });
         
         // In the scorer: first innings is ALWAYS Team A, second innings is ALWAYS Team B
         // So Team A batted in first innings, Team B batted in second innings
