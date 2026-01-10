@@ -339,6 +339,48 @@
     console.error("❌ Firebase initialization error:", error);
   }
   
+  // Check if tournament name already exists in Firebase
+  async function checkTournamentExists() {
+    const tournamentNameInput = document.getElementById('tournamentName');
+    const tournamentStatus = document.getElementById('tournamentStatus');
+    const passwordHelpText = document.getElementById('passwordHelpText');
+    const tournamentName = tournamentNameInput?.value.trim();
+    
+    if (!tournamentName || tournamentName === '') {
+      tournamentStatus.style.display = 'none';
+      passwordHelpText.textContent = 'Required for tournaments. Protects your tournament and allows team collaboration.';
+      passwordHelpText.style.color = '#64748b';
+      return;
+    }
+    
+    if (!firebaseEnabled || !db) {
+      return;
+    }
+    
+    try {
+      const orgId = generateOrganizationId(tournamentName);
+      const snapshot = await db.ref('tournaments/' + orgId).once('value');
+      const orgData = snapshot.val();
+      
+      if (orgData && orgData.passwordHash) {
+        // Tournament exists
+        tournamentStatus.style.display = 'block';
+        tournamentStatus.innerHTML = '<div style="padding:8px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#991b1b;font-size:11px;font-weight:600;">⚠️ Tournament exists! Enter correct password to add matches.</div>';
+        passwordHelpText.textContent = 'This tournament already exists. Enter the correct password to join and add matches.';
+        passwordHelpText.style.color = '#991b1b';
+      } else {
+        // Tournament doesn't exist - new
+        tournamentStatus.style.display = 'block';
+        tournamentStatus.innerHTML = '<div style="padding:8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;color:#166534;font-size:11px;font-weight:600;">✅ Available! Set a password to create this tournament.</div>';
+        passwordHelpText.textContent = 'Create a new tournament with this name. Set a password to protect it.';
+        passwordHelpText.style.color = '#166534';
+      }
+    } catch (error) {
+      console.error('❌ Error checking tournament:', error);
+      tournamentStatus.style.display = 'none';
+    }
+  }
+  
   // Load existing tournaments from localStorage (user's own tournaments only)
   function loadExistingTournaments() {
     console.log("🔄 Loading existing tournaments from localStorage...");
@@ -380,6 +422,47 @@
       }
     } catch (error) {
       console.error("❌ Error loading tournaments:", error);
+    }
+  }
+  
+  // Track ALL user matches in localStorage (for quick match access)
+  function addMatchToUserHistory(matchInfo) {
+    try {
+      let allMatches = [];
+      const allMatchesJson = localStorage.getItem('cricketbook_all_user_matches');
+      if (allMatchesJson) {
+        allMatches = JSON.parse(allMatchesJson);
+      }
+      
+      // Remove existing entry if match already exists
+      allMatches = allMatches.filter(m => m.matchId !== matchInfo.matchId);
+      
+      // Add new/updated match info
+      allMatches.unshift(matchInfo);
+      
+      // Keep only last 50 matches
+      if (allMatches.length > 50) {
+        allMatches = allMatches.slice(0, 50);
+      }
+      
+      localStorage.setItem('cricketbook_all_user_matches', JSON.stringify(allMatches));
+      console.log('💾 Added match to user history:', matchInfo.matchId);
+    } catch (error) {
+      console.error('❌ Error adding match to user history:', error);
+    }
+  }
+  
+  // Get all user matches from localStorage
+  function getAllUserMatches() {
+    try {
+      const allMatchesJson = localStorage.getItem('cricketbook_all_user_matches');
+      if (allMatchesJson) {
+        return JSON.parse(allMatchesJson);
+      }
+      return [];
+    } catch (error) {
+      console.error('❌ Error loading user matches:', error);
+      return [];
     }
   }
   
@@ -566,8 +649,15 @@
     }
     
     try {
-      const snapshot = await db.ref('organizations/' + organizationId + '/matches/' + matchId).once('value');
-      const matchData = snapshot.val();
+      // Check both tournament and quick match paths
+      let snapshot = await db.ref('tournaments/' + organizationId + '/matches/' + matchId).once('value');
+      let matchData = snapshot.val();
+      
+      if (!matchData) {
+        // Try quick matches path
+        snapshot = await db.ref('quickMatches/' + organizationId + '/matches/' + matchId).once('value');
+        matchData = snapshot.val();
+      }
       
       console.log("📦 Match data retrieved:", matchData ? "exists" : "null");
       
@@ -1562,9 +1652,28 @@ function saveMatchState() {
     editToken: editToken  // Store edit token for protection
   };
   
-  db.ref('organizations/' + organizationId + '/matches/' + matchId).set(matchData)
+  // Determine the Firebase path based on whether it's a tournament or quick match
+  const tournamentName = matchData.tournamentName;
+  const matchPath = (tournamentName && tournamentName.trim() !== '') 
+    ? 'tournaments/' + organizationId + '/matches/' + matchId
+    : 'quickMatches/' + organizationId + '/matches/' + matchId;
+  
+  db.ref(matchPath).set(matchData)
     .then(() => {
-      console.log("💾 Match state saved to Firebase");
+      console.log("💾 Match state saved to Firebase at:", matchPath);
+      
+      // Track this match in user's all-matches history
+      addMatchToUserHistory({
+        matchId: matchId,
+        organizationId: organizationId,
+        teamA: teamA,
+        teamB: teamB,
+        tournamentName: matchData.tournamentName,
+        matchType: matchData.matchType,
+        timestamp: matchData.lastUpdated,
+        isQuickMatch: !matchData.tournamentName || matchData.tournamentName.trim() === ''
+      });
+      
       // Also update localStorage session
       if (canEditMatch) {
         saveCurrentMatchSession();
@@ -1581,7 +1690,15 @@ function listenForUpdates() {
   
   console.log("👂 Listening for match updates:", matchId);
   
-  db.ref('organizations/' + organizationId + '/matches/' + matchId).on('value', (snapshot) => {
+  // Determine the Firebase path based on whether it's a tournament or quick match
+  const tournamentName = document.getElementById('tournamentName')?.value || '';
+  const matchPath = (tournamentName && tournamentName.trim() !== '') 
+    ? 'tournaments/' + organizationId + '/matches/' + matchId
+    : 'quickMatches/' + organizationId + '/matches/' + matchId;
+  
+  console.log("📍 Listening at path:", matchPath);
+  
+  db.ref(matchPath).on('value', (snapshot) => {
     const data = snapshot.val();
     if (!data) {
       console.warn("⚠️ No match data found for matchId:", matchId);
@@ -2665,20 +2782,36 @@ async function startMatch(){
   // Check if tournament exists and validate password (only for named tournaments)
   if (firebaseEnabled && db && tournamentName && tournamentName !== '' && tournamentPassword) {
     try {
-      const orgSnapshot = await db.ref('organizations/' + organizationId).once('value');
-      const orgData = orgSnapshot.val();
+      // First, check all existing tournaments to ensure name is unique
+      const allTournamentsSnapshot = await db.ref('tournaments').once('value');
+      const allTournaments = allTournamentsSnapshot.val() || {};
       
-      if (orgData && orgData.passwordHash) {
-        // Tournament exists - verify password
-        console.log('� Tournament exists, verifying password...');
-        const passwordValid = await verifyPassword(tournamentPassword, orgData.passwordHash);
+      // Check if any tournament has this exact name (case-insensitive)
+      let existingTournament = null;
+      let existingOrgId = null;
+      
+      for (const [orgId, tournamentData] of Object.entries(allTournaments)) {
+        if (tournamentData.name && tournamentData.name.toLowerCase() === tournamentName.toLowerCase()) {
+          existingTournament = tournamentData;
+          existingOrgId = orgId;
+          break;
+        }
+      }
+      
+      if (existingTournament && existingTournament.passwordHash) {
+        // Tournament with this name already exists - verify password
+        console.log('📋 Tournament "' + tournamentName + '" exists, verifying password...');
+        const passwordValid = await verifyPassword(tournamentPassword, existingTournament.passwordHash);
         
         if (!passwordValid) {
-          alert('❌ Incorrect password!\n\nThis tournament already exists.\n\nEnter the correct password to add matches, or choose a different tournament name.');
+          alert('❌ Incorrect password!\n\nA tournament named "' + tournamentName + '" already exists.\n\n• Enter the correct password to add matches\n• OR choose a different tournament name');
+          document.getElementById('tournamentPassword').focus();
           return;
         }
         
-        console.log('✅ Password verified! Adding match to existing tournament.');
+        // Use the existing tournament's org ID
+        organizationId = existingOrgId;
+        console.log('✅ Password verified! Using existing tournament org ID:', organizationId);
         alert('✅ Password verified!\n\nAdding your match to existing tournament: "' + tournamentName + '"');
         
       } else {
@@ -2687,7 +2820,7 @@ async function startMatch(){
         const passwordHash = await hashPassword(tournamentPassword);
         
         // Save tournament metadata to Firebase
-        await db.ref('organizations/' + organizationId).update({
+        await db.ref('tournaments/' + organizationId).update({
           name: tournamentName,
           passwordHash: passwordHash,
           createdAt: Date.now(),
@@ -2726,6 +2859,18 @@ async function startMatch(){
   
   // Save current match session to localStorage for recovery
   saveCurrentMatchSession();
+  
+  // Track this match in user's all-matches history immediately
+  addMatchToUserHistory({
+    matchId: matchId,
+    organizationId: organizationId,
+    teamA: teamA,
+    teamB: teamB,
+    tournamentName: tournamentName,
+    matchType: matchType,
+    timestamp: Date.now(),
+    isQuickMatch: !tournamentName || tournamentName.trim() === ''
+  });
   
   document.getElementById("setup").style.display="none";
   document.getElementById("game").style.display="block";
@@ -3381,23 +3526,34 @@ function terminateSavedMatchById(matchId) {
     return;
   }
   
-  // Delete from Firebase
-  const matchPath = 'organizations/' + matchToDelete.organizationId + '/matches/' + matchToDelete.matchId;
+  // Delete from Firebase - try both tournament and quick match paths
+  const tournamentPath = 'tournaments/' + matchToDelete.organizationId + '/matches/' + matchToDelete.matchId;
+  const quickMatchPath = 'quickMatches/' + matchToDelete.organizationId + '/matches/' + matchToDelete.matchId;
   
-  db.ref(matchPath).remove()
+  // Try tournament path first
+  db.ref(tournamentPath).remove()
     .then(() => {
-      console.log('🗑️ Match deleted from Firebase:', matchToDelete.matchId);
-      // Remove from localStorage after successful Firebase deletion
+      console.log('🗑️ Match deleted from Firebase (tournament):', matchToDelete.matchId);
       removeMatchFromHistory(matchId);
       alert('✅ Match deleted successfully from server and local storage');
       refreshSavedMatches();
     })
-    .catch((error) => {
-      console.error('❌ Failed to delete match from Firebase:', error);
-      // Still remove from localStorage even if Firebase deletion fails
-      removeMatchFromHistory(matchId);
-      alert('⚠️ Match deleted from local storage, but server deletion failed.\n\nError: ' + error.message);
-      refreshSavedMatches();
+    .catch(() => {
+      // If tournament path fails, try quick match path
+      db.ref(quickMatchPath).remove()
+        .then(() => {
+          console.log('🗑️ Match deleted from Firebase (quick match):', matchToDelete.matchId);
+          removeMatchFromHistory(matchId);
+          alert('✅ Match deleted successfully from server and local storage');
+          refreshSavedMatches();
+        })
+        .catch((error) => {
+          console.error('❌ Failed to delete match from Firebase:', error);
+          // Still remove from localStorage even if Firebase deletion fails
+          removeMatchFromHistory(matchId);
+          alert('⚠️ Match deleted from local storage, but server deletion failed.\n\nError: ' + error.message);
+          refreshSavedMatches();
+        });
     });
 }
 

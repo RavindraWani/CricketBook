@@ -535,6 +535,20 @@
     let openNRRBreakdowns = new Set(); // Track which NRR breakdowns are open
     let lastActivityTime = Date.now(); // Track last user activity
     let isPollingPaused = false; // Track if polling is paused
+    
+    // Get all user matches from localStorage
+    function getAllUserMatches() {
+      try {
+        const allMatchesJson = localStorage.getItem('cricketbook_all_user_matches');
+        if (allMatchesJson) {
+          return JSON.parse(allMatchesJson);
+        }
+        return [];
+      } catch (error) {
+        console.error('❌ Error loading user matches:', error);
+        return [];
+      }
+    }
 
     // Check if org parameter is in URL (from share link)
     const urlParams = new URLSearchParams(window.location.search);
@@ -550,35 +564,76 @@
       console.log('🔗 Using Organization ID from URL and saved to localStorage:', organizationId);
     }
     
-    if (!organizationId) {
-      // No org ID - show helpful message
-      console.warn('⚠️ No Organization ID found. Please start a match first.');
+    // Check if user has any matches in history
+    const userMatches = getAllUserMatches();
+    
+    if (!organizationId && userMatches.length === 0) {
+      // No org ID and no match history - show welcome message
+      console.warn('⚠️ No Organization ID found and no match history. Please start a match first.');
       document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:12px;color:#1f2937;">Welcome to CricketBook!</div><div style="color:#6b7280;margin-bottom:16px;">Start your first match to see all your matches here.</div><a href="index.html" class="btn new-match-btn" style="max-width:300px;margin:0 auto;">🏠 Go to Home & Start Match</a></div>';
       document.getElementById('loading').style.display = 'block';
       document.getElementById('content').style.display = 'none';
     } else {
-      console.log('✅ Using Organization ID:', organizationId);
+      // Has org ID or has match history - load matches
+      console.log('✅ Loading matches - orgId:', organizationId, '| User match history:', userMatches.length);
       
-      // Load all matches with real-time sync (filtered by organization)
+      // Load all matches with real-time sync
       loadMatches();
     }
     
     function loadMatches() {
-      const matchesRef = database.ref('organizations/' + organizationId + '/matches');
-    
     // Use polling instead of continuous listener to reduce active connections
     const pollMatches = () => {
-      matchesRef.once('value', (snapshot) => {
-      const allMatches = snapshot.val();
+      // Get all user matches from localStorage (refresh each poll)
+      const userMatches = getAllUserMatches();
+      console.log('💾 User has', userMatches.length, 'matches in localStorage history');
       
-      console.log('📊 Loaded matches from Firebase for org ' + organizationId + ':', allMatches); // Debug log
+      // Load from Firebase for all orgIds user has created matches in
+      const orgIds = new Set();
+      if (organizationId) {
+        orgIds.add(organizationId);
+      }
+      userMatches.forEach(match => {
+        if (match.organizationId) {
+          orgIds.add(match.organizationId);
+        }
+      });
       
-      if (!allMatches) {
+      console.log('🎯 Loading matches from', orgIds.size, 'organizations:', Array.from(orgIds));
+      
+      // If no orgIds found, show empty state
+      if (orgIds.size === 0) {
+        console.log('⚠️ No organization IDs found in history');
         document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:12px;color:#1f2937;">No Matches Yet</div><div style="color:#6b7280;margin-bottom:16px;">Start your first match to see it here!</div><a href="index.html" style="background:#8b5cf6;color:white;padding:10px 24px;border-radius:10px;text-decoration:none;display:inline-block;font-weight:600;">🏠 Go to Home & Start Scoring</a></div>';
         document.getElementById('loading').style.display = 'block';
         document.getElementById('content').style.display = 'none';
         return;
       }
+      
+      // Build promises for all orgIds
+      const promises = [];
+      orgIds.forEach(orgId => {
+        promises.push(database.ref('tournaments/' + orgId + '/matches').once('value'));
+        promises.push(database.ref('quickMatches/' + orgId + '/matches').once('value'));
+      });
+      
+      // Load all matches from all user's organizations
+      Promise.all(promises).then((snapshots) => {
+        let allMatches = {};
+        
+        snapshots.forEach(snapshot => {
+          const matches = snapshot.val() || {};
+          allMatches = { ...allMatches, ...matches };
+        });
+        
+        console.log('📊 Loaded total matches from Firebase:', Object.keys(allMatches).length);
+        
+        if (Object.keys(allMatches).length === 0) {
+          document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:12px;color:#1f2937;">No Matches Yet</div><div style="color:#6b7280;margin-bottom:16px;">Start your first match to see it here!</div><a href="index.html" style="background:#8b5cf6;color:white;padding:10px 24px;border-radius:10px;text-decoration:none;display:inline-block;font-weight:600;">🏠 Go to Home & Start Scoring</a></div>';
+          document.getElementById('loading').style.display = 'block';
+          document.getElementById('content').style.display = 'none';
+          return;
+        }
       
       // Convert to array and sort by lastUpdated timestamp (newest first)
       const matchesArray = Object.keys(allMatches).map(matchId => ({
@@ -642,7 +697,7 @@
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
       
-    }, (error) => {
+    }).catch((error) => {
       console.error('❌ Firebase error:', error); // Debug log
       
       // Check if it's a connection limit error
@@ -737,9 +792,12 @@
       const isBattingFirst = !match.inSecond;
       
       const matchTypeText = match.matchType ? ` - ${match.matchType}` : '';
-      const tournamentBadge = match.tournamentName && match.tournamentName.trim() !== '' 
-        ? `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>` 
-        : '';
+      
+      // Check if it's a quick match or tournament match
+      const isQuickMatch = !match.tournamentName || match.tournamentName.trim() === '';
+      const tournamentBadge = isQuickMatch
+        ? `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;background:rgba(254,240,138,0.2);padding:4px 10px;border-radius:12px;border:1px solid rgba(254,240,138,0.5);">⚡ Quick Match</div>`
+        : `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>`;
       
       container.innerHTML = `
         <div class="card ongoing-card">
@@ -763,7 +821,7 @@
               </div>
             </div>
             <div style="flex-shrink: 0;">
-              <a href="livescore.html?org=${organizationId}&match=${match.matchId}" class="btn btn-primary">
+              <a href="livescore.html?org=${match.organizationId}&match=${match.matchId}" class="btn btn-primary">
                 👁️ Watch
               </a>
             </div>
@@ -818,9 +876,12 @@
         }) : '';
         
         const matchTypeText = match.matchType ? ` - ${match.matchType}` : '';
-        const tournamentBadge = match.tournamentName && match.tournamentName.trim() !== '' 
-          ? `<div style="font-size:11px;color:#667eea;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>` 
-          : '';
+        
+        // Check if it's a quick match or tournament match
+        const isQuickMatch = !match.tournamentName || match.tournamentName.trim() === '';
+        const tournamentBadge = isQuickMatch
+          ? `<div style="font-size:11px;color:#f59e0b;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;display:inline-block;background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);padding:3px 10px;border-radius:12px;border:1px solid #fbbf24;">⚡ Quick Match</div>`
+          : `<div style="font-size:11px;color:#667eea;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>`;
         
         return `
           <div class="card">
@@ -845,7 +906,7 @@
                 ${dateStr ? `<div class="match-meta">📅 ${dateStr}</div>` : ''}
               </div>
               <div style="flex-shrink: 0;">
-                <a href="livescore.html?org=${organizationId}&match=${match.matchId}" class="btn">
+                <a href="livescore.html?org=${match.organizationId}&match=${match.matchId}" class="btn">
                   👁️ View
                 </a>
               </div>

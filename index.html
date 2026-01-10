@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -76,8 +76,8 @@
     /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
       margin-bottom: 16px;
     }
     
@@ -150,7 +150,7 @@
     
     .card:hover .card-link {
       color: #7c3aed;
-      gap: 12px;
+      gap: 10px;
     }
     
     /* Footer */
@@ -239,40 +239,70 @@
     <!-- Hero Section -->
     <div class="hero">
       <h1>🏏 CricketBook</h1>
-      <p>Real-time Cricket Scoring for Local Matches & Tournaments</p>
+      <p>Score matches instantly. Share live. Track tournaments.<br>No signup. 100% Free.</p>
     </div>
     
- 
+ <!-- Cards Grid -->
+    <div class="cards-grid">
+      <!-- Scorer Card -->
+      <a href="scorer.html" class="card" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border:3px solid #ffffff;box-shadow:0 12px 48px rgba(102,126,234,0.4), 0 4px 16px rgba(118,75,162,0.3);transform:scale(1.02);position:relative;">
+        <div style="position:absolute;top:12px;right:12px;background:#10b981;color:white;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:0.5px;">START HERE</div>
+        <h2 style="color:#ffffff;font-size:24px;">⚙️ Scorer</h2>
+        <p style="color:rgba(255,255,255,0.95);font-weight:400;line-height:1.4;font-size:13px;">Create & score matches. Choose Quick Match (single) or Tournament (multiple). Share instantly via WhatsApp.</p>
+        <span class="card-link" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#ffffff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(16,185,129,0.4);display:inline-block;margin-top:10px;">🚀 Start Scoring →</span>
+      </a>
+      
+      <!-- Live Score Card -->
+      <a href="livescore.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+        <h2 style="color:#3b82f6;font-size:18px;margin-bottom:8px;">📺 Live Score</h2>
+        <p style="color:#4b5563;font-weight:400;line-height:1.4;font-size:13px;">Real-time match updates with automatic ball-by-ball sync.</p>
+        <span class="card-link" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#ffffff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(59,130,246,0.3);display:inline-block;margin-top:10px;">Watch Live →</span>
+      </a>
+      
+      <!-- All Matches Card -->
+      <a href="matches.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+        <h2 style="color:#8b5cf6;font-size:18px;margin-bottom:8px;">📋 All Matches</h2>
+        <p style="color:#4b5563;font-weight:400;line-height:1.4;font-size:13px;">View all your matches (Quick + Tournaments). See points tables for League matches.</p>
+        <span class="card-link" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);color:#ffffff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(139,92,246,0.3);display:inline-block;margin-top:10px;">View Matches →</span>
+      </a>
+      
+      <!-- About Card -->
+      <a href="about.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+        <h2 style="color:#0891b2;font-size:18px;margin-bottom:8px;">ℹ️ About</h2>
+        <p style="color:#4b5563;font-weight:400;line-height:1.4;font-size:13px;">Features, privacy, and how CricketBook makes scoring simple & free.</p>
+        <span class="card-link" style="background:linear-gradient(135deg, #0891b2 0%, #0e7490 100%);color:#ffffff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(8,145,178,0.3);display:inline-block;margin-top:10px;">Learn More →</span>
+      </a>
+    </div>
     
     <!-- How It Works Section -->
     <div class="card" style="max-width: 800px; margin: 0 auto 16px;">
       <h2 style="text-align: center; font-size: 22px; margin-bottom: 16px; color: #1f2937;">⚡ How It Works</h2>
       
-      <div style="display: grid; gap: 12px;">
+      <div style="display: grid; gap: 10px;">
         <!-- Step 1 -->
-        <div style="display: flex; gap: 12px; align-items: start;">
+        <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">1</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Quick Match Setup</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Enter team names, overs & match type — start instantly without signup</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Start Scoring</h3>
+            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Click <strong>Scorer</strong>  enter teams & overs  start instantly (no signup)</p>
           </div>
         </div>
         
         <!-- Step 2 -->
-        <div style="display: flex; gap: 12px; align-items: start;">
+        <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">2</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Score Ball-by-Ball</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Record runs, wickets & extras with real-time Firebase sync</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Record Each Ball</h3>
+            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Tap runs (0-6), wickets, extras — updates sync in real-time</p>
           </div>
         </div>
         
         <!-- Step 3 -->
-        <div style="display: flex; gap: 12px; align-items: start;">
+        <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">3</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Share Instantly</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">WhatsApp share with viewer link (public) or scorer link (edit access)</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Share via WhatsApp</h3>
+            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Two links: <strong>View</strong> (spectators) or <strong>Score</strong> (edit access)</p>
           </div>
         </div>
       </div>
@@ -284,7 +314,7 @@
     
       <!-- Why CricketBook Section -->
     <div class="card" style="max-width: 800px; margin: 0 auto 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-      <h2 style="text-align: center; font-size: 22px; margin-bottom: 14px; color: white;">🏆 Why Choose Us?</h2>
+      <h2 style="text-align: center; font-size: 22px; margin-bottom: 14px; color: white;">🏆 Why CricketBook?</h2>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px;">
         <!-- Feature 1 -->
@@ -317,37 +347,7 @@
       </div>
     </div>
     
-<!-- Cards Grid -->
-    <div class="cards-grid">
-      <!-- Scorer Card -->
-      <a href="scorer.html" class="card" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border:3px solid #ffffff;box-shadow:0 12px 48px rgba(102,126,234,0.4), 0 4px 16px rgba(118,75,162,0.3);transform:scale(1.02);position:relative;">
-        <div style="position:absolute;top:12px;right:12px;background:#10b981;color:white;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;">POPULAR</div>
-        <h2 style="color:#ffffff;font-size:24px;">⚙️ Scorer</h2>
-        <p style="color:rgba(255,255,255,0.95);font-weight:500;line-height:1.5;">Score matches ball-by-ball with instant WhatsApp sharing. Dual links for viewing & editing.</p>
-        <span class="card-link" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#ffffff;padding:14px 28px;border-radius:12px;font-size:16px;font-weight:800;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(16,185,129,0.4);display:inline-block;margin-top:8px;">🚀 Start Scoring →</span>
-      </a>
-      
-      <!-- Live Score Card -->
-      <a href="livescore.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
-        <h2 style="color:#3b82f6;font-size:22px;margin-bottom:12px;">📺 Live Score</h2>
-        <p style="color:#4b5563;font-weight:500;line-height:1.5;">Real-time match updates with automatic ball-by-ball sync.</p>
-        <span class="card-link" style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#ffffff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;box-shadow:0 3px 12px rgba(59,130,246,0.3);display:inline-block;margin-top:8px;">Watch Live →</span>
-      </a>
-      
-      <!-- All Matches Card -->
-      <a href="matches.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
-        <h2 style="color:#8b5cf6;font-size:22px;margin-bottom:12px;">📋 All Matches</h2>
-        <p style="color:#4b5563;font-weight:500;line-height:1.5;">View match history organized by tournaments and match types.</p>
-        <span class="card-link" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);color:#ffffff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;box-shadow:0 3px 12px rgba(139,92,246,0.3);display:inline-block;margin-top:8px;">View Matches →</span>
-      </a>
-      
-      <!-- About Card -->
-      <a href="about.html" class="card" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border:2px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);">
-        <h2 style="color:#0891b2;font-size:22px;margin-bottom:12px;">ℹ️ About</h2>
-        <p style="color:#4b5563;font-weight:500;line-height:1.5;">Features, privacy, and how CricketBook makes scoring simple & free.</p>
-        <span class="card-link" style="background:linear-gradient(135deg, #0891b2 0%, #0e7490 100%);color:#ffffff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;box-shadow:0 3px 12px rgba(8,145,178,0.3);display:inline-block;margin-top:8px;">Learn More →</span>
-      </a>
-    </div>
+
 
     <!-- Footer -->
     <div class="footer">
@@ -374,3 +374,12 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

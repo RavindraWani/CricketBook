@@ -321,11 +321,19 @@
         matchesListenerRef.off();
       }
       
-      // Use once() instead of on() to avoid persistent connection
-      database.ref('organizations/' + organizationId + '/matches').once('value', (snapshot) => {
-        const allMatches = snapshot.val();
+      // Check both tournament and quick match paths
+      Promise.all([
+        database.ref('tournaments/' + organizationId + '/matches').once('value'),
+        database.ref('quickMatches/' + organizationId + '/matches').once('value')
+      ]).then(([tournamentSnapshot, quickMatchSnapshot]) => {
+        const tournamentMatches = tournamentSnapshot.val() || {};
+        const quickMatches = quickMatchSnapshot.val() || {};
+        const allMatches = { ...tournamentMatches, ...quickMatches };
         
-        if (!allMatches) {
+        console.log('🏏 Tournament matches found:', Object.keys(tournamentMatches).length);
+        console.log('⚡ Quick matches found:', Object.keys(quickMatches).length);
+        
+        if (Object.keys(allMatches).length === 0) {
           document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:600;margin-bottom:12px;color:#1f2937;">No Matches Yet</div><div style="color:#6b7280;margin-bottom:16px;">Start your first match to see live scores here!</div><a href="index.html" style="background:#8b5cf6;color:white;padding:10px 24px;border-radius:10px;text-decoration:none;display:inline-block;font-weight:600;">🏠 Go to Home & Start Scoring</a></div>';
           // Retry after 5 seconds
           setTimeout(findAndLoadLiveMatch, 5000);
@@ -374,7 +382,7 @@
             document.getElementById('loading').innerHTML = '<div class="error">No matches available.</div>';
           }
         }
-      }, (error) => {
+      }).catch((error) => {
         console.error('❌ Error finding match:', error);
         
         // Check if it's a connection limit error
@@ -416,20 +424,33 @@
       
       // Use polling instead of continuous listener to reduce active connections
       const pollMatch = () => {
-        database.ref('organizations/' + organizationId + '/matches/' + id).once('value', (snapshot) => {
-          const data = snapshot.val();
-          console.log('📡 Polled update from Firebase for match', id);
+        // Try tournament path first, then quick matches path
+        database.ref('tournaments/' + organizationId + '/matches/' + id).once('value', (snapshot) => {
+          let data = snapshot.val();
+          
           if (data) {
+            console.log('📡 Polled update from Firebase (tournament match)', id);
             updateUI(data);
             document.getElementById('loading').style.display = 'none';
             document.getElementById('content').style.display = 'block';
           } else {
-            console.warn('⚠️ Match not found:', id);
-            document.getElementById('loading').innerHTML = '<div class="error">Match ID "' + id + '" not found in Firebase. <br><br>Try refreshing or start a new match.</div>';
-            // Stop polling if match not found
-            if (pollingInterval) {
-              clearInterval(pollingInterval);
-            }
+            // Try quick matches path
+            database.ref('quickMatches/' + organizationId + '/matches/' + id).once('value', (snapshot2) => {
+              data = snapshot2.val();
+              if (data) {
+                console.log('📡 Polled update from Firebase (quick match)', id);
+                updateUI(data);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+              } else {
+                console.warn('⚠️ Match not found:', id);
+                document.getElementById('loading').innerHTML = '<div class="error">Match ID "' + id + '" not found in Firebase. <br><br>Try refreshing or start a new match.</div>';
+                // Stop polling if match not found
+                if (pollingInterval) {
+                  clearInterval(pollingInterval);
+                }
+              }
+            });
           }
         }, (error) => {
           console.error('❌ Firebase error:', error);
@@ -960,4 +981,3 @@
 
 </body>
 </html>
-
