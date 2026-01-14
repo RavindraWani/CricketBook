@@ -183,6 +183,14 @@
           <span id="tournamentTitle"></span>
         </div>
         
+        <!-- Share Button -->
+        <div style="text-align:center;margin-bottom:16px;">
+          <button onclick="shareOnWhatsApp()" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:white;border:none;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 3px 8px rgba(37,211,102,0.25);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;">
+            <span style="font-size:16px;">📱</span>
+            Share on WhatsApp
+          </button>
+        </div>
+        
         <!-- 📊 Scoreboard Header -->
         <div class="scoreboard">
           <!-- Team Name & Score Display (Two Column Layout) -->
@@ -965,6 +973,58 @@
         }
       });
       return {runs, wkts};
+    }
+    
+    // Share on WhatsApp function
+    function shareOnWhatsApp() {
+      // Get current match data from the page
+      const teamAName = document.getElementById('teamAName').textContent;
+      const teamBName = document.getElementById('teamBName').textContent;
+      const scoreA = document.getElementById('scoreA').textContent;
+      const scoreB = document.getElementById('scoreB').textContent;
+      const teamAOvers = document.getElementById('teamAOvers').textContent;
+      const teamBOvers = document.getElementById('teamBOvers').textContent;
+      
+      // Get result if available
+      const resultBanner = document.getElementById('result');
+      const result = resultBanner && resultBanner.classList.contains('show') ? resultBanner.textContent : '';
+      
+      // Get tournament name if available
+      const tournamentEl = document.getElementById('tournamentTitle');
+      const tournament = tournamentEl ? tournamentEl.textContent : '';
+      
+      // Create share link
+      const shareLink = `${window.location.origin}/livescore.html?org=${organizationId}&match=${matchId}`;
+      
+      // Build message
+      let message = `🏏 *CricketBook Live Score* 🏏\n\n`;
+      
+      if (tournament) {
+        message += `🏆 *${tournament}*\n\n`;
+      }
+      
+      message += `*${teamAName}* vs *${teamBName}*\n\n`;
+      message += `📊 *Score:*\n`;
+      message += `${teamAName}: ${scoreA} ${teamAOvers}\n`;
+      message += `${teamBName}: ${scoreB} ${teamBOvers}\n`;
+      
+      if (result) {
+        message += `\n🏆 *Result:* ${result}\n`;
+      } else {
+        message += `\n🔴 *LIVE NOW!*\n`;
+      }
+      
+      message += `\n👁️ Watch Live: ${shareLink}\n`;
+      message += `\n_Powered by CricketBook_`;
+      
+      // Encode message for URL
+      const encodedMessage = encodeURIComponent(message);
+      
+      // Open WhatsApp with pre-filled message
+      const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+      
+      // Open in new window
+      window.open(whatsappUrl, '_blank');
     }
     
     // Clean up connections when leaving page
