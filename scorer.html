@@ -85,11 +85,24 @@
     background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; font-weight:600;
   }
   .panel{
-    margin-top:8px; padding:12px; border-radius:16px;
-    background:#ffffff;
+    margin-top:8px; padding:10px; border-radius:16px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
     border:2px solid #3b82f6;
-    box-shadow:0 4px 16px rgba(59,130,246,0.15);
-    transition: box-shadow 0.2s, border 0.2s;
+    box-shadow:0 6px 20px rgba(59,130,246,0.2), 0 2px 8px rgba(59,130,246,0.1);
+    transition: all 0.3s ease;
+  }
+  #extraPanel .btn-action{
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    font-weight: 800 !important;
+    font-size: 18px !important;
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+    letter-spacing: 0.5px !important;
+  }
+  #extraPanel .btn-action:active{
+    transform: scale(0.95) !important;
+    box-shadow: 0 1px 4px rgba(16, 185, 129, 0.4) !important;
   }
   #wicketPanel {
     background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
@@ -1009,42 +1022,48 @@
 
       <!-- Extra Runs Picker (appears above 4/6 buttons) -->
       <div id="extraPanel" class="panel" style="display:none;margin-bottom:8px;">
-        <div id="extraLabel" class="muted" style="margin-bottom:10px;font-size:15px;font-weight:700;color:#1f2937;"></div>
+        <div id="extraLabel" class="muted" style="margin-bottom:8px;font-size:15px;font-weight:800;color:#1e40af;text-align:center;text-transform:uppercase;letter-spacing:0.5px;"></div>
         <!-- First Row -->
-        <div class="row" style="margin-bottom:0px;">
-          <button class="btn btn-action" onclick="applyExtra(0)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+0</button>
-          <button class="btn btn-action" onclick="applyExtra(1)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+1</button>
-          <button class="btn btn-action" onclick="applyExtra(2)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+2</button>
+        <div class="row" style="margin-bottom:5px;gap:5px;">
+          <button class="btn btn-action" onclick="applyExtra(0)" style="flex:1;padding:11px 0;">+0</button>
+          <button class="btn btn-action" onclick="applyExtra(1)" style="flex:1;padding:11px 0;">+1</button>
+          <button class="btn btn-action" onclick="applyExtra(2)" style="flex:1;padding:11px 0;">+2</button>
         </div>
         <!-- Second Row -->
-        <div class="row">
-          <button class="btn btn-action" onclick="applyExtra(3)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+3</button>
-          <button class="btn btn-action" onclick="applyExtra(4)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+4</button>
-          <button class="btn btn-action" onclick="applyExtra(6)" style="flex:1;font-size:16px;padding:12px 0;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">+6</button>
+        <div class="row" style="gap:5px;">
+          <button class="btn btn-action" onclick="applyExtra(3)" style="flex:1;padding:11px 0;">+3</button>
+          <button class="btn btn-action" onclick="applyExtra(4)" style="flex:1;padding:11px 0;">+4</button>
+          <button class="btn btn-action" onclick="applyExtra(6)" style="flex:1;padding:11px 0;">+6</button>
         </div>
       </div>
 
-      <!-- Middle Row: Single Runs -->
+      <!-- First Row: 0 1 4 6 -->
       <div class="row" style="margin-bottom:8px;">
         <button class="btn" onclick="addLegalRun(0)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">0</button>
         <button class="btn" onclick="addLegalRun(1)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">1</button>
+        <button class="btn" onclick="addLegalRun(4)" style="flex:1;font-size:26px;padding:16px 0;background:#10b981;font-weight:900;">4</button>
+        <button class="btn" onclick="addLegalRun(6)" style="flex:1;font-size:26px;padding:16px 0;background:#f59e0b;font-weight:900;">6</button>
       </div>
 
-      <!-- Bottom Row: High Score Buttons/Other Runs -->
-      <div class="row">
-        <button class="btn" onclick="addLegalRun(4)" style="flex:1;font-size:24px;padding:16px 0;background:#10b981;font-weight:700;">4</button>
-        <button class="btn" onclick="addLegalRun(6)" style="flex:1;font-size:24px;padding:16px 0;background:#f59e0b;font-weight:700;">6</button>
-        <button class="btn" onclick="addLegalRun(2)" style="flex:1;font-size:24px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">2</button>
-        <button class="btn btn-muted" onclick="showMoreOptions()" style="flex:1;font-size:18px;padding:16px 0;">☰</button>
+      <!-- Second Row: 2 3 5 ☰ -->
+      <div class="row" style="margin-bottom:8px;">
+        <button class="btn" onclick="addLegalRun(2)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">2</button>
+        <button class="btn" onclick="addLegalRun(3)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">3</button>
+        <button class="btn" onclick="addLegalRun(5)" style="flex:1;font-size:26px;padding:16px 0;background:#e5e7eb;color:#1f2937;font-weight:900;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">5</button>
+        <button class="btn btn-muted" onclick="showMoreOptions()" style="flex:1;font-size:20px;padding:16px 0;font-weight:900;">☰</button>
       </div>
 
-      <!-- Additional Runs Row (Visible by Default) -->
-      <div id="moreRunsRow" style="display:block;margin-top:8px;">
-        <div class="row">
-          <button class="btn" onclick="addLegalRun(3)" style="flex:1;font-size:18px;padding:12px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">3</button>
-          <button class="btn" onclick="addLegalRun(5)" style="flex:1;font-size:18px;padding:12px 0;background:#e5e7eb;color:#1f2937;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,0.1) inset;">5</button>
+      <!-- Additional Options Row (Visible by Default) -->
+      <div id="moreRunsRow" style="display:block;margin-top:0px;">
+        <div class="row" style="margin-bottom:8px;">
           <button class="btn btn-muted" onclick="startExtra('LB')" style="flex:1;font-size:15px;padding:12px 0;">LB</button>
-          <button class="btn btn-extra" onclick="showWicketPanel(event)" style="flex:1;font-size:15px;padding:12px 0;background:#f43f5e;">Wkt+</button>
+          <button class="btn btn-muted" onclick="startExtra('B')" style="flex:1;font-size:15px;padding:12px 0;">BYE</button>
+        </div>
+        <!-- Extras with Wicket Row -->
+        <div class="row">
+          <button class="btn btn-extra" onclick="showWicketExtraModal('WD')" style="flex:1;font-size:13px;padding:10px 0;background:#f59e0b;font-weight:700;">WD+W</button>
+          <button class="btn btn-extra" onclick="showWicketExtraModal('NB')" style="flex:1;font-size:13px;padding:10px 0;background:#035fd7;font-weight:700;color:white;">NB+W</button>
+          <button class="btn btn-wkt" onclick="showRunOutModal()" style="flex:1;font-size:13px;padding:10px 0;background:#ef4444;font-weight:700;color:white;">RUN OUT</button>
         </div>
       </div>
     </div>
@@ -1164,7 +1183,8 @@ function makeInnings(){
     overs:[],                     // array of completed overs (each = array of symbols)
     curOver:[],                   // symbols in current (in-progress) over
     curOverLegal:0,               // legal balls in current over
-    done:false
+    done:false,
+    extras: { wd: 0, nb: 0, b: 0, lb: 0 }  // track extras separately
   };
 }
 let teamA, teamB, oversLimit=2, wicketsLimit=10;
@@ -1772,7 +1792,8 @@ function listenForUpdates() {
         overs: data.first.overs || [],
         curOver: data.first.curOver || [],
         curOverLegal: data.first.curOverLegal || 0,
-        done: data.first.done || false
+        done: data.first.done || false,
+        extras: data.first.extras || { wd: 0, nb: 0, b: 0, lb: 0 }
       };
       
       second = {
@@ -1782,7 +1803,8 @@ function listenForUpdates() {
         overs: data.second.overs || [],
         curOver: data.second.curOver || [],
         curOverLegal: data.second.curOverLegal || 0,
-        done: data.second.done || false
+        done: data.second.done || false,
+        extras: data.second.extras || { wd: 0, nb: 0, b: 0, lb: 0 }
       };
       
       inSecond = data.inSecond;  // Use boolean instead of function
@@ -2565,7 +2587,8 @@ function startExtra(type){
     }
     
     pendingExtra = {type};
-    showExtraPanel(true, `${type}: Select runs off bat`);
+    const label = type === 'WD' ? 'WD: Select overthrow runs' : 'NB: Select runs off bat';
+    showExtraPanel(true, label);
   } else {
     // Byes/Leg byes: choose runs; counts as legal ball
     // Check if only 1 run is needed to win (second innings only)
@@ -3297,10 +3320,297 @@ function showWicketPanel(e) {
         b.onclick.toString().includes('quickWicket') || 
         b.onclick.toString().includes('startExtra') ||
         b.onclick.toString().includes('showWicketPanel') ||
-        b.onclick.toString().includes('showMoreOptions'))) {
+        b.onclick.toString().includes('showMoreOptions') ||
+        b.onclick.toString().includes('showWicketExtraModal'))) {
       b.disabled = true;
     }
   });
+}
+
+// Show modal for run out with runs
+function showRunOutModal() {
+  const inn = currentInnings();
+  if (inn.done || pendingExtra || currentMatchOver()) return;
+  
+  // Check if wickets limit reached
+  if (inn.wkts >= wicketsLimit) {
+    alert(`Maximum wickets (${wicketsLimit}) already reached!`);
+    return;
+  }
+  
+  // Create modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'runOutModalOverlay';
+  modalOverlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modalOverlay.onclick = function(e) {
+    if (e.target.id === 'runOutModalOverlay') closeRunOutModal();
+  };
+  
+  // Create modal content
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background:white;border-radius:20px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+  modalContent.onclick = function(e) { e.stopPropagation(); };
+  
+  let contentHTML = `
+    <h3 style="margin:0 0 16px;font-size:20px;color:#1f2937;text-align:center;">🏃 Run Out</h3>
+    
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:8px;">Runs completed before run out:</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+  `;
+  
+  // Add run buttons (0, 1, 2, 3)
+  [0, 1, 2, 3].forEach(r => {
+    contentHTML += `<button onclick="document.getElementById('runOutRuns').value=${r}" style="padding:12px;background:#e5e7eb;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">${r}</button>`;
+  });
+  
+  contentHTML += `
+      </div>
+      <input type="number" id="runOutRuns" min="0" value="0" style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:10px;font-size:16px;margin-top:8px;text-align:center;font-weight:600;" />
+    </div>
+    
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:8px;">Run type:</label>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeNormal').checked=true">
+          <input type="radio" id="runTypeNormal" name="runType" value="normal" checked style="width:18px;height:18px;">
+          <span style="font-size:14px;color:#1f2937;">Normal runs (off bat)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeBye').checked=true">
+          <input type="radio" id="runTypeBye" name="runType" value="bye" style="width:18px;height:18px;">
+          <span style="font-size:14px;color:#1f2937;">Byes (no contact with bat)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeLB').checked=true">
+          <input type="radio" id="runTypeLB" name="runType" value="lb" style="width:18px;height:18px;">
+          <span style="font-size:14px;color:#1f2937;">Leg Byes (off body)</span>
+        </label>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:12px;margin-top:20px;">
+      <button onclick="closeRunOutModal()" style="flex:1;padding:12px;background:#e5e7eb;color:#1f2937;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="confirmRunOut()" style="flex:1;padding:12px;background:#ef4444;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Record Run Out</button>
+    </div>
+  `;
+  
+  modalContent.innerHTML = contentHTML;
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+}
+
+function closeRunOutModal() {
+  const modal = document.getElementById('runOutModalOverlay');
+  if (modal) modal.remove();
+}
+
+function confirmRunOut() {
+  const runs = parseInt(document.getElementById('runOutRuns').value) || 0;
+  const inn = currentInnings();
+  
+  if (inn.done || currentMatchOver()) return;
+  
+  // Get run type
+  let runType = 'normal';
+  if (document.getElementById('runTypeBye').checked) runType = 'bye';
+  else if (document.getElementById('runTypeLB').checked) runType = 'lb';
+  
+  pushUndo();
+  
+  // Build symbol based on run type
+  let sym;
+  if (runs === 0) {
+    if (runType === 'bye') sym = 'B+W';
+    else if (runType === 'lb') sym = 'LB+W';
+    else sym = 'W';
+  } else {
+    if (runType === 'bye') sym = `B+${runs}+W`;
+    else if (runType === 'lb') sym = `LB+${runs}+W`;
+    else sym = `${runs}+W`;
+  }
+  
+  // Add symbol to current over
+  addSymbol(inn, sym);
+  
+  // Update runs
+  inn.runs += runs;
+  
+  // Update extras if bye or leg bye
+  if (runType === 'bye') {
+    inn.extras.b += runs;
+  } else if (runType === 'lb') {
+    inn.extras.lb += runs;
+  }
+  
+  // Update wickets
+  inn.wkts += 1;
+  
+  // Run out always counts as legal ball
+  commitLegalBall(inn);
+  
+  // Check if innings should end
+  if (inn.wkts >= wicketsLimit) {
+    inn.done = true;
+    switchInnings();
+  }
+  
+  if (inSecond) checkResult();
+  
+  closeRunOutModal();
+  updateUI();
+}
+
+// Show modal for extras with wicket (WD+W, NB+W)
+function showWicketExtraModal(extraType) {
+  const inn = currentInnings();
+  if (inn.done || pendingExtra || currentMatchOver()) return;
+  
+  // Check if wickets limit reached
+  if (inn.wkts >= wicketsLimit) {
+    alert(`Maximum wickets (${wicketsLimit}) already reached!`);
+    return;
+  }
+  
+  const extraNames = {
+    'WD': 'Wide',
+    'NB': 'No Ball'
+  };
+  
+  // Create modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'wicketExtraModalOverlay';
+  modalOverlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modalOverlay.onclick = function(e) {
+    if (e.target.id === 'wicketExtraModalOverlay') closeWicketExtraModal();
+  };
+  
+  // Create modal content
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background:white;border-radius:20px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+  modalContent.onclick = function(e) { e.stopPropagation(); };
+  
+  let contentHTML = `
+    <h3 style="margin:0 0 16px;font-size:20px;color:#1f2937;text-align:center;">${extraNames[extraType]} + Wicket</h3>
+    
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:8px;">Extra runs taken (excluding ${extraType} penalty):</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+  `;
+  
+  // Add run buttons (always 0, 1, 2, 3)
+  [0, 1, 2, 3].forEach(r => {
+    contentHTML += `<button onclick="document.getElementById('wicketExtraRuns').value=${r}" style="padding:12px;background:#e5e7eb;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">${r}</button>`;
+  });
+  
+  contentHTML += `
+      </div>
+      <input type="number" id="wicketExtraRuns" min="0" value="0" style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:10px;font-size:16px;margin-top:8px;text-align:center;font-weight:600;" />
+    </div>
+  `;
+  
+  // Add NB ball counting option
+  if (extraType === 'NB') {
+    contentHTML += `
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:8px;">⚙️ Ball counting:</label>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('nbCountNo').checked=true">
+          <input type="radio" id="nbCountNo" name="nbCount" value="no" checked style="width:18px;height:18px;">
+          <span style="font-size:14px;color:#1f2937;">Don't count ball (standard rule)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('nbCountYes').checked=true">
+          <input type="radio" id="nbCountYes" name="nbCount" value="yes" style="width:18px;height:18px;">
+          <span style="font-size:14px;color:#1f2937;">Count as legal delivery</span>
+        </label>
+      </div>
+    </div>
+    `;
+  }
+  
+  contentHTML += `
+    <div style="display:flex;gap:12px;margin-top:20px;">
+      <button onclick="closeWicketExtraModal()" style="flex:1;padding:12px;background:#e5e7eb;color:#1f2937;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="confirmWicketExtra('${extraType}')" style="flex:1;padding:12px;background:#ef4444;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Record Wicket</button>
+    </div>
+  `;
+  
+  modalContent.innerHTML = contentHTML;
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+}
+
+function closeWicketExtraModal() {
+  const modal = document.getElementById('wicketExtraModalOverlay');
+  if (modal) modal.remove();
+}
+
+function confirmWicketExtra(extraType) {
+  const extraRuns = parseInt(document.getElementById('wicketExtraRuns').value) || 0;
+  const inn = currentInnings();
+  
+  if (inn.done || currentMatchOver()) return;
+  
+  // Check ball counting for NB
+  let countBall = true;
+  if (extraType === 'NB') {
+    const nbCountYes = document.getElementById('nbCountYes');
+    countBall = nbCountYes && nbCountYes.checked;
+  } else if (extraType === 'WD') {
+    countBall = false; // Wide never counts
+  } else {
+    countBall = true; // Bye/LB always count
+  }
+  
+  pushUndo();
+  
+  // Build symbol
+  let sym;
+  if (extraRuns === 0) {
+    sym = extraType + '+W';
+  } else {
+    sym = `${extraType}+${extraRuns}+W`;
+  }
+  
+  // Add symbol to current over
+  addSymbol(inn, sym);
+  
+  // Calculate total runs (add penalty for WD/NB)
+  let totalRuns = extraRuns;
+  if (extraType === 'WD' || extraType === 'NB') {
+    totalRuns += 1; // Add the penalty run
+  }
+  
+  // Update runs
+  inn.runs += totalRuns;
+  
+  // Update extras (track total including penalty for WD/NB)
+  if (extraType === 'WD') {
+    inn.extras.wd += totalRuns;
+  } else if (extraType === 'NB') {
+    inn.extras.nb += totalRuns;
+  } else if (extraType === 'B') {
+    inn.extras.b += extraRuns;
+  } else if (extraType === 'LB') {
+    inn.extras.lb += extraRuns;
+  }
+  
+  // Update wickets
+  inn.wkts += 1;
+  
+  // Update legal balls if needed
+  if (countBall) {
+    commitLegalBall(inn);
+  }
+  
+  // Check if innings should end
+  if (inn.wkts >= wicketsLimit) {
+    inn.done = true;
+    switchInnings();
+  }
+  
+  if (inSecond) checkResult();
+  
+  closeWicketExtraModal();
+  updateUI();
 }
 
 // Toggle more options menu
