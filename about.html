@@ -131,54 +131,78 @@
     }
     
     /* Navigation */
-    .nav {
-      text-align: center;
+    .nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
       padding: 0 5px;
     }
+
+    .nav-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .nav-title:hover {
+      transform: scale(1.05);
+      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .nav-links {
+      text-align: center;
+      margin-bottom: 15px;
+      padding: 0 5px;
+      display: none;
+    }
     
-    .nav a {
-      display: inline-block;
+    .nav-links.active {
+      display: block;
+    }
+    
+    .nav-links a {
+      display: block;
       color: white;
       text-decoration: none;
-      padding: 8px 14px;
-      margin: 3px 3px;
+      padding: 10px 14px;
+      margin: 8px 0;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       transition: all 0.2s;
       white-space: nowrap;
     }
     
-    .nav a:hover {
+    .nav-links a:hover {
       background: rgba(255, 255, 255, 0.25);
       transform: translateY(-1px);
     }
     
-    .nav a.active {
+    .nav-links a.active {
       background: rgba(255, 255, 255, 0.3);
-    }
-    
-    @media (max-width: 768px) {
-      .nav {
-        margin-bottom: 12px;
-        padding: 0 2px;
-      }
-      .nav a {
-        padding: 6px 8px;
-        margin: 2px 1px;
-        font-size: 10.5px;
-      }
-    }
-    
-    @media (max-width: 400px) {
-      .nav a {
-        padding: 6px 6px;
-        margin: 2px 1px;
-        font-size: 10px;
-      }
     }
     
     /* Footer */
@@ -204,11 +228,22 @@
       }
     }
   </style>
+  <script>
+    // Toggle mobile navigation
+    function toggleNav() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+  </script>
 </head>
 <body>
   <div class="container">
     <!-- Navigation -->
-    <nav class="nav">
+    <div class="nav-header">
+      <a href="index.html" class="nav-title">🏏 CricketBook</a>
+      <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    </div>
+    <nav class="nav-links" id="navLinks">
       <a href="index.html">🏠 Home</a>
       <a href="livescore.html">📺 Live Score</a>
       <a href="matches.html">📋 My Matches</a>

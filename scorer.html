@@ -76,6 +76,8 @@
   .btn-undo{background:#f43f5e !important; color:white !important;}
   .btn-extra-nb{background:#035fd7 !important; color:#fff !important;} /* Orange for No Ball */
   .btn-extra-wd{background:#68ce02 !important; color:#222 !important;} /* Yellow for Wide */
+  .btn-extra-lb{background:#6366f1 !important; color:#fff !important;} /* Indigo for Leg Bye */
+  .btn-extra-b{background:#8b5cf6 !important; color:#fff !important;} /* Purple for Bye */
   .scoreboard{
     display:grid; gap:6px; margin-bottom:8px;
   }
@@ -201,54 +203,78 @@
   }
 
   /* Navigation */
-  .nav {
-    text-align: center;
+  .nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
     padding: 0 5px;
   }
+
+  .nav-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .nav-title:hover {
+    transform: scale(1.05);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .nav-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .nav-links {
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
+    display: none;
+  }
   
-  .nav a {
-    display: inline-block;
+  .nav-links.active {
+    display: block;
+  }
+  
+  .nav-links a {
+    display: block;
     color: white;
     text-decoration: none;
-    padding: 8px 14px;
-    margin: 3px 3px;
+    padding: 10px 14px;
+    margin: 8px 0;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     font-weight: 600;
-    font-size: 13px;
+    font-size: 14px;
     transition: all 0.2s;
     white-space: nowrap;
   }
   
-  .nav a:hover {
+  .nav-links a:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
   }
   
-  .nav a.active {
+  .nav-links a.active {
     background: rgba(255, 255, 255, 0.3);
-  }
-  
-  @media (max-width: 768px) {
-    .nav {
-      margin-bottom: 12px;
-      padding: 0 2px;
-    }
-    .nav a {
-      padding: 6px 8px;
-      margin: 2px 1px;
-      font-size: 10.5px;
-    }
-  }
-  
-  @media (max-width: 400px) {
-    .nav a {
-      padding: 6px 6px;
-      margin: 2px 1px;
-      font-size: 10px;
-    }
   }
   
   /* Saved Matches Section */
@@ -858,12 +884,24 @@
   }
 </script>
 
+<script>
+  // Toggle navigation
+  function toggleNav() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.toggle('active');
+  }
+</script>
+
 </head>
 <body>
 <div class="container">
 
   <!-- Navigation -->
-  <nav class="nav">
+  <div class="nav-header">
+    <a href="index.html" class="nav-title">🏏 CricketBook</a>
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
+  </div>
+  <nav class="nav-links" id="navLinks">
     <a href="index.html">🏠 Home</a>
     <a href="livescore.html">📺 Live Score</a>
     <a href="matches.html">📋 My Matches</a>
@@ -1000,7 +1038,7 @@
       <!-- Overs Info -->
       <div class="flex-between" style="margin-bottom:12px;">
         <div id="oversExtrasInfo" class="chip" style="text-align:center;flex:1;background:linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);border:1px solid #cbd5e1;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:700;color:#1e293b;letter-spacing:0.3px;"></div>
-        <button style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0;margin:0;margin-left:8px;" onclick="showChartView()" title="Chart">📊</button>
+        <button style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0;margin:0;margin-left:8px;" onclick="showHelpModal()" title="Help">❓</button>
       </div>
 
       <!-- Live Over Display (replaces Ball Tracker) -->
@@ -1014,7 +1052,8 @@
     <div style="max-width:400px;margin:0 auto;">
       <!-- Top Row: Run Types/Extras + Wicket -->
       <div class="row" style="margin-bottom:8px;">
-        <button class="btn btn-muted" onclick="startExtra('B')" style="flex:1;font-size:15px;padding:12px 0;">BYE</button>
+        <button class="btn btn-extra btn-extra-lb" onclick="startExtra('LB')" style="flex:1;font-size:15px;padding:12px 0;">LB</button>
+        <button class="btn btn-extra btn-extra-b" onclick="startExtra('B')" style="flex:1;font-size:15px;padding:12px 0;">BYE</button>
         <button class="btn btn-extra btn-extra-wd" onclick="startExtra('WD')" style="flex:1;font-size:15px;padding:12px 0;">WD</button>
         <button class="btn btn-extra btn-extra-nb" onclick="startExtra('NB')" style="flex:1;font-size:15px;padding:12px 0;">NB</button>
         <button class="btn btn-wkt" onclick="quickWicket()" style="flex:1.5;font-size:18px;padding:12px 0;font-weight:900;">OUT</button>
@@ -1055,15 +1094,11 @@
 
       <!-- Additional Options Row (Visible by Default) -->
       <div id="moreRunsRow" style="display:block;margin-top:0px;">
-        <div class="row" style="margin-bottom:8px;">
-          <button class="btn btn-muted" onclick="startExtra('LB')" style="flex:1;font-size:15px;padding:12px 0;">LB</button>
-          <button class="btn btn-muted" onclick="startExtra('B')" style="flex:1;font-size:15px;padding:12px 0;">BYE</button>
-        </div>
         <!-- Extras with Wicket Row -->
         <div class="row">
-          <button class="btn btn-extra" onclick="showWicketExtraModal('WD')" style="flex:1;font-size:13px;padding:10px 0;background:#f59e0b;font-weight:700;">WD+W</button>
-          <button class="btn btn-extra" onclick="showWicketExtraModal('NB')" style="flex:1;font-size:13px;padding:10px 0;background:#035fd7;font-weight:700;color:white;">NB+W</button>
-          <button class="btn btn-wkt" onclick="showRunOutModal()" style="flex:1;font-size:13px;padding:10px 0;background:#ef4444;font-weight:700;color:white;">RUN OUT</button>
+          <button class="btn btn-extra" onclick="showWicketExtraModal('WD')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%);font-weight:800;color:white;box-shadow:0 3px 10px rgba(245,158,11,0.3);">WD+W</button>
+          <button class="btn btn-extra" onclick="showWicketExtraModal('NB')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);font-weight:800;color:white;box-shadow:0 3px 10px rgba(239,68,68,0.3);">NB+W</button>
+          <button class="btn btn-wkt" onclick="showRunOutModal()" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);font-weight:800;color:white;box-shadow:0 3px 10px rgba(139,92,246,0.3);">RUN OUT</button>
         </div>
       </div>
     </div>
@@ -3457,6 +3492,136 @@ function confirmRunOut() {
   
   closeRunOutModal();
   updateUI();
+}
+
+// Show modal for selecting LB or BYE
+function showByeModal() {
+  const inn = currentInnings();
+  if (inn.done || currentMatchOver()) return;
+  
+  // Create modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'byeModalOverlay';
+  modalOverlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modalOverlay.onclick = function(e) {
+    if (e.target.id === 'byeModalOverlay') closeByeModal();
+  };
+  
+  // Create modal content
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background:white;border-radius:20px;padding:28px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+  modalContent.onclick = function(e) { e.stopPropagation(); };
+  
+  modalContent.innerHTML = `
+    <h3 style="margin:0 0 20px;font-size:20px;color:#1f2937;text-align:center;font-weight:800;">Select Extra Type</h3>
+    
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+      <button onclick="selectByeType('LB')" style="padding:16px;background:linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);color:white;border:none;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(99,102,241,0.3);transition:all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+        <div style="font-size:20px;margin-bottom:4px;">LEG BYE</div>
+        <div style="font-size:12px;opacity:0.9;font-weight:600;">Ball hits batsman body</div>
+      </button>
+      
+      <button onclick="selectByeType('B')" style="padding:16px;background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);color:white;border:none;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,0.3);transition:all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+        <div style="font-size:20px;margin-bottom:4px;">BYE</div>
+        <div style="font-size:12px;opacity:0.9;font-weight:600;">Ball misses everything</div>
+      </button>
+    </div>
+    
+    <button onclick="closeByeModal()" style="width:100%;padding:12px;background:#e5e7eb;color:#1f2937;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">Cancel</button>
+  `;
+  
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+}
+
+function selectByeType(type) {
+  closeByeModal();
+  startExtra(type);
+}
+
+function closeByeModal() {
+  const modal = document.getElementById('byeModalOverlay');
+  if (modal) modal.remove();
+}
+
+// Show help modal with quick tips
+function showHelpModal() {
+  // Create modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'helpModalOverlay';
+  modalOverlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+  modalOverlay.onclick = function(e) {
+    if (e.target.id === 'helpModalOverlay') closeHelpModal();
+  };
+  
+  // Create modal content
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background:white;border-radius:20px;padding:28px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);max-height:90vh;overflow-y:auto;';
+  modalContent.onclick = function(e) { e.stopPropagation(); };
+  
+  modalContent.innerHTML = `
+    <h3 style="margin:0 0 20px;font-size:22px;color:#1f2937;text-align:center;font-weight:800;">❓ Quick Tips</h3>
+    
+    <div style="color:#374151;line-height:1.6;font-size:14px;">
+      <div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);border-left:4px solid #3b82f6;border-radius:8px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#1e40af;">🏏 Scoring Basics</div>
+        <ul style="margin:6px 0;padding-left:20px;">
+          <li>Tap <strong>0-6</strong> for runs scored by batsman</li>
+          <li>Tap <strong>LB</strong> (Leg Bye) when ball hits batsman's body</li>
+          <li>Tap <strong>BYE</strong> when ball misses everything</li>
+          <li>Tap <strong>WD</strong> (Wide) or <strong>NB</strong> (No Ball) for extras</li>
+          <li>After WD/NB, choose additional runs if any</li>
+        </ul>
+      </div>
+      
+      <div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border-left:4px solid #f59e0b;border-radius:8px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#92400e;">🎯 Wickets</div>
+        <ul style="margin:6px 0;padding-left:20px;">
+          <li>Tap <strong>OUT</strong> button for quick wicket</li>
+          <li>Or tap a run button <strong>then OUT</strong> for run-out</li>
+          <li>Use <strong>WD+W</strong> or <strong>NB+W</strong> for extras with wicket</li>
+        </ul>
+      </div>
+      
+      <div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);border-left:4px solid #ec4899;border-radius:8px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#831843;">⚡ Quick Actions</div>
+        <ul style="margin:6px 0;padding-left:20px;">
+          <li><strong>UNDO</strong> - Remove last ball (available for 3 balls)</li>
+          <li><strong>New Over</strong> - Manually complete current over</li>
+          <li><strong>Switch Strike</strong> - Change batting strike</li>
+          <li><strong>Change Bowler</strong> - Update current bowler</li>
+        </ul>
+      </div>
+      
+      <div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);border-left:4px solid #10b981;border-radius:8px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#065f46;">📊 Features</div>
+        <ul style="margin:6px 0;padding-left:20px;">
+          <li><strong>Share</strong> - Get shareable link for live updates</li>
+          <li><strong>Chart (📊)</strong> - View detailed innings summary</li>
+          <li><strong>Commentary</strong> - Ball-by-ball commentary below</li>
+        </ul>
+      </div>
+      
+      <div style="padding:14px;background:linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);border-left:4px solid #8b5cf6;border-radius:8px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#5b21b6;">💡 Pro Tips</div>
+        <ul style="margin:6px 0;padding-left:20px;">
+          <li>Innings auto-ends at <strong>10 wickets</strong> or <strong>overs limit</strong></li>
+          <li>Target score shown in 2nd innings</li>
+          <li>All scores saved automatically in your browser</li>
+        </ul>
+      </div>
+    </div>
+    
+    <button onclick="closeHelpModal()" style="width:100%;margin-top:20px;padding:12px;background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);">Got it!</button>
+  `;
+  
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+}
+
+function closeHelpModal() {
+  const modal = document.getElementById('helpModalOverlay');
+  if (modal) modal.remove();
 }
 
 // Show modal for extras with wicket (WD+W, NB+W)
