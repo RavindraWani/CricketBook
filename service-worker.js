@@ -1,14 +1,13 @@
-const CACHE_NAME = 'cricketbook-v1';
+const CACHE_NAME = 'cricketbook-v2';
 const urlsToCache = [
-  '/index.html',
-  '/scorer.html',
-  '/livescore.html',
-  '/matches.html',
-  '/allmatches.html',
-  '/admin.html',
-  '/about.html',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './scorer.html',
+  './livescore.html',
+  './matches.html',
+  './allmatches.html',
+  './admin.html',
+  './about.html'
 ];
 
 // Install event - cache files
