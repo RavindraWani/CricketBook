@@ -72,7 +72,9 @@ self.addEventListener('fetch', (event) => {
           return response;
         }).catch(() => {
           // Network failed, return offline page if available
-          return caches.match('/index.html');
+          if (event.request.destination === 'document') {
+            return caches.match('./index.html');
+          }
         });
       })
   );
