@@ -1,13 +1,13 @@
-const CACHE_NAME = 'cricketbook-v2';
+const CACHE_NAME = 'cricketbook-v3';
 const urlsToCache = [
-  './',
-  './index.html',
-  './scorer.html',
-  './livescore.html',
-  './matches.html',
-  './allmatches.html',
-  './admin.html',
-  './about.html'
+  '/',
+  '/index.html',
+  '/scorer.html',
+  '/livescore.html',
+  '/matches.html',
+  '/allmatches.html',
+  '/admin.html',
+  '/about.html'
 ];
 
 // Install event - cache files
@@ -73,7 +73,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {
           // Network failed, return offline page if available
           if (event.request.destination === 'document') {
-            return caches.match('./index.html');
+            return caches.match('/index.html');
           }
         });
       })
