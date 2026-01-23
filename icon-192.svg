@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="40" fill="#667eea"/>
+  <circle cx="96" cy="76" r="32" fill="white" opacity="0.95"/>
+  <rect x="62" y="110" width="68" height="8" rx="4" fill="white" opacity="0.95"/>
+  <rect x="52" y="122" width="88" height="8" rx="4" fill="white" opacity="0.95"/>
+  <rect x="72" y="134" width="48" height="8" rx="4" fill="white" opacity="0.95"/>
+  <text x="96" y="168" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">CB</text>
+</svg>
