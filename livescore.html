@@ -263,7 +263,7 @@
 
     .nav-toggle {
       background: var(--badge-bg);
-      border: none;
+      border: 1px solid var(--badge-border);
       color: var(--nav-text);
       font-size: 24px;
       padding: 8px 12px;
@@ -327,8 +327,8 @@
       right: -300px;
       width: 280px;
       height: 100vh;
-      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      border-left: 1px solid var(--badge-border);
       padding: 80px 20px 20px;
       box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
       z-index: 1000;
@@ -359,12 +359,13 @@
     .nav-links a:hover {
       background: var(--badge-hover);
       transform: translateX(-4px);
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: var(--badge-border);
     }
     
     .nav-links a.active {
-      background: rgba(255, 255, 255, 0.35);
-      border-color: rgba(255, 255, 255, 0.4);
+      background: var(--badge-hover);
+      border-color: var(--badge-border);
+      box-shadow: 0 0 0 2px var(--badge-border);
     }
 
     /* Responsive adjustments */

@@ -732,7 +732,7 @@
     .nav-title {
       font-size: 20px;
       font-weight: 800;
-      color: white;
+      color: var(--nav-text);
       text-shadow: 0 2px 4px rgba(0,0,0,0.1);
       cursor: pointer;
       transition: all 0.2s;
@@ -746,9 +746,9 @@
     }
 
     .nav-toggle {
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--nav-text);
       font-size: 24px;
       padding: 8px 12px;
       border-radius: 8px;
@@ -764,7 +764,7 @@
     }
 
     .nav-toggle:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--badge-hover);
     }
 
     .nav-toggle .hamburger {
@@ -811,8 +811,8 @@
       right: -300px;
       width: 280px;
       height: 100vh;
-      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      border-left: 1px solid var(--badge-border);
       padding: 80px 20px 20px;
       box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
       z-index: 1000;
@@ -826,30 +826,30 @@
     
     .nav-links a {
       display: block;
-      color: white;
+      color: var(--nav-text);
       text-decoration: none;
       padding: 14px 18px;
       margin: 8px 0;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--badge-bg);
       backdrop-filter: blur(10px);
       font-weight: 600;
       font-size: 15px;
       transition: all 0.2s;
       white-space: nowrap;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--badge-border);
     }
     
     .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--badge-hover);
       transform: translateX(-4px);
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: var(--badge-border);
     }
     
     .nav-links a.active {
-      background: rgba(251, 191, 36, 0.2);
-      border-color: rgba(251, 191, 36, 0.4);
-      color: #fbbf24;
+      background: var(--badge-hover);
+      border-color: var(--badge-border);
+      box-shadow: 0 0 0 2px var(--badge-border);
     }
 
     /* Responsive adjustments */
