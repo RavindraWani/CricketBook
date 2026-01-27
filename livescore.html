@@ -670,8 +670,8 @@
   </div>
 
   <!-- Firebase SDK -->
-  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
   <script>
     // Firebase Configuration
@@ -685,9 +685,14 @@
       appId: "1:128747950424:web:dce02e8420c353f1acd52d"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    // Initialize Firebase (check if firebase is loaded)
+    let database;
+    if (typeof firebase !== 'undefined') {
+      firebase.initializeApp(firebaseConfig);
+      database = firebase.database();
+    } else {
+      console.error('❌ Firebase SDK not loaded');
+    }
 
     // Track active listeners for cleanup
     let currentMatchRef = null;
@@ -1581,8 +1586,8 @@
     <p style="margin:0;"><a href="https://www.instagram.com/cricketbook.digital/" target="_blank" rel="noopener noreferrer" style="color:white;text-decoration:none;font-weight:600;opacity:0.95;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.95'">📷 Follow us on Instagram</a></p>
   </footer>
   <script>
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
+    // Register Service Worker for PWA (only works on HTTP/HTTPS)
+    if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
           .then(reg => console.log('✅ Service Worker registered:', reg.scope))
