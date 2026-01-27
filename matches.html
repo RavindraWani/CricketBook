@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -84,6 +84,51 @@
       --badge-bg: rgba(255, 255, 255, 0.1);
       --badge-border: rgba(255, 255, 255, 0.05);
       --badge-hover: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Dark mode styles for points table */
+    [data-theme="dark"] .points-table-container {
+      background: var(--card-bg);
+      box-shadow: 0 10px 40px rgba(0,0,0,.3), 0 2px 8px rgba(0,0,0,.2);
+    }
+    
+    [data-theme="dark"] .points-table td {
+      border-bottom: 1px solid rgba(71,85,105,.4);
+      color: var(--text-primary);
+    }
+    
+    [data-theme="dark"] .points-table td:first-child {
+      color: var(--text-primary);
+    }
+    
+    [data-theme="dark"] .points-table tbody tr:hover {
+      background: rgba(71,85,105,.2);
+    }
+    
+    [data-theme="dark"] .nrr-breakdown {
+      background: rgba(71,85,105,.15);
+    }
+    
+    [data-theme="dark"] .nrr-breakdown td {
+      border-bottom: 1px solid rgba(71,85,105,.4);
+      color: var(--text-secondary);
+    }
+    
+    [data-theme="dark"] .nrr-formula {
+      background: rgba(71,85,105,.25);
+      border-left-color: #8b5cf6;
+    }
+    
+    [data-theme="dark"] .nrr-formula-title {
+      color: var(--text-primary);
+    }
+    
+    [data-theme="dark"] .toggle-nrr {
+      color: #a78bfa;
+    }
+    
+    [data-theme="dark"] .toggle-nrr:hover {
+      color: #c4b5fd;
     }
     
     * {
@@ -652,7 +697,7 @@
     function updateThemeIcon(theme) {
       const themeToggle = document.getElementById('themeToggle');
       if (themeToggle) {
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.textContent = theme === 'dark' ? '🌞' : '🌜';
         themeToggle.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
       }
     }
@@ -686,7 +731,7 @@
       <a href="index.html" class="nav-title">🏏 CricketBook</a>
       <div style="display: flex; align-items: center;">
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">
-          🌙
+          🌜
         </button>
         <button class="nav-toggle" onclick="toggleNav()">
           <span class="hamburger">☰</span>

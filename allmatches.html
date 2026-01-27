@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -857,7 +857,7 @@
     function updateThemeIcon(theme) {
       const themeToggle = document.getElementById('themeToggle');
       if (themeToggle) {
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.textContent = theme === 'dark' ? '🌞' : '🌜';
         themeToggle.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
       }
     }
@@ -891,7 +891,7 @@
       <a href="index.html" class="nav-title">🏏 CricketBook</a>
       <div style="display: flex; align-items: center;">
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">
-          🌙
+          🌜
         </button>
         <button class="nav-toggle" onclick="toggleNav()">
           <span class="hamburger">☰</span>
