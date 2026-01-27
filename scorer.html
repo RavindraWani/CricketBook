@@ -1318,6 +1318,17 @@
         </svg>
         <span>Tournament Link</span>
       </a>
+      
+      <!-- Delete Match Button -->
+      <a href="javascript:void(0)" onclick="deleteCurrentMatch()" style="color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);border:none;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;text-align:center;grid-column:1/-1;box-shadow:0 4px 12px rgba(220,38,38,0.4);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(220,38,38,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(220,38,38,0.4)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+        <span>Delete Match</span>
+      </a>
     </div>
 
   </div>
@@ -4211,6 +4222,115 @@ function resumeSavedMatch() {
   const resumeUrl = `scorer.html?org=${savedSession.organizationId}&match=${savedSession.matchId}&edit=${savedSession.editToken}`;
   console.log('🔄 Resuming match:', resumeUrl);
   window.location.href = resumeUrl;
+}
+
+function deleteCurrentMatch() {
+  if (!matchId) {
+    alert('❌ No match is currently loaded');
+    return;
+  }
+  
+  if (!confirm('⚠️ Delete this match permanently?\n\n' + teamA + ' vs ' + teamB + '\n\nThis will:\n✗ Remove from Firebase server\n✗ Delete all match data\n✗ Clear from local storage\n\n⚠️ This action cannot be undone!')) {
+    return;
+  }
+  
+  console.log('🗑️ Starting deletion for match:', matchId, 'org:', organizationId);
+  
+  // Show deleting message
+  const deletingMsg = document.createElement('div');
+  deletingMsg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(220,38,38,0.95);color:white;padding:20px 30px;border-radius:12px;font-size:16px;font-weight:700;z-index:10000;box-shadow:0 10px 40px rgba(0,0,0,0.3);';
+  deletingMsg.textContent = '🗑️ Deleting match...';
+  document.body.appendChild(deletingMsg);
+  
+  // Check if Firebase is enabled
+  if (!firebaseEnabled || !db) {
+    console.log('⚠️ Firebase not enabled, deleting from localStorage only');
+    removeMatchFromHistory(matchId);
+    deletingMsg.remove();
+    alert('✅ Match deleted from local storage');
+    window.location.href = 'scorer.html';
+    return;
+  }
+  
+  // Ensure organizationId is available
+  if (!organizationId) {
+    console.error('❌ No organizationId available');
+    deletingMsg.remove();
+    alert('❌ Error: Cannot delete match - missing organization ID');
+    return;
+  }
+  
+  // Delete from Firebase - check both tournament and quick match paths
+  const tournamentPath = 'tournaments/' + organizationId + '/matches/' + matchId;
+  const quickMatchPath = 'quickMatches/' + organizationId + '/matches/' + matchId;
+  
+  console.log('🔍 Checking paths:', tournamentPath, 'and', quickMatchPath);
+  
+  // Check both paths and delete from wherever it exists
+  Promise.all([
+    db.ref(tournamentPath).once('value'),
+    db.ref(quickMatchPath).once('value')
+  ]).then(([tournamentSnapshot, quickMatchSnapshot]) => {
+    const deletePromises = [];
+    let foundIn = [];
+    
+    // Delete from tournament path if exists
+    if (tournamentSnapshot.exists()) {
+      console.log('✅ Found match in tournament path:', tournamentPath);
+      foundIn.push('tournament');
+      deletePromises.push(
+        db.ref(tournamentPath).remove()
+          .then(() => console.log('✅ Successfully deleted from tournament path'))
+          .catch(err => console.error('❌ Failed to delete from tournament path:', err))
+      );
+    } else {
+      console.log('⚠️ Match not found in tournament path');
+    }
+    
+    // Delete from quick match path if exists
+    if (quickMatchSnapshot.exists()) {
+      console.log('✅ Found match in quick match path:', quickMatchPath);
+      foundIn.push('quickMatch');
+      deletePromises.push(
+        db.ref(quickMatchPath).remove()
+          .then(() => console.log('✅ Successfully deleted from quick match path'))
+          .catch(err => console.error('❌ Failed to delete from quick match path:', err))
+      );
+    } else {
+      console.log('⚠️ Match not found in quick match path');
+    }
+    
+    // If match doesn't exist in Firebase at all
+    if (deletePromises.length === 0) {
+      console.log('⚠️ Match not found in Firebase, removing from localStorage only');
+      removeMatchFromHistory(matchId);
+      clearCurrentMatchSession();
+      deletingMsg.remove();
+      alert('✅ Match deleted from local storage (not found on server)');
+      window.location.href = 'scorer.html';
+      return;
+    }
+    
+    console.log('🔥 Executing deletions from:', foundIn.join(', '));
+    
+    // Execute all delete operations
+    return Promise.all(deletePromises)
+      .then(() => {
+        console.log('✅ All Firebase deletions completed successfully');
+        removeMatchFromHistory(matchId);
+        clearCurrentMatchSession();
+        deletingMsg.remove();
+        alert('✅ Match deleted successfully!\n\nRemoved from: ' + foundIn.join(' & ') + '\nMatch ID: ' + matchId);
+        window.location.href = 'scorer.html';
+      });
+  }).catch((error) => {
+    console.error('❌ Failed to delete match from Firebase:', error);
+    deletingMsg.remove();
+    // Still remove from localStorage even if Firebase deletion fails
+    removeMatchFromHistory(matchId);
+    alert('⚠️ Match deleted from local storage, but server deletion failed.\n\nError: ' + error.message);
+    window.location.href = 'scorer.html';
+  });
 }
 
 function terminateSavedMatchById(matchId) {
