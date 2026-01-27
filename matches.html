@@ -56,6 +56,36 @@
   }
   </script>
   <style>
+    :root {
+      /* Light mode (default) */
+      --bg-gradient-start: #667eea;
+      --bg-gradient-end: #764ba2;
+      --card-bg: #ffffff;
+      --card-border: rgba(148,163,184,.2);
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --text-tertiary: #94a3b8;
+      --nav-text: #ffffff;
+      --badge-bg: rgba(255, 255, 255, 0.15);
+      --badge-border: rgba(255, 255, 255, 0.1);
+      --badge-hover: rgba(255, 255, 255, 0.25);
+    }
+    
+    [data-theme="dark"] {
+      /* Dark mode */
+      --bg-gradient-start: #1e293b;
+      --bg-gradient-end: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: rgba(71,85,105,.3);
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #64748b;
+      --nav-text: #f1f5f9;
+      --badge-bg: rgba(255, 255, 255, 0.1);
+      --badge-border: rgba(255, 255, 255, 0.05);
+      --badge-hover: rgba(255, 255, 255, 0.2);
+    }
+    
     * {
       margin: 0;
       padding: 0;
@@ -64,10 +94,11 @@
     
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
       min-height: 100vh;
       padding: 18px;
-      color: #1f2937;
+      color: var(--text-primary);
+      transition: background 0.3s ease, color 0.3s ease;
     }
     
     .container {
@@ -573,8 +604,61 @@
         padding: 10px;
       }
     }
+    
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--nav-text);
+      font-size: 20px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--badge-hover);
+      transform: scale(1.05);
+    }
+    
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
   </style>
   <script>
+    // Dark Mode Management (Global)
+    function initTheme() {
+      const savedTheme = localStorage.getItem('cricketbook_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+    
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('cricketbook_theme', newTheme);
+      updateThemeIcon(newTheme);
+      console.log('🌓 Theme switched to:', newTheme);
+    }
+    
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+      }
+    }
+    
+    initTheme();
+    
     // Toggle mobile navigation
     function toggleNav() {
       const navLinks = document.getElementById('navLinks');
@@ -600,10 +684,15 @@
     <div class="nav-backdrop" id="navBackdrop" onclick="toggleNav()"></div>
     <div class="nav-header">
       <a href="index.html" class="nav-title">🏏 CricketBook</a>
-      <button class="nav-toggle" onclick="toggleNav()">
-        <span class="hamburger">☰</span>
-        <span class="close">×</span>
-      </button>
+      <div style="display: flex; align-items: center;">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+          🌙
+        </button>
+        <button class="nav-toggle" onclick="toggleNav()">
+          <span class="hamburger">☰</span>
+          <span class="close">×</span>
+        </button>
+      </div>
     </div>
     <nav class="nav-links" id="navLinks">
       <a href="index.html">🏠 Home</a>

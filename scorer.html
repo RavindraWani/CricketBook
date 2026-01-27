@@ -62,37 +62,79 @@
 }
 </script>
 <style>
+  :root {
+    /* Light mode (default) */
+    --bg-gradient-start: #667eea;
+    --bg-gradient-end: #764ba2;
+    --card-bg: #ffffff;
+    --card-border: rgba(148,163,184,.2);
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-tertiary: #94a3b8;
+    --nav-text: #ffffff;
+    --badge-bg: rgba(255, 255, 255, 0.15);
+    --badge-border: rgba(255, 255, 255, 0.1);
+    --badge-hover: rgba(255, 255, 255, 0.25);
+    --bg:#0b1220;
+    --card2:#121a2b;
+    --accent:#3b82f6;
+    --accent2:#27ce02;
+    --accent3:#10b981;
+    --danger:#e31d1d;
+    --muted:#94a3b8;
+    --text:#e5e7eb;
+    --chip:#1f2937;
+    --chip2:#0ea5e9;
+  }
+  
+  [data-theme="dark"] {
+    /* Dark mode */
+    --bg-gradient-start: #1e293b;
+    --bg-gradient-end: #0f172a;
+    --card-bg: #1e293b;
+    --card-border: rgba(71,85,105,.3);
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #64748b;
+    --nav-text: #f1f5f9;
+    --badge-bg: rgba(255, 255, 255, 0.1);
+    --badge-border: rgba(255, 255, 255, 0.05);
+    --badge-hover: rgba(255, 255, 255, 0.2);
+  }
+  
   :root{
     --bg:#0b1220;
-    --card:#121a2b;
-    --accent:#3b82f6;     /* blue: runs */
-    --accent2:#27ce02;    /* amber: NB/WD */
-    --accent3:#10b981;    /* green: actions */
-    --danger:#e31d1d;     /* red: wicket */
-    --muted:#94a3b8;      /* slate-400 */
-    --text:#e5e7eb;       /* gray-200 */
-    --chip:#1f2937;       /* gray-800 */
-    --chip2:#0ea5e9;      /* sky-500 */
+    --card2:#121a2b;
+    --accent:#3b82f6;
+    --accent2:#27ce02;
+    --accent3:#10b981;
+    --danger:#e31d1d;
+    --muted:#94a3b8;
+    --text:#e5e7eb;
+    --chip:#1f2937;
+    --chip2:#0ea5e9;
   }
   *{box-sizing:border-box}
   body{
     margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color:#1f2937; padding:12px;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    color:var(--text-primary); padding:12px;
     min-height:100vh;
+    transition: background 0.3s ease, color 0.3s ease;
   }
   #game.card {
-    color:#1f2937;
+    color:var(--text-primary);
   }
   h1{margin:4px 0 10px; font-size:20px; text-align:center}
   .container{max-width:760px; margin:0 auto}
   .card{
-    background:#ffffff;
-    border:1px solid rgba(148,163,184,.2);
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
     border-radius:20px; 
     padding:18px; 
     box-shadow:0 10px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
     position:relative;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
   #game.card {
     max-width:480px;
@@ -998,6 +1040,32 @@
 </script>
 
 <script>
+  // Dark Mode Management (Global)
+  function initTheme() {
+    const savedTheme = localStorage.getItem('cricketbook_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+  }
+  
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('cricketbook_theme', newTheme);
+    updateThemeIcon(newTheme);
+    console.log('🌓 Theme switched to:', newTheme);
+  }
+  
+  function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+      themeToggle.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  
+  initTheme();
+  
   // Toggle navigation
   function toggleNav() {
     const navLinks = document.getElementById('navLinks');
@@ -1025,10 +1093,15 @@
   <div class="nav-backdrop" id="navBackdrop" onclick="toggleNav()"></div>
   <div class="nav-header">
     <a href="index.html" class="nav-title">🏏 CricketBook</a>
-    <button class="nav-toggle" onclick="toggleNav()">
-      <span class="hamburger">☰</span>
-      <span class="close">×</span>
-    </button>
+    <div style="display: flex; align-items: center;">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode" style="background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--nav-text); font-size: 20px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+        🌙
+      </button>
+      <button class="nav-toggle" onclick="toggleNav()">
+        <span class="hamburger">☰</span>
+        <span class="close">×</span>
+      </button>
+    </div>
   </div>
   <nav class="nav-links" id="navLinks">
     <a href="index.html">🏠 Home</a>
@@ -1150,7 +1223,7 @@
         </div>
         <!-- Primary Score Display (Right) -->
         <div style="flex:0 0 auto;">
-          <div id="score" class="score-big" style="font-size:48px;font-weight:900;color:#000000;line-height:1;"></div>
+          <div id="score" class="score-big" style="font-size:48px;font-weight:900;color:var(--text-primary);line-height:1;"></div>
         </div>
       </div>
 
@@ -1288,7 +1361,7 @@
 
     <!-- Match Summary -->
     <div id="matchSummary" style="margin-top:20px;">
-      <div style="font-size:16px;font-weight:700;color:#1f2937;margin-bottom:16px;text-align:center;">
+      <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:16px;text-align:center;">
         📊 MATCH SUMMARY
       </div>
       

@@ -91,6 +91,36 @@
   }
   </script>
   <style>
+    :root {
+      /* Light mode (default) */
+      --bg-gradient-start: #667eea;
+      --bg-gradient-end: #764ba2;
+      --card-bg: #ffffff;
+      --card-border: rgba(148,163,184,.2);
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --text-tertiary: #94a3b8;
+      --nav-text: #ffffff;
+      --badge-bg: rgba(255, 255, 255, 0.15);
+      --badge-border: rgba(255, 255, 255, 0.1);
+      --badge-hover: rgba(255, 255, 255, 0.25);
+    }
+    
+    [data-theme="dark"] {
+      /* Dark mode */
+      --bg-gradient-start: #1e293b;
+      --bg-gradient-end: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: rgba(71,85,105,.3);
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #64748b;
+      --nav-text: #f1f5f9;
+      --badge-bg: rgba(255, 255, 255, 0.1);
+      --badge-border: rgba(255, 255, 255, 0.05);
+      --badge-hover: rgba(255, 255, 255, 0.2);
+    }
+    
     * {
       margin: 0;
       padding: 0;
@@ -99,10 +129,11 @@
     
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
       min-height: 100vh;
       padding: 18px;
-      color: #1f2937;
+      color: var(--text-primary);
+      transition: background 0.3s ease, color 0.3s ease;
     }
     
     .container {
@@ -188,7 +219,7 @@
     }
     
     .card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
       padding: 18px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1);
@@ -207,12 +238,12 @@
       font-size: 19px;
       font-weight: 700;
       margin-bottom: 8px;
-      color: #1f2937;
+      color: var(--text-primary);
     }
     
     .card p {
       font-size: 14px;
-      color: #6b7280;
+      color: var(--text-secondary);
       line-height: 1.4;
       margin-bottom: 12px;
     }
@@ -412,8 +443,64 @@
         right: -100%;
       }
     }
+    
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--nav-text);
+      font-size: 20px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--badge-hover);
+      transform: scale(1.05);
+    }
+    
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
   </style>
   <script>
+    // Dark Mode Management (Global - works across all pages)
+    function initTheme() {
+      const savedTheme = localStorage.getItem('cricketbook_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+    
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('cricketbook_theme', newTheme);
+      updateThemeIcon(newTheme);
+      
+      console.log('🌓 Theme switched to:', newTheme);
+    }
+    
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+      }
+    }
+    
+    // Initialize theme on page load
+    initTheme();
+    
     function toggleNav() {
       const navLinks = document.getElementById('navLinks');
       const navBackdrop = document.getElementById('navBackdrop');
@@ -438,10 +525,15 @@
     <div class="nav-backdrop" id="navBackdrop" onclick="toggleNav()"></div>
     <div class="nav-header">
       <a href="index.html" class="nav-title">🏏 CricketBook</a>
-      <button class="nav-toggle" onclick="toggleNav()">
-        <span class="hamburger">☰</span>
-        <span class="close">×</span>
-      </button>
+      <div style="display: flex; align-items: center;">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+          🌙
+        </button>
+        <button class="nav-toggle" onclick="toggleNav()">
+          <span class="hamburger">☰</span>
+          <span class="close">×</span>
+        </button>
+      </div>
     </div>
     <nav class="nav-links" id="navLinks">
       <a href="index.html" class="active">🏠 Home</a>
@@ -498,15 +590,15 @@
     
     <!-- How It Works Section -->
     <div class="card" style="max-width: 800px; margin: 0 auto 16px;">
-      <h2 style="text-align: center; font-size: 22px; margin-bottom: 16px; color: #1f2937;">⚡ How It Works</h2>
+      <h2 style="text-align: center; font-size: 22px; margin-bottom: 16px; color: var(--text-primary);">⚡ How It Works</h2>
       
       <div style="display: grid; gap: 10px;">
         <!-- Step 1 -->
         <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">1</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Start Scoring</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Click <strong>Scorer</strong>  enter teams & overs  start instantly (no signup)</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--text-primary);">Start Scoring</h3>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.4;">Click <strong>Scorer</strong>  enter teams & overs  start instantly (no signup)</p>
           </div>
         </div>
         
@@ -514,8 +606,8 @@
         <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">2</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Record Each Ball</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Tap runs (0-6), wickets, extras — updates sync in real-time</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--text-primary);">Record Each Ball</h3>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.4;">Tap runs (0-6), wickets, extras — updates sync in real-time</p>
           </div>
         </div>
         
@@ -523,8 +615,8 @@
         <div style="display: flex; gap: 10px; align-items: start;">
           <div style="flex-shrink: 0; width: 32px; height: 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">3</div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 4px; font-size: 16px; color: #1f2937;">Share via WhatsApp</h3>
-            <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.4;">Share live scores directly from match page. Two links: <strong>View</strong> (spectators) or <strong>Score</strong> (edit access)</p>
+            <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--text-primary);">Share via WhatsApp</h3>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.4;">Share live scores directly from match page. Two links: <strong>View</strong> (spectators) or <strong>Score</strong> (edit access)</p>
           </div>
         </div>
       </div>
