@@ -452,6 +452,209 @@
   #savedMatchesList {
     min-height: 50px;
   }
+  
+  /* Confirmation Modal Styles */
+  .confirmation-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .confirmation-modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 0;
+    border-radius: 10px;
+    width: 92%;
+    max-width: 340px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.25s ease;
+    overflow: hidden;
+  }
+  
+  .confirmation-modal-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .confirmation-modal-header h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .confirmation-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.9;
+  }
+  
+  .confirmation-modal-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .confirmation-modal-body {
+    padding: 12px;
+    color: #1f2937;
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+  
+  .confirmation-section {
+    margin-bottom: 8px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+  }
+  
+  .confirmation-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .confirmation-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    gap: 8px;
+  }
+  
+  .confirmation-row:last-child {
+    padding-bottom: 0;
+  }
+  
+  .confirmation-row:first-child {
+    padding-top: 0;
+  }
+  
+  .confirmation-label {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+  }
+  
+  .confirmation-value {
+    font-size: 12px;
+    color: #1f2937;
+    font-weight: 600;
+    text-align: right;
+    max-width: 65%;
+    word-break: break-word;
+  }
+  
+  .confirmation-modal-footer {
+    padding: 10px 12px;
+    background: #fafbfc;
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .confirmation-btn {
+    flex: 1;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  .confirmation-btn-cancel {
+    background: white;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+  }
+  
+  .confirmation-btn-cancel:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+  }
+  
+  .confirmation-btn-confirm {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  
+  .confirmation-btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  }
+  
+  @media (max-width: 768px) {
+    .confirmation-modal-content {
+      width: 95%;
+      margin: 10% auto;
+    }
+    
+    .confirmation-modal-footer {
+      flex-direction: column;
+    }
+    
+    .confirmation-btn {
+      width: 100%;
+    }
+  }
 </style>
 
 <!-- Firebase SDK -->
@@ -1208,9 +1411,30 @@
     </div>
   </div>
   
-  <button class="btn btn-action" onclick="startMatch()" style="width:100%;font-size:16px;padding:14px 0;background:linear-gradient(135deg, #10b981 0%, #059669 100%);border:none;border-radius:14px;box-shadow:0 6px 20px rgba(16,185,129,0.35);transition:all 0.2s ease;font-weight:800;color:#fff;letter-spacing:0.5px;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(16,185,129,0.45)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 20px rgba(16,185,129,0.35)'" ontouchstart="this.style.transform='scale(0.98)'" ontouchend="this.style.transform='scale(1)'">
+  <button class="btn btn-action" onclick="showConfirmationModal()" style="width:100%;font-size:16px;padding:14px 0;background:linear-gradient(135deg, #10b981 0%, #059669 100%);border:none;border-radius:14px;box-shadow:0 6px 20px rgba(16,185,129,0.35);transition:all 0.2s ease;font-weight:800;color:#fff;letter-spacing:0.5px;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(16,185,129,0.45)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 20px rgba(16,185,129,0.35)'" ontouchstart="this.style.transform='scale(0.98)'" ontouchend="this.style.transform='scale(1)'">
     🚀 Start Match
   </button>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="confirmation-modal">
+    <div class="confirmation-modal-content">
+      <div class="confirmation-modal-header">
+        <h2>✅ Confirm Match Details</h2>
+        <button class="confirmation-modal-close" onclick="closeConfirmationModal()" aria-label="Close">×</button>
+      </div>
+      <div class="confirmation-modal-body" id="confirmationModalBody">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+      <div class="confirmation-modal-footer">
+        <button class="confirmation-btn confirmation-btn-cancel" onclick="closeConfirmationModal()">
+          ✏️ Edit
+        </button>
+        <button class="confirmation-btn confirmation-btn-confirm" onclick="confirmAndStartMatch()">
+          🚀 Start Match
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Game -->
@@ -3073,6 +3297,123 @@ function handleMatchTypeChange() {
     customInput.value = '';
   }
 }
+
+/* ---------------- Confirmation Modal ---------------- */
+function showConfirmationModal() {
+  // Get form values
+  const teamA = document.getElementById("teamA").value.trim() || "Team A";
+  const teamB = document.getElementById("teamB").value.trim() || "Team B";
+  const overs = document.getElementById("overs").value || "4";
+  const wicketsLimit = document.getElementById("wicketsLimit").value || "10";
+  const matchTypeSelect = document.getElementById("matchType");
+  const customMatchType = document.getElementById("customMatchType").value.trim();
+  const tournamentName = document.getElementById("tournamentName").value.trim();
+  const tournamentPassword = document.getElementById("tournamentPassword").value;
+  
+  // Determine match type
+  let matchType;
+  if (matchTypeSelect.value === 'Custom') {
+    matchType = customMatchType || "Custom Match";
+  } else {
+    matchType = matchTypeSelect.value;
+  }
+  
+  // Build confirmation content
+  let content = '';
+  
+  // Teams Section
+  content += '<div class="confirmation-section">';
+  content += '<div class="confirmation-section-title">Teams</div>';
+  content += '<div class="confirmation-row">';
+  content += '<span class="confirmation-label">🏏 Batting</span>';
+  content += '<span class="confirmation-value">' + escapeHtml(teamA) + '</span>';
+  content += '</div>';
+  content += '<div class="confirmation-row">';
+  content += '<span class="confirmation-label">🎯 Bowling</span>';
+  content += '<span class="confirmation-value">' + escapeHtml(teamB) + '</span>';
+  content += '</div>';
+  content += '</div>';
+  
+  // Match Settings Section
+  content += '<div class="confirmation-section">';
+  content += '<div class="confirmation-section-title">Match Settings</div>';
+  content += '<div class="confirmation-row">';
+  content += '<span class="confirmation-label">Overs</span>';
+  content += '<span class="confirmation-value">' + escapeHtml(overs) + '</span>';
+  content += '</div>';
+  content += '<div class="confirmation-row">';
+  content += '<span class="confirmation-label">Wickets</span>';
+  content += '<span class="confirmation-value">' + escapeHtml(wicketsLimit) + '</span>';
+  content += '</div>';
+  content += '<div class="confirmation-row">';
+  content += '<span class="confirmation-label">Type</span>';
+  content += '<span class="confirmation-value">' + escapeHtml(matchType) + '</span>';
+  content += '</div>';
+  content += '</div>';
+  
+  // Tournament Section (only if tournament name is provided)
+  if (tournamentName) {
+    content += '<div class="confirmation-section">';
+    content += '<div class="confirmation-section-title">Tournament</div>';
+    content += '<div class="confirmation-row">';
+    content += '<span class="confirmation-label">Name</span>';
+    content += '<span class="confirmation-value">' + escapeHtml(tournamentName) + '</span>';
+    content += '</div>';
+    content += '<div class="confirmation-row">';
+    content += '<span class="confirmation-label">Password</span>';
+    content += '<span class="confirmation-value">' + (tournamentPassword ? '🔒 Set' : '⚠️ None') + '</span>';
+    content += '</div>';
+    content += '</div>';
+  }
+  
+  // Populate modal content
+  document.getElementById('confirmationModalBody').innerHTML = content;
+  
+  // Show modal
+  document.getElementById('confirmationModal').style.display = 'block';
+  
+  // Prevent body scroll
+  document.body.style.overflow = 'hidden';
+}
+
+function closeConfirmationModal() {
+  document.getElementById('confirmationModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+function confirmAndStartMatch() {
+  closeConfirmationModal();
+  startMatch();
+}
+
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('confirmationModal');
+  if (event.target === modal) {
+    closeConfirmationModal();
+  }
+});
+
+// Close modal on Escape key
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    const modal = document.getElementById('confirmationModal');
+    if (modal.style.display === 'block') {
+      closeConfirmationModal();
+    }
+  }
+});
 
 /* ---------------- Flow ---------------- */
 async function startMatch(){

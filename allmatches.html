@@ -1167,14 +1167,25 @@
     let customStartDate = null;
     let customEndDate = null;
     let collapsedTournaments = new Set();
+    let isAllDataLoaded = false; // Track if we've loaded all data
+    let isLoadingMore = false; // Prevent multiple simultaneous loads
     
     // Load ALL matches from Firebase (not just user's matches)
-    function loadAllMatches() {
-      console.log('🌍 Loading ALL matches from Firebase...');
+    function loadAllMatches(loadAll = false) {
+      if (loadAll) {
+        console.log('🌍 Loading ALL matches from Firebase (full history)...');
+      } else {
+        console.log('🌍 Loading matches from Firebase (optimized load)...');
+      }
       
       // Get all organizations' matches
+      // Note: We need to load all data as Firebase doesn't support querying nested match timestamps at org level
       const tournamentsPromise = database.ref('tournaments').once('value');
       const quickMatchesPromise = database.ref('quickMatches').once('value');
+      
+      if (loadAll) {
+        isAllDataLoaded = true;
+      }
       
       Promise.all([tournamentsPromise, quickMatchesPromise]).then(([tournamentsSnapshot, quickMatchesSnapshot]) => {
         let allMatchesObj = {};
@@ -1212,7 +1223,8 @@
           return timeB - timeA;
         });
         
-        console.log(`📊 Loaded ${allMatches.length} total matches from Firebase`);
+        const loadType = loadAll ? 'total' : '';
+        console.log(`📊 Loaded ${allMatches.length} matches ${loadType}`.trim());
         
         if (allMatches.length === 0) {
           document.getElementById('loading').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏏</div><div style="font-size:18px;font-weight:700;margin-bottom:8px;color:#1f2937;">No Matches Found</div><div style="color:#6b7280;font-size:14px;line-height:1.6;margin-bottom:20px;">No cricket matches are available worldwide at the moment.<br>Start scoring a match and it will appear here for everyone!</div><a href="index.html" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;padding:12px 28px;border-radius:12px;text-decoration:none;display:inline-block;font-weight:700;box-shadow:0 4px 12px rgba(102,126,234,0.3);transition:all 0.2s;">🏠 Go to Home</a></div>';
@@ -1234,6 +1246,7 @@
         document.getElementById('matchList').style.display = 'flex';
         document.getElementById('refreshBtn').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
+        isLoadingMore = false;
         
       }).catch((error) => {
         console.error('❌ Firebase error:', error);
