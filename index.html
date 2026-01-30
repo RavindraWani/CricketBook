@@ -34,7 +34,6 @@
   <meta property="og:url" content="https://cricketbook.digital/">
   <meta property="og:title" content="CricketBook - Free Live Cricket Scoring App for Local Matches">
   <meta property="og:description" content="Free online cricket scoring app. Record scores ball-by-ball, share live updates, and track match statistics. Perfect for local matches and tournaments.">
-  <meta property="og:image" content="https://cricketbook.digital/og-image.png">
   <meta property="og:site_name" content="CricketBook">
   <meta property="og:locale" content="en_US">
   
@@ -43,7 +42,6 @@
   <meta name="twitter:url" content="https://cricketbook.digital/">
   <meta name="twitter:title" content="CricketBook - Free Live Cricket Scoring App">
   <meta name="twitter:description" content="Free online cricket scoring app. Record scores ball-by-ball and share live updates instantly.">
-  <meta name="twitter:image" content="https://cricketbook.digital/twitter-image.png">
   <meta name="twitter:site" content="@cricketbook">
   
   <!-- Additional SEO -->
@@ -74,13 +72,6 @@
       "price": "0",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "2150",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "author": {
       "@type": "Organization",
       "name": "CricketBook",
@@ -90,10 +81,6 @@
       "@type": "Organization",
       "name": "CricketBook",
       "logo": {
-        "@type": "ImageObject",
-        "url": "https://cricketbook.digital/logo.png"
-      }
-    }
   }
   </script>
   <style>
@@ -593,6 +580,13 @@
         <p style="color:#4b5563;font-weight:400;line-height:1.4;font-size:13px;">Features, sharing options, and how CricketBook makes scoring simple & free.</p>
         <span class="card-link" style="background:linear-gradient(135deg, #0891b2 0%, #0e7490 100%);color:#ffffff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(8,145,178,0.3);display:inline-block;margin-top:10px;">Learn More →</span>
       </a>
+      
+      <!-- Community Card -->
+      <a href="https://www.instagram.com/cricketbook.digital/" target="_blank" rel="noopener noreferrer" class="card" style="background:linear-gradient(135deg, #E1306C 0%, #C13584 50%, #833AB4 100%);border:2px solid rgba(255,255,255,0.3);box-shadow:0 12px 32px rgba(225,48,108,0.3), 0 4px 12px rgba(131,58,180,0.2);">
+        <h2 style="color:#ffffff;font-size:18px;margin-bottom:8px;">📸 Community</h2>
+        <p style="color:rgba(255,255,255,0.95);font-weight:400;line-height:1.4;font-size:13px;">Tag <strong>@cricketbook.digital</strong> in your match stories! Share scores, highlights & connect with cricket lovers.</p>
+        <span class="card-link" style="background:rgba(255,255,255,0.25);backdrop-filter:blur(10px);color:#ffffff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(0,0,0,0.2);display:inline-block;margin-top:10px;border:1px solid rgba(255,255,255,0.3);">Follow & Tag Us →</span>
+      </a>
     </div>
     
     <!-- How It Works Section -->
@@ -688,13 +682,17 @@
       <p style="margin:0;"><a href="https://www.instagram.com/cricketbook.digital/" target="_blank" rel="noopener noreferrer" style="color:white;text-decoration:none;font-weight:600;opacity:0.95;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.95'">📷 Follow us on Instagram</a></p>
     </div>
   </div>
-  
+  <span id="copyrightYear"></span>
   <script>
     // Auto-redirect to LiveScore if org parameter is present
     const urlParams = new URLSearchParams(window.location.search);
     const orgId = urlParams.get('org');
     const matchId = urlParams.get('match');
-    
+    Dynamic copyright year
+    document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+  </script>
+  <script>
+    // 
     if (orgId) {
       // Build redirect URL
       let redirectUrl = 'livescore.html?org=' + orgId;
