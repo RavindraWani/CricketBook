@@ -177,6 +177,18 @@
       transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
     
+    .card-no-padding {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 0 5px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
+      position: relative;
+      color: var(--text-primary);
+      overflow: hidden;
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    
     .result-banner {
       background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
       color: white;
@@ -663,35 +675,35 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Match Summary - Full Width Section -->
-  <div id="matchSummary" style="margin-top:24px;">
-    <div style="max-width:480px;margin:0 auto;padding:20px 0;background:var(--card-bg);border-top:3px solid var(--table-border);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-      <div style="font-size:18px;font-weight:800;color:var(--text-primary);margin-bottom:20px;text-align:center;letter-spacing:0.5px;">
-        📊 MATCH SUMMARY
-      </div>
-      
-      <!-- 3-Column Table for Match Summary -->
-      <div style="padding:0 16px;">
-        <table id="matchSummaryTable" style="width:100%;border-collapse:collapse;background:var(--table-bg);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);table-layout:fixed;">
-          <thead>
-            <tr style="background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);color:#fff;">
-              <th rowspan="2" style="padding:6px 1px;font-size:14px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:26px;vertical-align:middle;">⏱</th>
-              <th id="team1Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:50%;">Team 1</th>
-              <th id="team2Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;width:50%;">Team 2</th>
-            </tr>
-            <tr style="background:linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);color:#fff;">
-              <th id="team1Stats" style="padding:4px 8px 8px 8px;font-size:11px;font-weight:600;text-align:center;border-right:1px solid rgba(255,255,255,0.2);opacity:0.95;letter-spacing:0.3px;line-height:1.6;">—</th>
-              <th id="team2Stats" style="padding:4px 8px 8px 8px;font-size:11px;font-weight:600;text-align:center;opacity:0.95;letter-spacing:0.3px;line-height:1.6;">—</th>
-            </tr>
-          </thead>
-          <tbody id="matchSummaryBody">
-            <tr>
-              <td colspan="3" style="text-align:center;color:#94a3b8;padding:20px;font-size:13px;">No overs bowled yet</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Match Summary Section -->
+    <div id="matchSummary" style="display:none;">
+      <div class="card-no-padding" style="margin-top:20px;">
+        <div style="font-size:18px;font-weight:800;color:var(--text-primary);margin-bottom:0;padding:20px 20px 16px 20px;text-align:center;letter-spacing:0.5px;">
+          📊 MATCH SUMMARY
+        </div>
+        
+        <!-- 3-Column Table for Match Summary -->
+        <div>
+          <table id="matchSummaryTable" style="width:100%;border-collapse:collapse;background:var(--table-bg);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);table-layout:fixed;">
+            <thead>
+              <tr style="background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);color:#fff;">
+                <th rowspan="2" style="padding:6px 1px;font-size:14px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:26px;vertical-align:middle;">⏱</th>
+                <th id="team1Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:50%;">Team 1</th>
+                <th id="team2Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;width:50%;">Team 2</th>
+              </tr>
+              <tr style="background:linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);color:#fff;">
+                <th id="team1Stats" style="padding:4px 8px 8px 8px;font-size:11px;font-weight:600;text-align:center;border-right:1px solid rgba(255,255,255,0.2);opacity:0.95;letter-spacing:0.3px;line-height:1.6;">—</th>
+                <th id="team2Stats" style="padding:4px 8px 8px 8px;font-size:11px;font-weight:600;text-align:center;opacity:0.95;letter-spacing:0.3px;line-height:1.6;">—</th>
+              </tr>
+            </thead>
+            <tbody id="matchSummaryBody">
+              <tr>
+                <td colspan="3" style="text-align:center;color:var(--text-tertiary);padding:20px;font-size:13px;">No overs bowled yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -883,6 +895,7 @@
             updateUI(data);
             document.getElementById('loading').style.display = 'none';
             document.getElementById('content').style.display = 'block';
+            document.getElementById('matchSummary').style.display = 'block';
           } else {
             // Try quick matches path
             database.ref('quickMatches/' + organizationId + '/matches/' + id).once('value', (snapshot2) => {
@@ -892,6 +905,7 @@
                 updateUI(data);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
+                document.getElementById('matchSummary').style.display = 'block';
               } else {
                 console.warn('⚠️ Match not found:', id);
                 document.getElementById('loading').innerHTML = '<div class="error">Match ID "' + id + '" not found in Firebase. <br><br>Try refreshing or start a new match.</div>';
@@ -1585,7 +1599,7 @@
       const maxOvers = Math.max(firstOvers.length, secondOvers.length);
       
       if (maxOvers === 0) {
-        document.getElementById('matchSummaryBody').innerHTML = '<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:20px;font-size:13px;">No overs bowled yet</td></tr>';
+        document.getElementById('matchSummaryBody').innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-tertiary);padding:20px;font-size:13px;">No overs bowled yet</td></tr>';
         return;
       }
       
@@ -1640,23 +1654,23 @@
         }).join('') : '<span style="color:#cbd5e1;font-size:11px;">—</span>';
         
         tableHtml += `
-          <tr style="border-bottom:1px solid #e2e8f0;">
-            <td style="padding:6px 2px;text-align:center;font-weight:700;color:#1f2937;font-size:11px;border-right:1px solid #e2e8f0;background:#f1f5f9;vertical-align:top;">${overNum}</td>
-            <td style="padding:6px 4px;border-right:1px solid #e2e8f0;background:#fff;vertical-align:top;word-wrap:break-word;">
-              ${firstStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:4px;border-left:2px solid #3b82f6;">
-                <span style="font-weight:700;color:#1e40af;font-size:11px;">${firstCumulativeRuns}/${firstCumulativeWkts}</span>
-                <span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83c\udfaf<strong style="color:#059669;font-size:9px;">${firstStats.runs}</strong></span>
-                ${firstStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83d\udd34<strong style="color:#dc2626;font-size:9px;">${firstStats.wkts}</strong></span>` : ''}
-                ${firstStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\u2795<strong style="color:#f59e0b;font-size:9px;">${firstStats.extras}</strong></span>` : ''}
+          <tr style="border-bottom:1px solid var(--table-border);">
+            <td style="padding:6px 2px;text-align:center;font-weight:700;color:var(--text-primary);font-size:11px;border-right:1px solid var(--table-border);background:var(--card-bg);vertical-align:top;">${overNum}</td>
+            <td style="padding:6px 4px;border-right:1px solid var(--table-border);background:var(--card-bg);vertical-align:top;word-wrap:break-word;">
+              ${firstStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:var(--table-bg);border-radius:4px;border-left:2px solid #3b82f6;">
+                <span style="font-weight:700;color:var(--text-primary);font-size:11px;">${firstCumulativeRuns}/${firstCumulativeWkts}</span>
+                <span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">🎯<strong style="color:#059669;font-size:9px;">${firstStats.runs}</strong></span>
+                ${firstStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">🔴<strong style="color:#dc2626;font-size:9px;">${firstStats.wkts}</strong></span>` : ''}
+                ${firstStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">➕<strong style="color:#f59e0b;font-size:9px;">${firstStats.extras}</strong></span>` : ''}
               </div>` : ''}
               <div style="line-height:1.4;">${firstBallsHtml}</div>
             </td>
-            <td style="padding:6px 4px;background:#fff;vertical-align:top;word-wrap:break-word;">
-              ${secondStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:4px;border-left:2px solid #3b82f6;">
-                <span style="font-weight:700;color:#1e40af;font-size:11px;">${secondCumulativeRuns}/${secondCumulativeWkts}</span>
-                <span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83c\udfaf<strong style="color:#059669;font-size:9px;">${secondStats.runs}</strong></span>
-                ${secondStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83d\udd34<strong style="color:#dc2626;font-size:9px;">${secondStats.wkts}</strong></span>` : ''}
-                ${secondStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\u2795<strong style="color:#f59e0b;font-size:9px;">${secondStats.extras}</strong></span>` : ''}
+            <td style="padding:6px 4px;background:var(--card-bg);vertical-align:top;word-wrap:break-word;">
+              ${secondStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:var(--table-bg);border-radius:4px;border-left:2px solid #3b82f6;">
+                <span style="font-weight:700;color:var(--text-primary);font-size:11px;">${secondCumulativeRuns}/${secondCumulativeWkts}</span>
+                <span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">🎯<strong style="color:#059669;font-size:9px;">${secondStats.runs}</strong></span>
+                ${secondStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">🔴<strong style="color:#dc2626;font-size:9px;">${secondStats.wkts}</strong></span>` : ''}
+                ${secondStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:var(--card-bg);padding:1px 3px;border-radius:3px;">➕<strong style="color:#f59e0b;font-size:9px;">${secondStats.extras}</strong></span>` : ''}
               </div>` : ''}
               <div style="line-height:1.4;">${secondBallsHtml}</div>
             </td>
