@@ -2393,26 +2393,67 @@ function updateWinProbability() {
       const currentRunRate = (second.legalBalls || 0) > 0 ? 
                               (currentScore * 6) / second.legalBalls : 0;
       
-      // Wickets factor (each wicket reduces probability significantly)
-      const wicketsInHand = wicketsLimit - wicketsLost;
-      const wicketsFactor = wicketsInHand / wicketsLimit;
+      // Check if target is mathematically impossible (max 6 runs per ball)
+      const maxPossibleRuns = ballsRemaining * 6;
       
-      // Balls remaining factor
-      const ballsFactor = ballsRemaining / (oversLimit * 6);
-      
-      // Required run rate factor (comparing with typical achievable rate of 10)
-      const rrFactor = Math.max(0, Math.min(1, 1 - (requiredRunRate - 6) / 10));
-      
-      // Weighted calculation
-      team2Prob = Math.round(
-        (wicketsFactor * 40) + 
-        (ballsFactor * 30) + 
-        (rrFactor * 30)
-      );
-      
-      // Clamp between 1-99 during play
-      team2Prob = Math.max(1, Math.min(99, team2Prob));
-      team1Prob = 100 - team2Prob;
+      if (runsNeeded > maxPossibleRuns) {
+        // Impossible to achieve target
+        team2Prob = 0;
+        team1Prob = 100;
+      } else if (runsNeeded <= 6 && ballsRemaining > 0) {
+        // Very easy - need 6 or less with balls remaining
+        const wicketsInHand = wicketsLimit - wicketsLost;
+        team2Prob = Math.min(99, 85 + (wicketsInHand * 1.4));
+        team1Prob = 100 - team2Prob;
+      } else {
+        // Calculate based on cricket realities
+        const wicketsInHand = wicketsLimit - wicketsLost;
+        
+        // Wickets factor: Exponential penalty for losing wickets
+        // Having 8+ wickets is strong, losing last few wickets is critical
+        const wicketsFactor = Math.pow(wicketsInHand / wicketsLimit, 1.5);
+        
+        // Run rate feasibility factor
+        // RRR < 6: Very achievable (90-100%)
+        // RRR 6-9: Moderate (60-90%)
+        // RRR 9-12: Difficult (30-60%)
+        // RRR 12-15: Very difficult (10-30%)
+        // RRR 15-18: Extremely difficult (2-10%)
+        // RRR > 18: Nearly impossible (0-2%)
+        let rrFeasibility;
+        if (requiredRunRate <= 6) {
+          rrFeasibility = 1.0;
+        } else if (requiredRunRate <= 9) {
+          rrFeasibility = 1.0 - ((requiredRunRate - 6) / 3) * 0.3;
+        } else if (requiredRunRate <= 12) {
+          rrFeasibility = 0.7 - ((requiredRunRate - 9) / 3) * 0.4;
+        } else if (requiredRunRate <= 15) {
+          rrFeasibility = 0.3 - ((requiredRunRate - 12) / 3) * 0.2;
+        } else if (requiredRunRate <= 18) {
+          rrFeasibility = 0.1 - ((requiredRunRate - 15) / 3) * 0.08;
+        } else {
+          rrFeasibility = Math.max(0, 0.02 - ((requiredRunRate - 18) / 10) * 0.02);
+        }
+        
+        // Balls remaining factor: Having more balls gives more options
+        // But diminishing returns after certain point
+        const ballsRatio = ballsRemaining / (oversLimit * 6);
+        const ballsFactor = Math.min(1, ballsRatio + 0.2);
+        
+        // Combine factors with appropriate weights
+        // Wickets: 45% (most critical in limited overs)
+        // RR Feasibility: 45% (equally critical)
+        // Balls remaining: 10% (helps but less critical if RR is impossible)
+        team2Prob = Math.round(
+          (wicketsFactor * 45) + 
+          (rrFeasibility * 45) + 
+          (ballsFactor * 10)
+        );
+        
+        // Clamp between 1-99 during play
+        team2Prob = Math.max(1, Math.min(99, team2Prob));
+        team1Prob = 100 - team2Prob;
+      }
       
       // Determine phase
       const oversCompleted = Math.floor((second.legalBalls || 0) / 6);
