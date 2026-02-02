@@ -673,7 +673,7 @@
             <table id="matchSummaryTable" style="width:100%;border-collapse:collapse;background:#f8fafc;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);table-layout:fixed;">
               <thead>
                 <tr style="background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);color:#fff;">
-                  <th rowspan="2" style="padding:6px 2px;font-size:11px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:32px;vertical-align:middle;">Ovs</th>
+                  <th rowspan="2" style="padding:6px 1px;font-size:14px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:26px;vertical-align:middle;">⏱</th>
                   <th id="team1Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,0.2);width:50%;">Team 1</th>
                   <th id="team2Header" style="padding:6px 6px 2px 6px;font-size:13px;font-weight:700;text-align:center;width:50%;">Team 2</th>
                 </tr>
@@ -1641,24 +1641,20 @@
           <tr style="border-bottom:1px solid #e2e8f0;">
             <td style="padding:6px 2px;text-align:center;font-weight:700;color:#1f2937;font-size:11px;border-right:1px solid #e2e8f0;background:#f1f5f9;vertical-align:top;">${overNum}</td>
             <td style="padding:6px 4px;border-right:1px solid #e2e8f0;background:#fff;vertical-align:top;word-wrap:break-word;">
-              ${firstStats ? `<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:5px;padding:4px 6px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:6px;border-left:3px solid #3b82f6;">
-                <span style="font-weight:700;color:#1e40af;">${firstCumulativeRuns}/${firstCumulativeWkts}</span>
-                <span style="display:flex;gap:6px;color:#64748b;font-weight:600;font-size:10px;">
-                  <span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\ud83c\udfaf <strong style="color:#059669;">${firstStats.runs}</strong></span>
-                  ${firstStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\ud83d\udd34 <strong style="color:#dc2626;">${firstStats.wkts}</strong></span>` : ''}
-                  ${firstStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\u2795 <strong style="color:#f59e0b;">${firstStats.extras}</strong></span>` : ''}
-                </span>
+              ${firstStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:4px;border-left:2px solid #3b82f6;">
+                <span style="font-weight:700;color:#1e40af;font-size:11px;">${firstCumulativeRuns}/${firstCumulativeWkts}</span>
+                <span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83c\udfaf<strong style="color:#059669;font-size:9px;">${firstStats.runs}</strong></span>
+                ${firstStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83d\udd34<strong style="color:#dc2626;font-size:9px;">${firstStats.wkts}</strong></span>` : ''}
+                ${firstStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\u2795<strong style="color:#f59e0b;font-size:9px;">${firstStats.extras}</strong></span>` : ''}
               </div>` : ''}
               <div style="line-height:1.4;">${firstBallsHtml}</div>
             </td>
             <td style="padding:6px 4px;background:#fff;vertical-align:top;word-wrap:break-word;">
-              ${secondStats ? `<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:5px;padding:4px 6px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:6px;border-left:3px solid #3b82f6;">
-                <span style="font-weight:700;color:#1e40af;">${secondCumulativeRuns}/${secondCumulativeWkts}</span>
-                <span style="display:flex;gap:6px;color:#64748b;font-weight:600;font-size:10px;">
-                  <span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\ud83c\udfaf <strong style="color:#059669;">${secondStats.runs}</strong></span>
-                  ${secondStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\ud83d\udd34 <strong style="color:#dc2626;">${secondStats.wkts}</strong></span>` : ''}
-                  ${secondStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:2px;background:#fff;padding:2px 5px;border-radius:4px;">\u2795 <strong style="color:#f59e0b;">${secondStats.extras}</strong></span>` : ''}
-                </span>
+              ${secondStats ? `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:10px;margin-bottom:4px;padding:3px 4px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:4px;border-left:2px solid #3b82f6;">
+                <span style="font-weight:700;color:#1e40af;font-size:11px;">${secondCumulativeRuns}/${secondCumulativeWkts}</span>
+                <span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83c\udfaf<strong style="color:#059669;font-size:9px;">${secondStats.runs}</strong></span>
+                ${secondStats.wkts > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\ud83d\udd34<strong style="color:#dc2626;font-size:9px;">${secondStats.wkts}</strong></span>` : ''}
+                ${secondStats.extras > 0 ? `<span style="display:inline-flex;align-items:center;gap:1px;background:#fff;padding:1px 3px;border-radius:3px;">\u2795<strong style="color:#f59e0b;font-size:9px;">${secondStats.extras}</strong></span>` : ''}
               </div>` : ''}
               <div style="line-height:1.4;">${secondBallsHtml}</div>
             </td>
