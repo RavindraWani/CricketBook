@@ -284,6 +284,83 @@
       border-color: #fbbf24;
     }
     
+    /* Date Filter Inputs */
+    .date-filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .date-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .date-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+    
+    .date-input {
+      padding: 8px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .date-input:focus {
+      outline: none;
+      border-color: #fbbf24;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .date-input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+    
+    .btn-clear-dates {
+      padding: 8px 16px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .btn-clear-dates:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-clear-dates:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .date-info {
+      font-size: 12px;
+      color: #60a5fa;
+      padding: 4px 12px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
     /* Match List */
     .match-list {
       display: flex;
@@ -957,6 +1034,18 @@
           <button class="filter-btn" data-filter="live">🔴 Live</button>
           <button class="filter-btn" data-filter="completed">✅ Completed</button>
         </div>
+        <div class="date-filters">
+          <div class="date-input-group">
+            <span class="date-label">📅 From:</span>
+            <input type="date" id="dateFrom" class="date-input">
+          </div>
+          <div class="date-input-group">
+            <span class="date-label">To:</span>
+            <input type="date" id="dateTo" class="date-input">
+          </div>
+          <button id="clearDatesBtn" class="btn-clear-dates" onclick="clearDateFilters()" disabled>Clear Dates</button>
+          <span id="dateInfo" class="date-info" style="display:none;"></span>
+        </div>
       </div>
       
       <!-- Bulk Actions Bar -->
@@ -1022,6 +1111,8 @@
     let selectedMatches = new Set();
     let currentFilter = 'all';
     let searchQuery = '';
+    let dateFrom = null;
+    let dateTo = null;
     
     // Check if already logged in
     const isLoggedIn = sessionStorage.getItem('admin_logged_in') === 'true';
@@ -1212,6 +1303,27 @@
           }
         }
         
+        // Date range filter
+        if (dateFrom || dateTo) {
+          const matchDate = match.timestamp || match.lastUpdated || 0;
+          if (matchDate === 0) return false; // Skip matches without dates
+          
+          const matchDateOnly = new Date(matchDate);
+          matchDateOnly.setHours(0, 0, 0, 0);
+          
+          if (dateFrom) {
+            const fromDate = new Date(dateFrom);
+            fromDate.setHours(0, 0, 0, 0);
+            if (matchDateOnly < fromDate) return false;
+          }
+          
+          if (dateTo) {
+            const toDate = new Date(dateTo);
+            toDate.setHours(23, 59, 59, 999);
+            if (matchDateOnly > toDate) return false;
+          }
+        }
+        
         // Filter by type
         if (currentFilter === 'stalled') {
           return isStalledMatch(match);
@@ -1225,6 +1337,7 @@
       });
       
       displayMatches();
+      updateDateInfo();
     }
     
     // Display matches
@@ -1383,6 +1496,30 @@
       }
     }
     
+    // Clear date filters
+    function clearDateFilters() {
+      dateFrom = null;
+      dateTo = null;
+      document.getElementById('dateFrom').value = '';
+      document.getElementById('dateTo').value = '';
+      document.getElementById('clearDatesBtn').disabled = true;
+      document.getElementById('dateInfo').style.display = 'none';
+      applyFilters();
+    }
+    
+    // Update date info display
+    function updateDateInfo() {
+      const dateInfoEl = document.getElementById('dateInfo');
+      if (dateFrom || dateTo) {
+        const fromStr = dateFrom ? new Date(dateFrom).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Start';
+        const toStr = dateTo ? new Date(dateTo).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'End';
+        dateInfoEl.textContent = `📅 Showing: ${fromStr} → ${toStr} (${filteredMatches.length} matches)`;
+        dateInfoEl.style.display = 'inline-block';
+      } else {
+        dateInfoEl.style.display = 'none';
+      }
+    }
+    
     // Event Listeners
     document.getElementById('searchBox').addEventListener('input', (e) => {
       searchQuery = e.target.value;
@@ -1396,6 +1533,19 @@
         currentFilter = btn.dataset.filter;
         applyFilters();
       });
+    });
+    
+    // Date filter event listeners
+    document.getElementById('dateFrom').addEventListener('change', (e) => {
+      dateFrom = e.target.value || null;
+      document.getElementById('clearDatesBtn').disabled = !dateFrom && !dateTo;
+      applyFilters();
+    });
+    
+    document.getElementById('dateTo').addEventListener('change', (e) => {
+      dateTo = e.target.value || null;
+      document.getElementById('clearDatesBtn').disabled = !dateFrom && !dateTo;
+      applyFilters();
     });
   </script>
 
