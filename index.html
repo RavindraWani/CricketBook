@@ -470,6 +470,42 @@
     .theme-toggle:active {
       transform: scale(0.95);
     }
+
+    /* Dark Mode Card Styles */
+    [data-theme="dark"] .cards-grid > a[style*="background:linear-gradient(135deg, #ffffff"] {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #0f172a 100%) !important;
+    }
+
+    [data-theme="dark"] .cards-grid > a[style*="#ffffff"] h2 {
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .cards-grid > a[style*="#ffffff"] p {
+      color: var(--text-secondary) !important;
+    }
+
+    [data-theme="dark"] .card[style*="max-width"] {
+      background: var(--card-bg) !important;
+    }
+
+    [data-theme="dark"] .card h3,
+    [data-theme="dark"] .card strong {
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] div[style*="background: #f0f9ff"] {
+      background: rgba(59, 130, 246, 0.1) !important;
+      border-left-color: #60a5fa !important;
+    }
+
+    [data-theme="dark"] div[style*="background: #f0f9ff"] p {
+      color: #93c5fd !important;
+    }
+
+    [data-theme="dark"] span.card-link[style*="background:#ffffff"] {
+      background: var(--card-bg) !important;
+      color: #E1306C !important;
+    }
   </style>
   <script>
     // Dark Mode Management (Global - works across all pages)
@@ -596,7 +632,7 @@
     </div>
     
     <!-- How It Works Section -->
-    <div class="card" style="max-width: 800px; margin: 0 auto 16px;">
+    <div class="card" style="max-width: 800px; margin: 0 auto 16px; border: 2px solid rgba(255,255,255,0.3);">
       <h2 style="text-align: center; font-size: 22px; margin-bottom: 16px; color: var(--text-primary);">⚡ How It Works</h2>
       
       <div style="display: grid; gap: 10px;">
@@ -634,7 +670,7 @@
     </div>
     
       <!-- Why CricketBook Section -->
-    <div class="card" style="max-width: 800px; margin: 0 auto 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="card" style="max-width: 800px; margin: 0 auto 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: 2px solid rgba(255,255,255,0.3);">
       <h2 style="text-align: center; font-size: 22px; margin-bottom: 14px; color: white;">🏆 Why CricketBook?</h2>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px;">
