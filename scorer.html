@@ -3149,7 +3149,7 @@ function getTournamentLink() {
   pathParts.pop(); // Remove the current file (scorer.html)
   const basePath = pathParts.join('/');
   const baseUrl = window.location.origin + basePath + '/';
-  return `${baseUrl}livescore.html?org=${organizationId}`;
+  return `${baseUrl}matches.html?org=${organizationId}`;
 }
 
 function shareViewerLink() {
