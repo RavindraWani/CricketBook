@@ -1906,6 +1906,7 @@ let first = makeInnings();
 let second = makeInnings();
 let inSecond=false, resultText="", target=0, matchCompleted=false;
 let pendingExtra=null; // {type:'NB'|'WD'|'B'|'LB'}
+let matchStartTimestamp = null; // Track match start time (set once)
 
 // Undo stack: stores deep copies of state before each action
 let undoStack = [];
@@ -2134,17 +2135,21 @@ function updateUI(){
 
   // Disable main buttons while choosing extra runs or wicket details
   const disable = !!pendingExtra || document.getElementById('wicketPanel').style.display === 'block';
-  [...document.querySelectorAll(".btn-run, .btn-wkt, .btn-extra, .btn-muted")].forEach(b=> {
+  [...document.querySelectorAll(".btn")].forEach(b=> {
     // Only modify buttons if user has edit permission
     if (canEditMatch) {
-      if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
-          b.onclick.toString().includes('quickWicket') || 
-          b.onclick.toString().includes('showMoreOptions'))) {
-        b.disabled = disable;
-      }
       // Keep extra buttons (WD, NB, Byes, LB) enabled to allow switching/canceling
       if (b.onclick && b.onclick.toString().includes('startExtra')) {
         b.disabled = false;
+      }
+      // Disable all other control buttons (runs, wickets, undo)
+      else if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
+          b.onclick.toString().includes('quickWicket') || 
+          b.onclick.toString().includes('showMoreOptions') ||
+          b.onclick.toString().includes('showWicketExtraModal') ||
+          b.onclick.toString().includes('showRunOutModal') ||
+          b.onclick.toString().includes('undoLastAction'))) {
+        b.disabled = disable;
       }
     }
     // If no edit permission, buttons stay disabled (handled by updateEditModeUI)
@@ -2705,6 +2710,11 @@ function overRunsAndWktsHelper(arr) {
 function saveMatchState() {
   if (!db || !matchId) return;
   
+  // Set timestamp only once when match starts
+  if (!matchStartTimestamp) {
+    matchStartTimestamp = Date.now();
+  }
+  
   const matchData = {
     teamA: teamA,
     teamB: teamB,
@@ -2719,7 +2729,7 @@ function saveMatchState() {
     resultText: resultText,
     matchCompleted: matchCompleted,
     lastUpdated: Date.now(),
-    timestamp: new Date().toISOString(),
+    timestamp: matchStartTimestamp,  // Preserve original start time
     organizationId: organizationId,  // Store org ID with match data
     editToken: editToken  // Store edit token for protection
   };
@@ -2742,7 +2752,7 @@ function saveMatchState() {
         teamB: teamB,
         tournamentName: matchData.tournamentName,
         matchType: matchData.matchType,
-        timestamp: matchData.lastUpdated,
+        timestamp: matchData.timestamp,  // Use match start time for history
         isQuickMatch: !matchData.tournamentName || matchData.tournamentName.trim() === ''
       });
       
@@ -2842,6 +2852,7 @@ function listenForUpdates() {
       inSecond = data.inSecond;  // Use boolean instead of function
       resultText = data.resultText;
       matchCompleted = data.matchCompleted || false;
+      matchStartTimestamp = data.timestamp || null;  // Load the original start timestamp
       matchStarted = true;
       
       // Restore tournament name and match type to input fields (for display purposes)
@@ -3569,7 +3580,13 @@ function wicket(){
   };
   document.getElementById('wicketPanel').style.display = 'block';
   // Disable main buttons
-  [...document.querySelectorAll(".btn-run, .btn-wkt, .btn-extra")].forEach(b=> b.disabled = true);
+  [...document.querySelectorAll(".btn")].forEach(b=> {
+    if (b.onclick && (b.onclick.toString().includes('addLegalRun') ||
+        b.onclick.toString().includes('startExtra') ||
+        b.onclick.toString().includes('showMoreOptions'))) {
+      b.disabled = true;
+    }
+  });
 }
 
 function confirmWicketExtra() {
@@ -3606,13 +3623,13 @@ function confirmWicketExtra() {
   if(inSecond) checkResult();
   document.getElementById('wicketPanel').style.display = 'none';
   // Re-enable all buttons
-  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> b.disabled = false);
+  [...document.querySelectorAll('.btn')].forEach(b=> b.disabled = false);
   updateUI();
 }
 function cancelWicketExtra() {
   document.getElementById('wicketPanel').style.display = 'none';
   // Re-enable all buttons
-  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> b.disabled = false);
+  [...document.querySelectorAll('.btn')].forEach(b=> b.disabled = false);
   updateUI();
 }
 
@@ -4538,7 +4555,7 @@ function showWicketPanel(e) {
   };
   document.getElementById('wicketPanel').style.display = 'block';
   // Disable scoring buttons
-  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> {
+  [...document.querySelectorAll('.btn')].forEach(b=> {
     if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
         b.onclick.toString().includes('quickWicket') || 
         b.onclick.toString().includes('startExtra') ||
