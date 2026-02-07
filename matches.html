@@ -1221,7 +1221,7 @@
       // Check if it's a quick match or tournament match
       const isQuickMatch = !match.tournamentName || match.tournamentName.trim() === '';
       const tournamentBadge = isQuickMatch
-        ? `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;background:rgba(254,240,138,0.2);padding:4px 10px;border-radius:12px;border:1px solid rgba(254,240,138,0.5);">⚡ Quick Match</div>`
+        ? `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;display:inline-block;background:rgba(254,240,138,0.2);padding:4px 10px;border-radius:12px;border:1px solid rgba(254,240,138,0.5);">⚡ Quick Match</div>`
         : `<div style="font-size:11px;color:#fef08a;font-weight:800;margin-bottom:4px;letter-spacing:0.3px;">#${match.tournamentName}${matchTypeText}</div>`;
       
       container.innerHTML = `

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Resource hints for faster loading -->
@@ -20,8 +20,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
 <!-- Primary Meta Tags -->
-<meta name="description" content="Easy-to-use cricket scorer tool - record runs, wickets, extras, and overs in real-time. Simple interface with undo, ball-by-ball tracking, and instant sharing for local matches." />
-<parameter name="keywords" content="cricket scorer, cricket scoring tool, record cricket match, cricket ball by ball scorer, cricket wicket tracker, cricket runs tracker, cricket overs scorer, cricket match recorder, digital cricket scoring, local cricket scorer, cricket scorekeeper app" />
+<meta name="description" content="Professional cricket scorer tool - record runs, wickets, extras, and overs in real-time. Easy-to-use interface with undo, ball-by-ball tracking, and instant sharing capabilities." />
+<meta name="keywords" content="cricket scorer, cricket scoring tool, record cricket match, cricket ball by ball scorer, cricket wicket tracker, cricket runs tracker, cricket overs scorer, cricket match recorder, digital cricket scoring, professional cricket scorer, cricket scorekeeper app" />
 <meta name="author" content="CricketBook" />
 <meta name="robots" content="index, follow" />
 <meta name="language" content="English" />
@@ -111,6 +111,71 @@
     --badge-border: rgba(255, 255, 255, 0.05);
     --badge-hover: rgba(255, 255, 255, 0.2);
   }
+
+  /* Setup Form Dark Mode Support */
+  #setup {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+  }
+
+  #setup h1 {
+    color: var(--text-primary) !important;
+  }
+
+  #setup .muted {
+    color: var(--text-tertiary) !important;
+  }
+
+  #setup .setup-section {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+  }
+
+  #setup label {
+    color: var(--text-primary) !important;
+  }
+
+  #setup .setup-hint {
+    color: var(--text-tertiary) !important;
+  }
+
+  #setup input, #setup select {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--card-border) !important;
+  }
+
+  #setup input::placeholder {
+    color: var(--text-tertiary) !important;
+  }
+
+  #setup .setup-toggle-btn {
+    background: var(--card-bg) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--card-border) !important;
+  }
+
+  #setup .setup-toggle-btn:hover {
+    background: var(--card-border) !important;
+  }
+
+  #setup .tournament-section-content {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+  }
+
+  #setup .password-section {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+  }
+
+  [data-theme="dark"] #setup input:focus {
+    border-color: #3b82f6 !important;
+  }
+
+  [data-theme="dark"] #setup select:focus {
+    border-color: #8b5cf6 !important;
+  }
   
   :root{
     --bg:#0b1220;
@@ -153,9 +218,7 @@
     padding: 0 5px;
     box-shadow: 0 10px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
     position: relative;
-    color: var(--text-primary);
-    overflow: hidden;
-    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
   #game.card {
     max-width:480px;
@@ -188,6 +251,210 @@
   .btn-extra-wd{background:#68ce02 !important; color:#222 !important;} /* Yellow for Wide */
   .btn-extra-lb{background:#6366f1 !important; color:#fff !important;} /* Indigo for Leg Bye */
   .btn-extra-b{background:#8b5cf6 !important; color:#fff !important;} /* Purple for Bye */
+  
+  /* Confirmation Modal Styles */
+  .confirmation-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .confirmation-modal-content {
+    background-color: var(--card-bg);
+    margin: 8% auto;
+    padding: 0;
+    border-radius: 10px;
+    width: 92%;
+    max-width: 340px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.25s ease;
+    overflow: hidden;
+  }
+  
+  .confirmation-modal-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .confirmation-modal-header h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .confirmation-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.9;
+  }
+  
+  .confirmation-modal-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .confirmation-modal-body {
+    padding: 12px;
+    color: var(--text-primary);
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+  
+  .confirmation-section {
+    margin-bottom: 8px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+  }
+  
+  .confirmation-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .confirmation-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  
+  .confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    gap: 8px;
+  }
+  
+  .confirmation-row:last-child {
+    padding-bottom: 0;
+  }
+  
+  .confirmation-row:first-child {
+    padding-top: 0;
+  }
+  
+  .confirmation-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  .confirmation-value {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: right;
+    max-width: 65%;
+    word-break: break-word;
+  }
+  
+  .confirmation-modal-footer {
+    padding: 10px 12px;
+    background: var(--table-bg);
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid var(--card-border);
+  }
+  
+  .confirmation-btn {
+    flex: 1;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  .confirmation-btn-cancel {
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    border: 2px solid var(--card-border);
+  }
+  
+  .confirmation-btn-cancel:hover {
+    background: var(--table-bg);
+    border-color: var(--text-tertiary);
+    transform: translateY(-1px);
+  }
+  
+  .confirmation-btn-confirm {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  
+  .confirmation-btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  }
+  
+  @media (max-width: 768px) {
+    .confirmation-modal-content {
+      width: 95%;
+      margin: 10% auto;
+    }
+    
+    .confirmation-modal-footer {
+      flex-direction: column;
+    }
+    
+    .confirmation-btn {
+      width: 100%;
+    }
+  }
+  
   .scoreboard{
     display:grid; gap:6px; margin-bottom:8px;
   }
@@ -467,279 +734,11 @@
   #savedMatchesList {
     min-height: 50px;
   }
-  
-  /* Confirmation Modal Styles */
-  .confirmation-modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    animation: fadeIn 0.2s ease;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes slideUp {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  .confirmation-modal-content {
-    background-color: #ffffff;
-    margin: 8% auto;
-    padding: 0;
-    border-radius: 10px;
-    width: 92%;
-    max-width: 340px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    animation: slideUp 0.25s ease;
-    overflow: hidden;
-  }
-  
-  .confirmation-modal-header {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .confirmation-modal-header h2 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .confirmation-modal-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    opacity: 0.9;
-  }
-  
-  .confirmation-modal-close:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.15);
-  }
-  
-  .confirmation-modal-body {
-    padding: 12px;
-    color: #1f2937;
-    max-height: 65vh;
-    overflow-y: auto;
-  }
-  
-  .confirmation-section {
-    margin-bottom: 8px;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
-    border: none;
-  }
-  
-  .confirmation-section:last-child {
-    margin-bottom: 0;
-  }
-  
-  .confirmation-section-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 5px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  
-  .confirmation-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 0;
-    gap: 8px;
-  }
-  
-  .confirmation-row:last-child {
-    padding-bottom: 0;
-  }
-  
-  .confirmation-row:first-child {
-    padding-top: 0;
-  }
-  
-  .confirmation-label {
-    font-size: 12px;
-    color: #64748b;
-    font-weight: 500;
-  }
-  
-  .confirmation-value {
-    font-size: 12px;
-    color: #1f2937;
-    font-weight: 600;
-    text-align: right;
-    max-width: 65%;
-    word-break: break-word;
-  }
-  
-  .confirmation-modal-footer {
-    padding: 10px 12px;
-    background: #fafbfc;
-    display: flex;
-    gap: 8px;
-    border-top: 1px solid #e2e8f0;
-  }
-  
-  .confirmation-btn {
-    flex: 1;
-    padding: 9px 16px;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-  
-  .confirmation-btn-cancel {
-    background: white;
-    color: #64748b;
-    border: 2px solid #e2e8f0;
-  }
-  
-  .confirmation-btn-cancel:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    transform: translateY(-1px);
-  }
-  
-  .confirmation-btn-confirm {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  }
-  
-  .confirmation-btn-confirm:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-  }
-  
-  @media (max-width: 768px) {
-    .confirmation-modal-content {
-      width: 95%;
-      margin: 10% auto;
-    }
-    
-    .confirmation-modal-footer {
-      flex-direction: column;
-    }
-    
-    .confirmation-btn {
-      width: 100%;
-    }
-  }
-
-  /* Setup Form Dark Mode Styles */
-  #setup {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-  }
-
-  #setup h1 {
-    color: var(--text-primary) !important;
-  }
-
-  #setup .muted {
-    color: var(--text-tertiary) !important;
-  }
-
-  #setup .setup-section {
-    background: var(--card-bg) !important;
-    border-color: var(--card-border) !important;
-  }
-
-  #setup label {
-    color: var(--text-primary) !important;
-  }
-
-  #setup .setup-hint {
-    color: var(--text-tertiary) !important;
-  }
-
-  #setup input, #setup select {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--card-border) !important;
-  }
-
-  #setup input::placeholder {
-    color: var(--text-tertiary) !important;
-  }
-
-  #setup .setup-toggle-btn {
-    background: var(--card-bg) !important;
-    color: var(--text-secondary) !important;
-    border-color: var(--card-border) !important;
-  }
-
-  #setup .setup-toggle-btn:hover {
-    background: var(--card-border) !important;
-  }
-
-  #setup .tournament-section-content {
-    background: var(--card-bg) !important;
-    border-color: var(--card-border) !important;
-  }
-
-  #setup .password-section {
-    background: var(--card-bg) !important;
-    border-color: var(--card-border) !important;
-  }
-
-  [data-theme="dark"] #setup input:focus {
-    border-color: #3b82f6 !important;
-  }
-
-  [data-theme="dark"] #setup select:focus {
-    border-color: #8b5cf6 !important;
-  }
 </style>
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
   // Firebase Configuration
   // SETUP INSTRUCTIONS:
@@ -1268,14 +1267,6 @@
       button.style.opacity = '0.5';
       button.style.cursor = 'not-allowed';
     });
-    
-    // Also disable anchor links (like Delete Match button)
-    const links = document.querySelectorAll('#game a[onclick]');
-    links.forEach(link => {
-      link.style.opacity = '0.5';
-      link.style.cursor = 'not-allowed';
-      link.style.pointerEvents = 'none';
-    });
   }
   
   // Enable all interactive buttons in edit mode
@@ -1286,14 +1277,6 @@
       button.disabled = false;
       button.style.opacity = '1';
       button.style.cursor = 'pointer';
-    });
-    
-    // Also enable anchor links (like Delete Match button)
-    const links = document.querySelectorAll('#game a[onclick]');
-    links.forEach(link => {
-      link.style.opacity = '1';
-      link.style.cursor = 'pointer';
-      link.style.pointerEvents = 'auto';
     });
   }
   
@@ -1627,8 +1610,8 @@
       <div id="moreRunsRow" style="display:block;margin-top:0px;">
         <!-- Extras with Wicket Row -->
         <div class="row" style="gap:6px;">
-          <button class="btn btn-extra" onclick="showWicketExtraModal('WD')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%);font-weight:800;color:white;border:none;border-radius:10px;box-shadow:0 3px 10px rgba(245,158,11,0.3);transition:all 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 14px rgba(245,158,11,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(245,158,11,0.3)'">WD+WKT</button>
-          <button class="btn btn-extra" onclick="showWicketExtraModal('NB')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);font-weight:800;color:white;border:none;border-radius:10px;box-shadow:0 3px 10px rgba(239,68,68,0.3);transition:all 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 14px rgba(239,68,68,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(239,68,68,0.3)'">NB+WKT</button>
+          <button class="btn btn-extra" onclick="showWicketExtraModal('WD')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%);font-weight:800;color:white;border:none;border-radius:10px;box-shadow:0 3px 10px rgba(245,158,11,0.3);transition:all 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 14px rgba(245,158,11,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(245,158,11,0.3)'">WD+W</button>
+          <button class="btn btn-extra" onclick="showWicketExtraModal('NB')" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);font-weight:800;color:white;border:none;border-radius:10px;box-shadow:0 3px 10px rgba(239,68,68,0.3);transition:all 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 14px rgba(239,68,68,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(239,68,68,0.3)'">NB+W</button>
           <button class="btn btn-wkt" onclick="showRunOutModal()" style="flex:1;font-size:13px;padding:10px 0;background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);font-weight:800;color:white;border:none;border-radius:10px;box-shadow:0 3px 10px rgba(139,92,246,0.3);transition:all 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 14px rgba(139,92,246,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 3px 10px rgba(139,92,246,0.3)'">RUN OUT</button>
         </div>
       </div>
@@ -1748,18 +1731,20 @@
     <!-- Team Percentages Row -->
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <!-- Team 1 -->
-      <div style="flex:1;text-align:left;">
-        <span style="font-size:10px;color:var(--text-secondary);font-weight:600;" id="winTeam1Name">Team A</span>
-        <span style="font-size:14px;font-weight:900;margin-left:4px;background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="winTeam1Prob">50%</span>
+      <div style="flex:1;text-align:center;">
+        <div id="winTeam1Name" style="font-size:10px;color:var(--text-secondary);font-weight:600;margin-bottom:2px;">Team A</div>
+        <div id="winTeam1Prob" style="font-size:16px;font-weight:900;color:#3b82f6;">50%</div>
       </div>
       
-      <!-- Match Phase -->
-      <div style="font-size:8px;color:var(--text-tertiary);font-weight:600;text-align:center;flex:0 0 auto;padding:0 8px;" id="matchPhase">—</div>
+      <!-- Phase Text (Center) -->
+      <div style="flex:0 0 auto;padding:0 12px;">
+        <div id="winPhase" style="font-size:8px;color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">—</div>
+      </div>
       
       <!-- Team 2 -->
-      <div style="flex:1;text-align:right;">
-        <span style="font-size:14px;font-weight:900;margin-right:4px;background:linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="winTeam2Prob">50%</span>
-        <span style="font-size:10px;color:var(--text-secondary);font-weight:600;" id="winTeam2Name">Team B</span>
+      <div style="flex:1;text-align:center;">
+        <div id="winTeam2Name" style="font-size:10px;color:var(--text-secondary);font-weight:600;margin-bottom:2px;">Team B</div>
+        <div id="winTeam2Prob" style="font-size:16px;font-weight:900;color:#8b5cf6;">50%</div>
       </div>
     </div>
   </div>
@@ -1906,7 +1891,6 @@ let first = makeInnings();
 let second = makeInnings();
 let inSecond=false, resultText="", target=0, matchCompleted=false;
 let pendingExtra=null; // {type:'NB'|'WD'|'B'|'LB'}
-let matchStartTimestamp = null; // Track match start time (set once)
 
 // Undo stack: stores deep copies of state before each action
 let undoStack = [];
@@ -1924,248 +1908,6 @@ function showExtraPanel(show, label=""){
   const lab = document.getElementById("extraLabel");
   panel.style.display = show ? "block" : "none";
   lab.textContent = label;
-}
-function updateUI(){
-  const inn = currentInnings();
-  const batting = inSecond ? teamB : teamA;
-  const bowling = inSecond ? teamA : teamB;
-
-  // Primary Score Display
-  document.getElementById("score").textContent = `${inn.runs}/${inn.wkts}`;
-
-  // Team Name
-  document.getElementById("status").textContent = batting;
-  
-  // First Innings Score (show when in second innings)
-  const firstInningsScoreElem = document.getElementById("firstInningsScore");
-  const bowlingTeamDisplay = document.getElementById("bowlingTeamDisplay");
-  
-  if (inSecond && firstInningsScoreElem) {
-    const firstOvers = Math.floor(first.legalBalls/6);
-    const firstBalls = first.legalBalls % 6;
-    firstInningsScoreElem.textContent = `${teamA}: ${first.runs}/${first.wkts} (${firstOvers}.${firstBalls})`;
-    firstInningsScoreElem.style.display = 'block';
-    // Hide bowling team display in second innings as first innings score already shows it
-    bowlingTeamDisplay.style.display = 'none';
-  } else {
-    if (firstInningsScoreElem) {
-      firstInningsScoreElem.style.display = 'none';
-    }
-    // Show bowling team display in first innings
-    bowlingTeamDisplay.textContent = `vs ${bowling}`;
-    bowlingTeamDisplay.style.display = 'block';
-  }
-
-  // Overs and Run Rate
-  const overs = Math.floor(inn.legalBalls/6);
-  const ballsInOver = inn.legalBalls % 6;
-  
-  let balls = inn.legalBalls;
-  let rr = balls > 0 ? (inn.runs * 6 / balls).toFixed(2) : '0.00';
-
-  // Live Over Display (replaces Ball Tracker) - Compact View
-  const liveOverDiv = document.getElementById("liveOverDisplay");
-  
-  // Helper to calculate runs/wickets for an over
-  function overRunsAndWkts(arr) {
-    let runs = 0, wkts = 0;
-    arr.forEach(sym => {
-      if (typeof sym === 'string') {
-        // New format with + signs
-        if (/^([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
-        else if (/^W$/.test(sym)) { wkts += 1; }
-        else if (/^WD\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)\+W$/)[1]); wkts += 1; }
-        else if (/^WD\+W$/.test(sym)) { runs += 1; wkts += 1; }
-        else if (/^NB\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)\+W$/)[1]); wkts += 1; }
-        else if (/^NB\+W$/.test(sym)) { runs += 1; wkts += 1; }
-        else if (/^B\+([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)\+W$/)[1]); wkts += 1; }
-        else if (/^B\+W$/.test(sym)) { runs += 0; wkts += 1; }
-        // Old format (backward compatibility)
-        else if (/^([0-9]+)W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
-        else if (/^WD\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)W$/)[1]); wkts += 1; }
-        else if (/^WDW$/.test(sym)) { runs += 1; wkts += 1; }
-        else if (/^NB\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)W$/)[1]); wkts += 1; }
-        else if (/^NBW$/.test(sym)) { runs += 1; wkts += 1; }
-        else if (/^B\+([0-9]+)W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)W$/)[1]); wkts += 1; }
-        else if (/^BW$/.test(sym)) { runs += 0; wkts += 1; }
-        // Normal balls
-        else if (/^[0-9]$/.test(sym)) runs += parseInt(sym);
-        else if (/^NB$/.test(sym) || /^WD$/.test(sym)) runs += 1;
-        else if (/^NB\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)$/)[1]);
-        else if (/^WD\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)$/)[1]);
-        else if (/^B\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^B\+([0-9]+)$/)[1]);
-        else if (/^LB\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^LB\+([0-9]+)$/)[1]);
-      }
-    });
-    return {runs, wkts};
-  }
-  
-  // Show current over if it has balls, or last completed over if current is empty
-  if (inn.curOver.length > 0) {
-    // Current over in progress
-    const ballsChips = inn.curOver.map(sym => {
-      // Check if it's a wicket - must end with W or have +W pattern (not just contain W like WD)
-      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
-      const bgColor = isWicket ? '#ef4444' : '#3b82f6';
-      const borderColor = isWicket ? '#dc2626' : '#2563eb';
-      return `<span style="display:inline-flex;align-items:center;margin:1px 2px;padding:4px 7px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;border:none;font-size:11px;box-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap;">${sym}</span>`;
-    }).join('');
-    const overStats = overRunsAndWkts(inn.curOver);
-    liveOverDiv.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:8px;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;flex:1;min-width:0;">${ballsChips}</div>
-      <div style="flex-shrink:0;padding:5px 10px;background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#fff;font-weight:800;font-size:13px;border-radius:8px;box-shadow:0 2px 6px rgba(59,130,246,0.3);white-space:nowrap;">${overStats.runs}/${overStats.wkts}</div>
-    </div>`;
-    liveOverDiv.style.display = 'flex';
-  } else if (inn.overs.length > 0) {
-    // Show last completed over until next over starts
-    const lastOver = inn.overs[inn.overs.length - 1];
-    const ballsChips = lastOver.map(sym => {
-      // Check if it's a wicket - must end with W or have +W pattern (not just contain W like WD)
-      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
-      const bgColor = isWicket ? '#ef4444' : '#10b981';
-      const borderColor = isWicket ? '#dc2626' : '#059669';
-      return `<span style="display:inline-flex;align-items:center;margin:1px 2px;padding:4px 7px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;border:none;font-size:11px;box-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap;">${sym}</span>`;
-    }).join('');
-    const overStats = overRunsAndWkts(lastOver);
-    liveOverDiv.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:8px;">
-      <div style="display:flex;flex-wrap:wrap;align-items:center;flex:1;min-width:0;opacity:0.85;">${ballsChips}</div>
-      <div style="flex-shrink:0;padding:5px 10px;background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#fff;font-weight:800;font-size:13px;border-radius:8px;box-shadow:0 2px 6px rgba(16,185,129,0.3);white-space:nowrap;">${overStats.runs}/${overStats.wkts}</div>
-    </div>`;
-    liveOverDiv.style.display = 'flex';
-  } else {
-    liveOverDiv.innerHTML = `<div style="color:#94a3b8;font-size:12px;font-weight:600;text-align:center;width:100%;padding:2px 0;">No balls bowled yet</div>`;
-    liveOverDiv.style.display = 'flex';
-  }
-
-  // --- First Innings Info (for second innings only) ---
-  const firstInfoDiv = document.getElementById("firstInningsInfo");
-  if (inSecond && !resultText) {
-    const need = Math.max(first.runs + 1 - second.runs, 0);
-    const ballsLeft = (oversLimit * 6) - second.legalBalls;
-    const reqRR = ballsLeft > 0 ? (need * 6 / ballsLeft).toFixed(2) : '0.00';
-    
-    firstInfoDiv.style.display = 'block';
-    firstInfoDiv.innerHTML = `Need <b>${need}</b> runs in <b>${ballsLeft}</b> balls | RRR: <b>${reqRR}</b>`;
-  } else {
-    firstInfoDiv.style.display = 'none';
-    firstInfoDiv.innerHTML = '';
-  }
-
-  // --- Calculate Extras and This Over ---
-  let extras = 0;
-  let thisOverRuns = 0;
-  let thisOverWkts = 0;
-
-  // Count extras from all overs and current over
-  function countOverSymbols(arr) {
-    arr.forEach(sym => {
-      if (typeof sym === 'string') {
-        // Handle wicket extras (WD+W, NB+W, WD+2+W, etc.)
-        if (/^WD\+([0-9]+)\+W$/.test(sym)) {
-          const runs = parseInt(sym.match(/^WD\+([0-9]+)\+W$/)[1]);
-          extras += 1 + runs;
-        } else if (/^WD\+W$/.test(sym)) {
-          extras += 1;
-        } else if (/^NB\+([0-9]+)\+W$/.test(sym)) {
-          const runs = parseInt(sym.match(/^NB\+([0-9]+)\+W$/)[1]);
-          extras += 1 + runs;
-        } else if (/^NB\+W$/.test(sym)) {
-          extras += 1;
-        } else if (/^B\+([0-9]+)\+W$/.test(sym)) {
-          const runs = parseInt(sym.match(/^B\+([0-9]+)\+W$/)[1]);
-          extras += runs;
-        } else if (/^B\+W$/.test(sym)) {
-          extras += 0;
-        }
-        // Handle non-wicket extras
-        else if (/^NB\+([0-9]+)$/.test(sym)) {
-          extras += 1 + parseInt(sym.match(/^NB\+([0-9]+)$/)[1]);
-        } else if (/^WD\+([0-9]+)$/.test(sym)) {
-          extras += 1 + parseInt(sym.match(/^WD\+([0-9]+)$/)[1]);
-        } else if (sym === 'NB' || sym === 'WD') {
-          extras += 1;
-        } else if (/^B\+([0-9]+)$/.test(sym)) {
-          extras += parseInt(sym.match(/^B\+([0-9]+)$/)[1]);
-        } else if (/^LB\+([0-9]+)$/.test(sym)) {
-          extras += parseInt(sym.match(/^LB\+([0-9]+)$/)[1]);
-        }
-      }
-    });
-  }
-  inn.overs.forEach(countOverSymbols);
-  countOverSymbols(inn.curOver);
-
-  const thisOver = overRunsAndWkts(inn.curOver);
-  thisOverRuns = thisOver.runs;
-  thisOverWkts = thisOver.wkts;
-  
-  // Display consolidated Overs/RR/Extras in chip banner
-  document.getElementById("oversExtrasInfo").innerHTML = `O's: <b>(${overs}.${ballsInOver}/${oversLimit})</b> | RR: <b>${rr}</b> | Ext's: <b>${extras}</b>`;
-
-  // Update page title with team names
-  if (teamA && teamB) {
-    document.getElementById('pageTitle').textContent = `${teamA} vs ${teamB} - Cricket Scorer`;
-  }
-
-  // Update tournament header display
-  const tournamentHeaderScorer = document.getElementById('tournamentHeaderScorer');
-  const tournamentTitleScorer = document.getElementById('tournamentTitleScorer');
-  const tournamentNameValue = document.getElementById('tournamentName')?.value || '';
-  const matchTypeValue = document.getElementById('matchType')?.value || '';
-  
-  if (tournamentNameValue && tournamentNameValue.trim() !== '') {
-    const matchTypeText = matchTypeValue ? ` - ${matchTypeValue}` : '';
-    tournamentTitleScorer.textContent = `#${tournamentNameValue}${matchTypeText}`;
-    tournamentHeaderScorer.style.display = 'block';
-  } else {
-    tournamentHeaderScorer.style.display = 'none';
-  }
-
-  // Result
-  const resultDiv = document.getElementById("result");
-  const newMatchContainer = document.getElementById("newMatchContainer");
-  if (resultText) {
-    resultDiv.textContent = resultText;
-    resultDiv.style.display = 'block';
-    newMatchContainer.style.display = 'block';
-  } else {
-    resultDiv.style.display = 'none';
-    newMatchContainer.style.display = 'none';
-  }
-
-  // Disable main buttons while choosing extra runs or wicket details
-  const disable = !!pendingExtra || document.getElementById('wicketPanel').style.display === 'block';
-  [...document.querySelectorAll(".btn")].forEach(b=> {
-    // Only modify buttons if user has edit permission
-    if (canEditMatch) {
-      // Keep extra buttons (WD, NB, Byes, LB) enabled to allow switching/canceling
-      if (b.onclick && b.onclick.toString().includes('startExtra')) {
-        b.disabled = false;
-      }
-      // Disable all other control buttons (runs, wickets, undo)
-      else if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
-          b.onclick.toString().includes('quickWicket') || 
-          b.onclick.toString().includes('showMoreOptions') ||
-          b.onclick.toString().includes('showWicketExtraModal') ||
-          b.onclick.toString().includes('showRunOutModal') ||
-          b.onclick.toString().includes('undoLastAction'))) {
-        b.disabled = disable;
-      }
-    }
-    // If no edit permission, buttons stay disabled (handled by updateEditModeUI)
-  });
-  
-  // Save to Firebase after each update (if not in viewer mode and has edit permission)
-  // Don't save if we're currently loading data from Firebase (prevents loop)
-  if (!isViewerMode && firebaseEnabled && canEditMatch && !isLoadingFromFirebase) {
-    saveMatchState();
-  }
-  
-  // Update match summary display
-  updateMatchSummary();
-  
-  // Update live stats and win probability
-  updateLiveStats();
 }
 
 // Update Match Summary Table
@@ -2496,16 +2238,9 @@ function updateWinProbability() {
         const wicketsInHand = wicketsLimit - wicketsLost;
         
         // Wickets factor: Exponential penalty for losing wickets
-        // Having 8+ wickets is strong, losing last few wickets is critical
         const wicketsFactor = Math.pow(wicketsInHand / wicketsLimit, 1.5);
         
         // Run rate feasibility factor
-        // RRR < 6: Very achievable (90-100%)
-        // RRR 6-9: Moderate (60-90%)
-        // RRR 9-12: Difficult (30-60%)
-        // RRR 12-15: Very difficult (10-30%)
-        // RRR 15-18: Extremely difficult (2-10%)
-        // RRR > 18: Nearly impossible (0-2%)
         let rrFeasibility;
         if (requiredRunRate <= 6) {
           rrFeasibility = 1.0;
@@ -2521,22 +2256,18 @@ function updateWinProbability() {
           rrFeasibility = Math.max(0, 0.02 - ((requiredRunRate - 18) / 10) * 0.02);
         }
         
-        // Balls remaining factor: Having more balls gives more options
-        // But diminishing returns after certain point
+        // Balls remaining factor
         const ballsRatio = ballsRemaining / (oversLimit * 6);
         const ballsFactor = Math.min(1, ballsRatio + 0.2);
         
-        // Combine factors with appropriate weights
-        // Wickets: 45% (most critical in limited overs)
-        // RR Feasibility: 45% (equally critical)
-        // Balls remaining: 10% (helps but less critical if RR is impossible)
+        // Combine factors
         team2Prob = Math.round(
           (wicketsFactor * 45) + 
           (rrFeasibility * 45) + 
           (ballsFactor * 10)
         );
         
-        // Clamp between 1-99 during play
+        // Clamp between 1-99
         team2Prob = Math.max(1, Math.min(99, team2Prob));
         team1Prob = 100 - team2Prob;
       }
@@ -2554,23 +2285,21 @@ function updateWinProbability() {
   } else if (first) {
     // First innings - predict based on score
     const currentScore = first.runs || 0;
-    const wicketsLost = first.wkts || 0;
     const ballsBowled = first.legalBalls || 0;
     const totalBalls = oversLimit * 6;
     const ballsRemaining = totalBalls - ballsBowled;
     
     if (first.done || inSecond) {
-      // First innings complete - estimate based on par score
-      const parScore = oversLimit * 7; // Rough par: 7 runs per over
+      // First innings complete
+      const parScore = oversLimit * 7;
       const scoreDiff = currentScore - parScore;
       
-      // Convert score difference to probability
       team1Prob = 50 + Math.round(scoreDiff / 2);
       team1Prob = Math.max(10, Math.min(90, team1Prob));
       team2Prob = 100 - team1Prob;
       phaseText = 'Innings Break';
     } else {
-      // Innings in progress - project final score
+      // Innings in progress
       const currentRR = ballsBowled > 0 ? (currentScore * 6) / ballsBowled : 0;
       const projectedScore = Math.round(currentScore + (currentRR * ballsRemaining / 6));
       const parScore = oversLimit * 7;
@@ -2595,7 +2324,7 @@ function updateWinProbability() {
   document.getElementById('winTeam1Prob').textContent = `${Math.round(team1Prob)}%`;
   document.getElementById('winTeam2Prob').textContent = `${Math.round(team2Prob)}%`;
   document.getElementById('winProbBar').style.width = `${Math.round(team1Prob)}%`;
-  document.getElementById('matchPhase').textContent = phaseText;
+  document.getElementById('winPhase').textContent = phaseText;
 }
 
 // Helper to calculate overs from legal balls
@@ -2669,7 +2398,7 @@ function calculateExtrasForInnings(inn) {
   return extras;
 }
 
-// Helper to calculate runs/wickets/extras for an over
+// Helper function for Match Summary - calculates runs/wickets/extras for an over
 function overRunsAndWktsHelper(arr) {
   let runs = 0, wkts = 0, extras = 0;
   arr.forEach(sym => {
@@ -2705,15 +2434,260 @@ function overRunsAndWktsHelper(arr) {
   return {runs, wkts, extras};
 }
 
+function updateUI(){
+  const inn = currentInnings();
+  const batting = inSecond ? teamB : teamA;
+  const bowling = inSecond ? teamA : teamB;
+
+  // Primary Score Display
+  document.getElementById("score").textContent = `${inn.runs}/${inn.wkts}`;
+
+  // Team Name
+  document.getElementById("status").textContent = batting;
+  
+  // First Innings Score (show when in second innings)
+  const firstInningsScoreElem = document.getElementById("firstInningsScore");
+  const bowlingTeamDisplay = document.getElementById("bowlingTeamDisplay");
+  
+  if (inSecond && firstInningsScoreElem) {
+    const firstOvers = Math.floor(first.legalBalls/6);
+    const firstBalls = first.legalBalls % 6;
+    firstInningsScoreElem.textContent = `${teamA}: ${first.runs}/${first.wkts} (${firstOvers}.${firstBalls})`;
+    firstInningsScoreElem.style.display = 'block';
+    // Hide bowling team display in second innings as first innings score already shows it
+    bowlingTeamDisplay.style.display = 'none';
+  } else {
+    if (firstInningsScoreElem) {
+      firstInningsScoreElem.style.display = 'none';
+    }
+    // Show bowling team display in first innings
+    bowlingTeamDisplay.textContent = `vs ${bowling}`;
+    bowlingTeamDisplay.style.display = 'block';
+  }
+
+  // Overs and Run Rate
+  const overs = Math.floor(inn.legalBalls/6);
+  const ballsInOver = inn.legalBalls % 6;
+  
+  let balls = inn.legalBalls;
+  let rr = balls > 0 ? (inn.runs * 6 / balls).toFixed(2) : '0.00';
+
+  // Live Over Display (replaces Ball Tracker) - Compact View
+  const liveOverDiv = document.getElementById("liveOverDisplay");
+  
+  // Helper to calculate runs/wickets for an over
+  function overRunsAndWkts(arr) {
+    let runs = 0, wkts = 0;
+    arr.forEach(sym => {
+      if (typeof sym === 'string') {
+        // New format with + signs
+        if (/^([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
+        else if (/^W$/.test(sym)) { wkts += 1; }
+        else if (/^WD\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)\+W$/)[1]); wkts += 1; }
+        else if (/^WD\+W$/.test(sym)) { runs += 1; wkts += 1; }
+        else if (/^NB\+([0-9]+)\+W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)\+W$/)[1]); wkts += 1; }
+        else if (/^NB\+W$/.test(sym)) { runs += 1; wkts += 1; }
+        else if (/^B\+([0-9]+)\+W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)\+W$/)[1]); wkts += 1; }
+        else if (/^B\+W$/.test(sym)) { runs += 0; wkts += 1; }
+        // Old format (backward compatibility)
+        else if (/^([0-9]+)W$/.test(sym)) { runs += parseInt(sym); wkts += 1; }
+        else if (/^WD\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)W$/)[1]); wkts += 1; }
+        else if (/^WDW$/.test(sym)) { runs += 1; wkts += 1; }
+        else if (/^NB\+([0-9]+)W$/.test(sym)) { runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)W$/)[1]); wkts += 1; }
+        else if (/^NBW$/.test(sym)) { runs += 1; wkts += 1; }
+        else if (/^B\+([0-9]+)W$/.test(sym)) { runs += parseInt(sym.match(/^B\+([0-9]+)W$/)[1]); wkts += 1; }
+        else if (/^BW$/.test(sym)) { runs += 0; wkts += 1; }
+        // Normal balls
+        else if (/^[0-9]$/.test(sym)) runs += parseInt(sym);
+        else if (/^NB$/.test(sym) || /^WD$/.test(sym)) runs += 1;
+        else if (/^NB\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^NB\+([0-9]+)$/)[1]);
+        else if (/^WD\+([0-9]+)$/.test(sym)) runs += 1 + parseInt(sym.match(/^WD\+([0-9]+)$/)[1]);
+        else if (/^B\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^B\+([0-9]+)$/)[1]);
+        else if (/^LB\+([0-9]+)$/.test(sym)) runs += parseInt(sym.match(/^LB\+([0-9]+)$/)[1]);
+      }
+    });
+    return {runs, wkts};
+  }
+  
+  // Show current over if it has balls, or last completed over if current is empty
+  if (inn.curOver.length > 0) {
+    // Current over in progress
+    const ballsChips = inn.curOver.map(sym => {
+      // Check if it's a wicket - must end with W or have +W pattern (not just contain W like WD)
+      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
+      const bgColor = isWicket ? '#ef4444' : '#3b82f6';
+      const borderColor = isWicket ? '#dc2626' : '#2563eb';
+      return `<span style="display:inline-flex;align-items:center;margin:1px 2px;padding:4px 7px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;border:none;font-size:11px;box-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap;">${sym}</span>`;
+    }).join('');
+    const overStats = overRunsAndWkts(inn.curOver);
+    liveOverDiv.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:8px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;flex:1;min-width:0;">${ballsChips}</div>
+      <div style="flex-shrink:0;padding:5px 10px;background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:#fff;font-weight:800;font-size:13px;border-radius:8px;box-shadow:0 2px 6px rgba(59,130,246,0.3);white-space:nowrap;">${overStats.runs}/${overStats.wkts}</div>
+    </div>`;
+    liveOverDiv.style.display = 'flex';
+  } else if (inn.overs.length > 0) {
+    // Show last completed over until next over starts
+    const lastOver = inn.overs[inn.overs.length - 1];
+    const ballsChips = lastOver.map(sym => {
+      // Check if it's a wicket - must end with W or have +W pattern (not just contain W like WD)
+      const isWicket = /W$/.test(sym) || /\+W$/.test(sym);
+      const bgColor = isWicket ? '#ef4444' : '#10b981';
+      const borderColor = isWicket ? '#dc2626' : '#059669';
+      return `<span style="display:inline-flex;align-items:center;margin:1px 2px;padding:4px 7px;border-radius:6px;background:${bgColor};color:#fff;font-weight:700;border:none;font-size:11px;box-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap;">${sym}</span>`;
+    }).join('');
+    const overStats = overRunsAndWkts(lastOver);
+    liveOverDiv.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:8px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;flex:1;min-width:0;opacity:0.85;">${ballsChips}</div>
+      <div style="flex-shrink:0;padding:5px 10px;background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#fff;font-weight:800;font-size:13px;border-radius:8px;box-shadow:0 2px 6px rgba(16,185,129,0.3);white-space:nowrap;">${overStats.runs}/${overStats.wkts}</div>
+    </div>`;
+    liveOverDiv.style.display = 'flex';
+  } else {
+    liveOverDiv.innerHTML = `<div style="color:#94a3b8;font-size:12px;font-weight:600;text-align:center;width:100%;padding:2px 0;">No balls bowled yet</div>`;
+    liveOverDiv.style.display = 'flex';
+  }
+
+  // --- First Innings Info (for second innings only) ---
+  const firstInfoDiv = document.getElementById("firstInningsInfo");
+  if (inSecond && !resultText) {
+    const need = Math.max(first.runs + 1 - second.runs, 0);
+    const ballsLeft = (oversLimit * 6) - second.legalBalls;
+    const reqRR = ballsLeft > 0 ? (need * 6 / ballsLeft).toFixed(2) : '0.00';
+    
+    firstInfoDiv.style.display = 'block';
+    firstInfoDiv.innerHTML = `Need <b>${need}</b> runs in <b>${ballsLeft}</b> balls | RRR: <b>${reqRR}</b>`;
+  } else {
+    firstInfoDiv.style.display = 'none';
+    firstInfoDiv.innerHTML = '';
+  }
+
+  // --- Calculate Extras and This Over ---
+  let extras = 0;
+  let thisOverRuns = 0;
+  let thisOverWkts = 0;
+
+  // Count extras from all overs and current over
+  function countOverSymbols(arr) {
+    arr.forEach(sym => {
+      if (typeof sym === 'string') {
+        // Handle wicket extras (WD+W, NB+W, WD+2+W, etc.)
+        if (/^WD\+([0-9]+)\+W$/.test(sym)) {
+          const runs = parseInt(sym.match(/^WD\+([0-9]+)\+W$/)[1]);
+          extras += 1 + runs;
+        } else if (/^WD\+W$/.test(sym)) {
+          extras += 1;
+        } else if (/^NB\+([0-9]+)\+W$/.test(sym)) {
+          const runs = parseInt(sym.match(/^NB\+([0-9]+)\+W$/)[1]);
+          extras += 1 + runs;
+        } else if (/^NB\+W$/.test(sym)) {
+          extras += 1;
+        } else if (/^B\+([0-9]+)\+W$/.test(sym)) {
+          const runs = parseInt(sym.match(/^B\+([0-9]+)\+W$/)[1]);
+          extras += runs;
+        } else if (/^B\+W$/.test(sym)) {
+          extras += 0;
+        }
+        // Handle non-wicket extras
+        else if (/^NB\+([0-9]+)$/.test(sym)) {
+          extras += 1 + parseInt(sym.match(/^NB\+([0-9]+)$/)[1]);
+        } else if (/^WD\+([0-9]+)$/.test(sym)) {
+          extras += 1 + parseInt(sym.match(/^WD\+([0-9]+)$/)[1]);
+        } else if (sym === 'NB' || sym === 'WD') {
+          extras += 1;
+        } else if (/^B\+([0-9]+)$/.test(sym)) {
+          extras += parseInt(sym.match(/^B\+([0-9]+)$/)[1]);
+        } else if (/^LB\+([0-9]+)$/.test(sym)) {
+          extras += parseInt(sym.match(/^LB\+([0-9]+)$/)[1]);
+        }
+      }
+    });
+  }
+  inn.overs.forEach(countOverSymbols);
+  countOverSymbols(inn.curOver);
+
+  const thisOver = overRunsAndWkts(inn.curOver);
+  thisOverRuns = thisOver.runs;
+  thisOverWkts = thisOver.wkts;
+  
+  // Display consolidated Overs/RR/Extras in chip banner
+  document.getElementById("oversExtrasInfo").innerHTML = `O's: <b>(${overs}.${ballsInOver}/${oversLimit})</b> | RR: <b>${rr}</b> | Ext's: <b>${extras}</b>`;
+
+  // Update page title with team names
+  if (teamA && teamB) {
+    document.getElementById('pageTitle').textContent = `${teamA} vs ${teamB} - Cricket Scorer`;
+  }
+
+  // Update tournament header display
+  const tournamentHeaderScorer = document.getElementById('tournamentHeaderScorer');
+  const tournamentTitleScorer = document.getElementById('tournamentTitleScorer');
+  const tournamentNameValue = document.getElementById('tournamentName')?.value || '';
+  const matchTypeValue = document.getElementById('matchType')?.value || '';
+  
+  if (tournamentNameValue && tournamentNameValue.trim() !== '') {
+    const matchTypeText = matchTypeValue ? ` - ${matchTypeValue}` : '';
+    tournamentTitleScorer.textContent = `#${tournamentNameValue}${matchTypeText}`;
+    tournamentHeaderScorer.style.display = 'block';
+  } else {
+    tournamentHeaderScorer.style.display = 'none';
+  }
+
+  // Result
+  const resultDiv = document.getElementById("result");
+  const newMatchContainer = document.getElementById("newMatchContainer");
+  if (resultText) {
+    resultDiv.textContent = resultText;
+    resultDiv.style.display = 'block';
+    newMatchContainer.style.display = 'block';
+  } else {
+    resultDiv.style.display = 'none';
+    newMatchContainer.style.display = 'none';
+  }
+
+  // Disable main buttons while choosing extra runs or wicket details
+  const disable = !!pendingExtra || document.getElementById('wicketPanel').style.display === 'block';
+  [...document.querySelectorAll(".btn-run, .btn-wkt, .btn-extra, .btn-muted")].forEach(b=> {
+    // Only modify buttons if user has edit permission
+    if (canEditMatch) {
+      if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
+          b.onclick.toString().includes('quickWicket') || 
+          b.onclick.toString().includes('showMoreOptions'))) {
+        b.disabled = disable;
+      }
+      // Keep extra buttons (WD, NB, Byes, LB) enabled to allow switching/canceling
+      if (b.onclick && b.onclick.toString().includes('startExtra')) {
+        b.disabled = false;
+      }
+    }
+    // If no edit permission, buttons stay disabled (handled by updateEditModeUI)
+  });
+  
+  // Save to Firebase after each update (if not in viewer mode and has edit permission)
+  // Don't save if we're currently loading data from Firebase (prevents loop)
+  if (!isViewerMode && firebaseEnabled && canEditMatch && !isLoadingFromFirebase) {
+    saveMatchState();
+  }
+  
+  // Update match summary display
+  // Update match summary display
+  updateMatchSummary();
+  
+  // Update live stats display
+  updateLiveStats();
+  
+  // Show match summary and live stats if match has started
+  const hasStarted = (first && first.legalBalls > 0) || (second && second.legalBalls > 0);
+  if (hasStarted) {
+    document.getElementById('matchSummary').style.display = 'block';
+    document.getElementById('winProbabilityCompact').style.display = 'block';
+  } else {
+    document.getElementById('matchSummary').style.display = 'none';
+    document.getElementById('winProbabilityCompact').style.display = 'none';
+  }
+}
+
 // ========== Firebase Sync Functions ==========
 
 function saveMatchState() {
   if (!db || !matchId) return;
-  
-  // Set timestamp only once when match starts
-  if (!matchStartTimestamp) {
-    matchStartTimestamp = Date.now();
-  }
   
   const matchData = {
     teamA: teamA,
@@ -2729,7 +2703,7 @@ function saveMatchState() {
     resultText: resultText,
     matchCompleted: matchCompleted,
     lastUpdated: Date.now(),
-    timestamp: matchStartTimestamp,  // Preserve original start time
+    timestamp: new Date().toISOString(),
     organizationId: organizationId,  // Store org ID with match data
     editToken: editToken  // Store edit token for protection
   };
@@ -2752,7 +2726,7 @@ function saveMatchState() {
         teamB: teamB,
         tournamentName: matchData.tournamentName,
         matchType: matchData.matchType,
-        timestamp: matchData.timestamp,  // Use match start time for history
+        timestamp: matchData.lastUpdated,
         isQuickMatch: !matchData.tournamentName || matchData.tournamentName.trim() === ''
       });
       
@@ -2852,7 +2826,6 @@ function listenForUpdates() {
       inSecond = data.inSecond;  // Use boolean instead of function
       resultText = data.resultText;
       matchCompleted = data.matchCompleted || false;
-      matchStartTimestamp = data.timestamp || null;  // Load the original start timestamp
       matchStarted = true;
       
       // Restore tournament name and match type to input fields (for display purposes)
@@ -2867,9 +2840,6 @@ function listenForUpdates() {
       if (document.getElementById('setup').style.display !== 'none') {
         document.getElementById('setup').style.display = 'none';
         document.getElementById('game').style.display = 'block';
-        document.getElementById('winProbabilityCompact').style.display = 'block';
-        document.getElementById('liveStatsComparison').style.display = 'block';
-        document.getElementById('matchSummary').style.display = 'block';
       }
       
       // Update edit mode UI (enable/disable buttons based on permission)
@@ -3153,11 +3123,6 @@ function getTournamentLink() {
 }
 
 function shareViewerLink() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Share Viewer Link', 'value': 1});
-  }
-  
   if (!firebaseEnabled) {
     alert('⚠️ Firebase not configured!\n\nPlease add your Firebase configuration to enable live sync and viewer mode.');
     return;
@@ -3195,11 +3160,6 @@ function shareViewerLink() {
 }
 
 function shareScorerLink() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Share Scorer Link', 'value': 1});
-  }
-  
   if (!firebaseEnabled) {
     alert('⚠️ Firebase not configured!\n\nPlease add your Firebase configuration to enable live sync and viewer mode.');
     return;
@@ -3248,11 +3208,6 @@ function shareScorerLink() {
 }
 
 function shareTournamentLink() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Share Tournament Link', 'value': 1});
-  }
-  
   if (!firebaseEnabled) {
     alert('⚠️ Firebase not configured!\n\nPlease add your Firebase configuration to enable live sync and viewer mode.');
     return;
@@ -3504,12 +3459,6 @@ function pushUndo() {
 function undoLastAction() {
   if (!checkCanEdit("undo")) return;
   if (undoStack.length === 0) return;
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Undo', 'value': 1});
-  }
-  
   const prev = undoStack.pop();
   first = JSON.parse(JSON.stringify(prev.first));
   second = JSON.parse(JSON.stringify(prev.second));
@@ -3545,12 +3494,6 @@ function addLegalRun(r){
   if (!checkCanEdit("add runs")) return;
   const inn = currentInnings();
   if (inn.done || pendingExtra || currentMatchOver()) return;
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': `Run Button - ${r}`, 'value': r});
-  }
-  
   pushUndo();
   inn.runs += r;
   addSymbol(inn, String(r));
@@ -3580,13 +3523,7 @@ function wicket(){
   };
   document.getElementById('wicketPanel').style.display = 'block';
   // Disable main buttons
-  [...document.querySelectorAll(".btn")].forEach(b=> {
-    if (b.onclick && (b.onclick.toString().includes('addLegalRun') ||
-        b.onclick.toString().includes('startExtra') ||
-        b.onclick.toString().includes('showMoreOptions'))) {
-      b.disabled = true;
-    }
-  });
+  [...document.querySelectorAll(".btn-run, .btn-wkt, .btn-extra")].forEach(b=> b.disabled = true);
 }
 
 function confirmWicketExtra() {
@@ -3623,13 +3560,13 @@ function confirmWicketExtra() {
   if(inSecond) checkResult();
   document.getElementById('wicketPanel').style.display = 'none';
   // Re-enable all buttons
-  [...document.querySelectorAll('.btn')].forEach(b=> b.disabled = false);
+  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> b.disabled = false);
   updateUI();
 }
 function cancelWicketExtra() {
   document.getElementById('wicketPanel').style.display = 'none';
   // Re-enable all buttons
-  [...document.querySelectorAll('.btn')].forEach(b=> b.disabled = false);
+  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> b.disabled = false);
   updateUI();
 }
 
@@ -3640,71 +3577,136 @@ function startExtra(type){
   const inn = currentInnings();
   if (inn.done || currentMatchOver()) return;
   
-  // If clicking same button again, cancel
+  // If clicking same button again, do nothing (modal handles its own state)
   if (pendingExtra && pendingExtra.type === type) {
-    cancelExtra();
     return;
   }
   
-  // If different extra type already pending, cancel previous one first
-  if (pendingExtra) {
-    cancelExtra();
-  }
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': `Extra - ${type}`, 'value': 1});
-  }
-  
-  // Save undo state before making changes
-  pushUndo();
-  if (type === 'NB' || type === 'WD'){
-    // Base 1 extra run, NOT a legal ball
-    inn.runs += 1;
-    addSymbol(inn, type);    // will replace with NB+X/WD+X after selection
-    
-    // Check if match is won with just this 1 run (second innings only)
-    if (inSecond && inn.runs >= first.runs + 1) {
-      pendingExtra = null;
-      checkResult();
-      updateUI();
-      return;
-    }
-    
-    pendingExtra = {type};
-    const label = type === 'WD' ? 'WD: Select overthrow runs' : 'NB: Select runs off bat';
-    showExtraPanel(true, label);
-  } else {
-    // Byes/Leg byes: choose runs; counts as legal ball
-    // Check if only 1 run is needed to win (second innings only)
-    if (inSecond && (first.runs + 1 - inn.runs) === 1) {
-      // Add 1 run and end the match
-      inn.runs += 1;
-      addSymbol(inn, `${type}+1`);
-      commitLegalBall(inn);
-      checkResult();
-      updateUI();
-      return;
-    }
-    
-    pendingExtra = {type};
-    showExtraPanel(true, `${type}: Select runs`);
-  }
-  if(inSecond) checkResult();
-  updateUI();
+  // Show modal for extra selection
+  showExtraModal(type);
 }
 
+
+function showExtraModal(extraType) {
+  const inn = currentInnings();
+  if (inn.done || pendingExtra || currentMatchOver()) return;
+  
+  const extraNames = {
+    'WD': 'Wide',
+    'NB': 'No Ball',
+    'B': 'Bye',
+    'LB': 'Leg Bye'
+  };
+  
+  // Create modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.id = 'extraModalOverlay';
+  modalOverlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modalOverlay.onclick = function(e) {
+    if (e.target.id === 'extraModalOverlay') closeExtraModal();
+  };
+  
+  // Create modal content
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'background:white;border-radius:20px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+  modalContent.onclick = function(e) { e.stopPropagation(); };
+  
+  let contentHTML = `
+    <h3 style="margin:0 0 16px;font-size:20px;color:#1f2937;text-align:center;">${extraNames[extraType]}</h3>
+    
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:12px;text-align:center;">${extraType === 'WD' || extraType === 'NB' ? 'Select extra runs (excluding penalty):' : 'Select runs taken:'}</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
+  `;
+  
+  // Add run buttons (0, 1, 2, 3)
+  [0, 1, 2, 3].forEach(r => {
+    contentHTML += `<button onclick="confirmExtraModal('${extraType}', ${r})" style="padding:16px;background:linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);border:none;border-radius:12px;font-size:20px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">${r}</button>`;
+  });
+  
+  contentHTML += `
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+  `;
+  
+  // Add run buttons (4, 5, 6)
+  [4, 5, 6].forEach(r => {
+    const bgColor = r === 4 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : r === 6 ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%)';
+    const textColor = r === 4 || r === 6 ? 'white' : '#1f2937';
+    contentHTML += `<button onclick="confirmExtraModal('${extraType}', ${r})" style="padding:16px;background:${bgColor};border:none;border-radius:12px;font-size:20px;font-weight:700;color:${textColor};cursor:pointer;transition:all 0.2s;box-shadow:0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">${r}</button>`;
+  });
+  
+  contentHTML += `
+      </div>
+    </div>
+  `;
+  
+  // Cancel button only
+  contentHTML += `
+    <button onclick="closeExtraModal()" style="width:100%;padding:12px;background:#e5e7eb;border:none;border-radius:10px;font-size:15px;font-weight:600;color:#374151;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">Cancel</button>
+  `;
+  
+  modalContent.innerHTML = contentHTML;
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+}
+
+function closeExtraModal() {
+  const modal = document.getElementById('extraModalOverlay');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+function confirmExtraModal(extraType, runs) {
+  // Runs is now passed directly from button click
+  runs = runs || 0;
+  
+  const inn = currentInnings();
+  if (inn.done || currentMatchOver()) {
+    closeExtraModal();
+    return;
+  }
+  
+  pushUndo();
+  
+  if (extraType === 'NB' || extraType === 'WD') {
+    // Base 1 extra run, NOT a legal ball
+    inn.runs += 1 + runs;
+    const symbol = runs > 0 ? `${extraType}+${runs}` : extraType;
+    addSymbol(inn, symbol);
+    
+    // Update extras tracking
+    if (extraType === 'WD') {
+      inn.extras.wd += 1 + runs;
+    } else {
+      inn.extras.nb += 1 + runs;
+    }
+  } else {
+    // B / LB: add runs and count as LEGAL ball
+    inn.runs += runs;
+    const symbol = runs > 0 ? `${extraType}+${runs}` : extraType;
+    addSymbol(inn, symbol);
+    commitLegalBall(inn);
+    
+    // Update extras tracking
+    if (extraType === 'B') {
+      inn.extras.b += runs;
+    } else {
+      inn.extras.lb += runs;
+    }
+  }
+  
+  if (inSecond) checkResult();
+  
+  closeExtraModal();
+  updateUI();
+}
 
 function applyExtra(runs){
   const inn = currentInnings();
   if (!pendingExtra || currentMatchOver()) return;
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': `Extra Runs - ${pendingExtra.type}+${runs}`, 'value': runs});
-  }
-  
-  // No pushUndo() - already saved in startExtra()
+  pushUndo();
   if (pendingExtra.type === 'NB' || pendingExtra.type === 'WD'){
     // Add bat runs; still NOT a legal ball
     inn.runs += runs;
@@ -3728,10 +3730,7 @@ function applyExtra(runs){
 function cancelExtra(){
   const inn = currentInnings();
   if (!pendingExtra) return;
-  // Remove the undo entry from startExtra() since we're cancelling
-  if (undoStack.length > 0) {
-    undoStack.pop();
-  }
+  pushUndo();
   if (pendingExtra.type === 'NB' || pendingExtra.type === 'WD'){
     // We had already added base 1 and a symbol; roll both back
     inn.runs -= 1;
@@ -3841,11 +3840,6 @@ async function checkTournamentExists() {
 
 /* Switch team names */
 function switchTeamNames() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Switch Team Names', 'value': 1});
-  }
-  
   const teamAInput = document.getElementById("teamA");
   const teamBInput = document.getElementById("teamB");
   
@@ -3901,7 +3895,7 @@ function handleMatchTypeChange() {
   }
 }
 
-/* ---------------- Confirmation Modal ---------------- */
+/* ---------------- Confirmation Modal Functions ---------------- */
 function showConfirmationModal() {
   // Get form values
   const teamA = document.getElementById("teamA").value.trim() || "Team A";
@@ -4012,7 +4006,7 @@ window.addEventListener('click', function(event) {
 window.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
     const modal = document.getElementById('confirmationModal');
-    if (modal.style.display === 'block') {
+    if (modal && modal.style.display === 'block') {
       closeConfirmationModal();
     }
   }
@@ -4164,9 +4158,6 @@ async function startMatch(){
   
   document.getElementById("setup").style.display="none";
   document.getElementById("game").style.display="block";
-  document.getElementById("winProbabilityCompact").style.display="block";
-  document.getElementById("liveStatsComparison").style.display="block";
-  document.getElementById("matchSummary").style.display="block";
   matchStarted = true;
   updateUI();
   
@@ -4187,11 +4178,6 @@ async function startMatch(){
 // Viewer tracking functionality removed for simplicity and performance
 
 function endInnings(){
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'End Innings', 'value': 1});
-  }
-  
   const inn = currentInnings();
   inn.done = true;
   switchInnings();
@@ -4242,11 +4228,6 @@ function resetAll(){
 function startNewMatch(){
   if (!confirm('🆕 Start a new match?\n\nThis will clear the current match and take you back to the setup page.')) {
     return;
-  }
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Start New Match', 'value': 1});
   }
   
   // Clear localStorage session
@@ -4413,11 +4394,6 @@ function getScoreboardText() {
 }
 
 function exportScoreboard() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Export Scoreboard', 'value': 1});
-  }
-  
   const text = getScoreboardText();
   // Try Web Share API (for WhatsApp, etc.)
   if (navigator.share) {
@@ -4460,12 +4436,6 @@ function quickWicket() {
     alert(`Maximum wickets (${wicketsLimit}) already reached!`);
     return;
   }
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Quick Wicket', 'value': 1});
-  }
-  
   pushUndo();
   let symbol = 'W';
   inn.wkts++;
@@ -4555,7 +4525,7 @@ function showWicketPanel(e) {
   };
   document.getElementById('wicketPanel').style.display = 'block';
   // Disable scoring buttons
-  [...document.querySelectorAll('.btn')].forEach(b=> {
+  [...document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted')].forEach(b=> {
     if (b.onclick && (b.onclick.toString().includes('addLegalRun') || 
         b.onclick.toString().includes('quickWicket') || 
         b.onclick.toString().includes('startExtra') ||
@@ -4571,11 +4541,6 @@ function showWicketPanel(e) {
 function showRunOutModal() {
   const inn = currentInnings();
   if (inn.done || pendingExtra || currentMatchOver()) return;
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Run Out', 'value': 1});
-  }
   
   // Check if wickets limit reached
   if (inn.wkts >= wicketsLimit) {
@@ -4614,24 +4579,6 @@ function showRunOutModal() {
       <input type="number" id="runOutRuns" min="0" value="0" style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:10px;font-size:16px;margin-top:8px;text-align:center;font-weight:600;" />
     </div>
     
-    <div style="margin-bottom:16px;">
-      <label style="display:block;font-size:14px;font-weight:600;color:#4b5563;margin-bottom:8px;">Run type:</label>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeNormal').checked=true">
-          <input type="radio" id="runTypeNormal" name="runType" value="normal" checked style="width:18px;height:18px;">
-          <span style="font-size:14px;color:#1f2937;">Normal runs (off bat)</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeBye').checked=true">
-          <input type="radio" id="runTypeBye" name="runType" value="bye" style="width:18px;height:18px;">
-          <span style="font-size:14px;color:#1f2937;">Byes (no contact with bat)</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border-radius:10px;cursor:pointer;border:2px solid #e5e7eb;" onclick="document.getElementById('runTypeLB').checked=true">
-          <input type="radio" id="runTypeLB" name="runType" value="lb" style="width:18px;height:18px;">
-          <span style="font-size:14px;color:#1f2937;">Leg Byes (off body)</span>
-        </label>
-      </div>
-    </div>
-    
     <div style="display:flex;gap:12px;margin-top:20px;">
       <button onclick="closeRunOutModal()" style="flex:1;padding:12px;background:#e5e7eb;color:#1f2937;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;">Cancel</button>
       <button onclick="confirmRunOut()" style="flex:1;padding:12px;background:#ef4444;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Record Run Out</button>
@@ -4654,23 +4601,14 @@ function confirmRunOut() {
   
   if (inn.done || currentMatchOver()) return;
   
-  // Get run type
-  let runType = 'normal';
-  if (document.getElementById('runTypeBye').checked) runType = 'bye';
-  else if (document.getElementById('runTypeLB').checked) runType = 'lb';
-  
   pushUndo();
   
-  // Build symbol based on run type
+  // Build symbol - always treat as normal runs (off bat)
   let sym;
   if (runs === 0) {
-    if (runType === 'bye') sym = 'B+W';
-    else if (runType === 'lb') sym = 'LB+W';
-    else sym = 'W';
+    sym = 'W';
   } else {
-    if (runType === 'bye') sym = `B+${runs}+W`;
-    else if (runType === 'lb') sym = `LB+${runs}+W`;
-    else sym = `${runs}+W`;
+    sym = `${runs}+W`;
   }
   
   // Add symbol to current over
@@ -4679,12 +4617,7 @@ function confirmRunOut() {
   // Update runs
   inn.runs += runs;
   
-  // Update extras if bye or leg bye
-  if (runType === 'bye') {
-    inn.extras.b += runs;
-  } else if (runType === 'lb') {
-    inn.extras.lb += runs;
-  }
+  // No extras tracking needed - runs off bat
   
   // Update wickets
   inn.wkts += 1;
@@ -4776,38 +4709,39 @@ function showHelpModal() {
       <div style="margin-bottom:12px;padding:12px;background:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);border-left:4px solid #3b82f6;border-radius:8px;">
         <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#1e40af;">📱 Basic Scoring</div>
         <ul style="margin:4px 0;padding-left:18px;font-size:12px;">
-          <li><strong>0-6</strong> - Runs scored by batsman</li>
-          <li><strong>OUT</strong> - Bowled, caught, LBW, stumped, etc.</li>
-          <li><strong>☰ More Options</strong> - Shows RUN OUT, WD+W, NB+W</li>
+          <li><strong>0, 1, 2, 3, 5</strong> - Regular runs off bat</li>
+          <li><strong>4, 6</strong> - Boundaries (auto-detected)</li>
+          <li><strong>OUT</strong> - Wicket (bowled, caught, LBW, stumped, etc.)</li>
+          <li><strong>☰ More</strong> - RUN OUT, WD+W, NB+W combos</li>
         </ul>
       </div>
       
       <div style="margin-bottom:12px;padding:12px;background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border-left:4px solid #f59e0b;border-radius:8px;">
-        <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#92400e;">⚡ Extras & Wickets</div>
+        <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#92400e;">⚡ Extras</div>
         <ul style="margin:4px 0;padding-left:18px;font-size:12px;">
-          <li><strong>WD</strong> / <strong>NB</strong> - Then select overthrow runs (+0 to +6)</li>
-          <li><strong>LB</strong> (Leg Bye) / <strong>BYE</strong> - Ball didn't hit bat</li>
-          <li><strong>WD+W</strong> / <strong>NB+W</strong> - Wide/No Ball with wicket</li>
-          <li><strong>RUN OUT</strong> - Dedicated button for run-out scenarios</li>
+          <li><strong>WD</strong> (Wide) / <strong>NB</strong> (No Ball) - Tap, then select overthrow runs (0-6)</li>
+          <li><strong>LB</strong> (Leg Bye) / <strong>BYE</strong> - Ball missed bat, choose runs (0-6)</li>
+          <li><strong>WD+W</strong> / <strong>NB+W</strong> - Extra with wicket (from ☰ menu)</li>
+          <li><strong>RUN OUT</strong> - Dedicated run-out button with runs selector</li>
         </ul>
       </div>
       
       <div style="margin-bottom:12px;padding:12px;background:linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);border-left:4px solid #ec4899;border-radius:8px;">
         <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#9f1239;">🔄 Match Controls</div>
         <ul style="margin:4px 0;padding-left:18px;font-size:12px;">
-          <li><strong>↶ UNDO</strong> - Reverses last action (unlimited)</li>
-          <li><strong>🏁 End Innings</strong> - Complete current innings</li>
-          <li><strong>🗑️ Delete Match</strong> - Permanently remove match from server & local storage</li>
+          <li><strong>↶ UNDO</strong> - Revert last ball (unlimited, click repeatedly if needed)</li>
+          <li><strong>🏁 End Innings</strong> - Manually complete current innings early</li>
+          <li><strong>🗑️ Delete Match</strong> - Permanently remove match & data</li>
         </ul>
       </div>
       
       <div style="padding:12px;background:linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);border-left:4px solid #10b981;border-radius:8px;">
-        <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#065f46;">🔗 Sharing</div>
+        <div style="font-weight:800;font-size:14px;margin-bottom:5px;color:#065f46;">🔗 Live Sharing</div>
         <ul style="margin:4px 0;padding-left:18px;font-size:12px;">
-          <li><strong>Share on WhatsApp</strong> - Get view & edit links</li>
-          <li><strong>View Link</strong> - Read-only live scorecard</li>
-          <li><strong>Editor Link</strong> - Co-scorers can edit together</li>
-          <li><strong>Export/Share</strong> - Download or share scorecard</li>
+          <li><strong>WhatsApp Share</strong> - Send live viewer link to fans</li>
+          <li><strong>Scorer Private</strong> - Secure edit link for co-scorers</li>
+          <li><strong>Tournament</strong> - Share tournament page (all matches)</li>
+          <li><strong>Export/Share</strong> - Download or share final scorecard image</li>
         </ul>
       </div>
     </div>
@@ -4828,11 +4762,6 @@ function closeHelpModal() {
 function showWicketExtraModal(extraType) {
   const inn = currentInnings();
   if (inn.done || pendingExtra || currentMatchOver()) return;
-  
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': `Wicket Extra - ${extraType}+W`, 'value': 1});
-  }
   
   // Check if wickets limit reached
   if (inn.wkts >= wicketsLimit) {
@@ -4985,11 +4914,6 @@ function confirmWicketExtra(extraType) {
 
 // Toggle more options menu
 function showMoreOptions() {
-  // GA tracking
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', {'event_category': 'Scorer Action', 'event_label': 'Show More Options', 'value': 1});
-  }
-  
   const moreRow = document.getElementById('moreRunsRow');
   if (moreRow.style.display === 'none' || !moreRow.style.display) {
     moreRow.style.display = 'block';
@@ -5431,7 +5355,7 @@ function deleteCurrentMatch() {
 }
 
 function terminateSavedMatchById(matchId) {
-  if (!confirm('⚠️ Are you sure you want to delete this saved match?\n\n⚠️ This action cannot be undone.')) {
+  if (!confirm('⚠️ Are you sure you want to delete this saved match?\n\nThis will:\n✓ Remove the match from Firebase server\n✓ Clear from local storage\n\nThis action cannot be undone.')) {
     return;
   }
   
@@ -5554,9 +5478,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Hide setup screen and show game view
     document.getElementById('setup').style.display = 'none';
     document.getElementById('game').style.display = 'block';
-    document.getElementById('winProbabilityCompact').style.display = 'block';
-    document.getElementById('liveStatsComparison').style.display = 'block';
-    document.getElementById('matchSummary').style.display = 'block';
     
     // Hide all scoring buttons
     document.querySelectorAll('.btn-run, .btn-wkt, .btn-extra, .btn-muted, .btn-more').forEach(btn => {
